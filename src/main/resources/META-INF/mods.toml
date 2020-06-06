@@ -1,0 +1,46 @@
+
+modLoader="javafml" #mandatory
+
+loaderVersion="[31,)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+
+issueTrackerURL="http://my.issue.tracker/" #optional
+
+[[mods]] #mandatory
+
+modId="dfssul" #mandatory
+
+version="1.15.2-0.0.1-preview" #mandatory
+
+displayName="Die fünf Schwerter" #mandatory
+
+logoFile="" #optional
+
+credits="Thanks to all my friends helping me getting my ideas" #optional
+
+authors="Juhu1705 (Team Noisruker)" #optional
+
+description='''
+This is a mod based on my in writing story Die fünf Schwerter - Schatten und Licht.
+It will give you the opportunity to live as one of six species (Human, Dwarf, Elf, Nithriln, Enfali, Dragonth [The Human form of Dragons. Normally they are really rare cause Dragons prefer their strong, big bodies]).
+
+You will learn about the rules of Magic the techniques of Weapons and Exploring of the surrounding world. Maybe you learn about stone or fire. Maybe you explore the nature. Eventually you find the truth of water. But don't be afraid. You will find your light right next to your way.
+'''
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+[[dependencies.examplemod]] #optional
+    # the modid of the dependency
+    modId="forge" #mandatory
+    # Does this dependency have to exist - if not, ordering below must be specified
+    mandatory=true #mandatory
+    # The version range of the dependency
+    versionRange="[31,)" #mandatory
+    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+    ordering="NONE"
+    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+    side="BOTH"
+# Here's another dependency
+[[dependencies.examplemod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.15.2]"
+    ordering="NONE"
+    side="BOTH"

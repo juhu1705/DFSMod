@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "III",
+    "IiI",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "tag": "forge:stone"
+    },
+    "i": {
+      "item": "dfssul:ancient_shard"
+    }
+  },
+  "result": {
+    "item": "dfssul:stone_pillar_block",
+    "count": 8
+  }
+}

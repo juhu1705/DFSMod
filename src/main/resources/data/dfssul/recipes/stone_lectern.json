@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AiA",
+    " L ",
+    "IlI"
+  ],
+  "key": {
+    "I": {
+      "tag": "minecraft:stone_bricks"
+    },
+    "i": {
+      "item": "dfssul:ancient_shard"
+    },
+    "L": {
+      "item": "dfssul:stone_pillar_block"
+    },
+    "l": {
+      "item": "dfssul:ancient_stone_rune"
+    },
+    "A": {
+      "item": "dfssul:ancient_stone_block"
+    }
+  },
+  "result": {
+    "item": "dfssul:stone_lectern_block",
+    "count": 1
+  }
+}

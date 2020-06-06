@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "dfssul:blocks/stone_pillar_block_top",
+    "west": "dfssul:blocks/stone_pillar_block_side",
+    "south": "dfssul:blocks/stone_pillar_block_side",
+    "east": "dfssul:blocks/stone_pillar_block_side",
+    "north": "dfssul:blocks/stone_pillar_block_side",
+    "up": "dfssul:blocks/stone_pillar_block_top",
+    "down": "dfssul:blocks/stone_pillar_block_top"
+  }
+}

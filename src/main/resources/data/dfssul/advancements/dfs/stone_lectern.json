@@ -1,0 +1,28 @@
+{
+  "parent": "dfssul:dfs/ancient_stone_rune",
+  "display": {
+    "icon": {
+      "item": "dfssul:stone_lectern_block"
+    },
+    "title": {
+      "translate": "advancements.dfs.craft_stone_lectern.title"
+    },
+    "description": {
+      "translate": "advancements.dfs.craft_stone_lectern.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:stone_lectern_block"
+          }
+        ]
+      }
+    }
+  }
+}

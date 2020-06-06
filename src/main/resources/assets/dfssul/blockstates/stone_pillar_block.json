@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y":  { "model": "dfssul:block/stone_pillar_block" },
+        "axis=z":   { "model": "dfssul:block/stone_pillar_block", "x": 90 },
+        "axis=x":   { "model": "dfssul:block/stone_pillar_block", "x": 90, "y": 90 }
+    }
+}

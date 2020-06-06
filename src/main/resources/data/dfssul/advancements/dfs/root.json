@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "dfssul:ancient_shard"
+    },
+    "title": {
+      "translate": "advancements.dfs.root.title"
+    },
+    "description": {
+      "translate": "advancements.dfs.root.description"
+    },
+    "background": "dfssul:textures/blocks/stone_pillar_block_side.png",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:ancient_shard"
+          }
+        ]
+      }
+    }
+  }
+}

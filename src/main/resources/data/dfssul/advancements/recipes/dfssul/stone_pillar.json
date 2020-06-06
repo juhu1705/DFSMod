@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dfssul:stone_pillar"
+    ]
+  },
+  "criteria": {
+    "has_ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:ancient_shard"
+          }
+        ]
+      }
+    },
+    "has_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "tag": "forge:stone"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dfssul:stone_pillar"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ancient_shard",
+      "has_stone",
+      "has_the_recipe"
+    ]
+  ]
+}

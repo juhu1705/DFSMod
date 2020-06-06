@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "dfssul:ancient_shard"
+    },
+    {
+      "tag": "forge:stone"
+    },
+    {
+      "item": "dfssul:ancient_shard"
+    }
+  ],
+  "result": {
+    "item": "dfssul:ancient_stone_block"
+  }
+}

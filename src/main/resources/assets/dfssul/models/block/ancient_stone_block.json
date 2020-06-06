@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "dfssul:blocks/stone_pillar_block_top",
+    "all": "minecraft:block/stone"
+  }
+}

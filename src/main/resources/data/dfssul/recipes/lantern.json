@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "#+#",
+    "###"
+  ],
+  "key": {
+    "I": {
+      "item": "dfssul:chain"
+    },
+    "#": {
+      "item": "minecraft:iron_nugget"
+    },
+    "+": {
+      "item": "minecraft:torch"
+    }
+  },
+  "result": {
+    "item": "minecraft:lantern",
+    "count": 1
+  }
+}

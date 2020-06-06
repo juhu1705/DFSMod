@@ -1,0 +1,42 @@
+{
+  "parent": "dfssul:dfs/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:cracked_stone_bricks"
+    },
+    "title": {
+      "translate": "advancements.dfs.discover_structures.title"
+    },
+    "description": {
+      "translate": "advancements.dfs.discover_structures.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "reward": {
+    "experience": 500
+  },
+  "criteria": {
+    "plains": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "dfssul:plains_structures"
+      }
+    },
+    "desert": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "dfssul:desert_structures"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "plains"
+    ],
+    [
+      "desert"
+    ]
+  ]
+}
