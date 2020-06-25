@@ -2,17 +2,17 @@ package de.noisruker.dfs.entities;
 
 public interface IEntityMagic {
 
-    public long getPower();
+    public float getPower();
 
-    public long getMaxPower();
+    public float getMaxPower();
 
-    public IEntityMagic setPower(long power);
+    public IEntityMagic setPower(float power);
 
-    public IEntityMagic setMaxPower(long maxPower);
+    public IEntityMagic setMaxPower(float maxPower);
 
-    public IEntityMagic usePower(long amount);
+    public IEntityMagic usePower(float amount);
 
-    public IEntityMagic setPowerRegenerationAmount(long powerRegeneration);
+    public IEntityMagic setPowerRegenerationAmount(float powerRegeneration);
 
     public IEntityMagic regeneratePower();
 

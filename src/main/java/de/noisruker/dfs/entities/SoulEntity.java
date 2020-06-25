@@ -1,15 +1,20 @@
 package de.noisruker.dfs.entities;
 
-import net.minecraft.entity.*;
+import de.noisruker.dfs.DfSMod;
+import de.noisruker.dfs.registries.ModItems;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.FlyingEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.ai.goal.WaterAvoidingRandomFlyingGoal;
-import net.minecraft.entity.monster.GhastEntity;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.WaterMobEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.FireballEntity;
+import net.minecraft.entity.projectile.EggEntity;
+import net.minecraft.item.EggItem;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -21,7 +26,7 @@ import java.util.Random;
 
 public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
 
-    private long power, maxPower, regenerationAmount;
+    private float power, maxPower, regenerationAmount;
 
 
 
@@ -41,7 +46,7 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
         super.registerGoals();
         super.goalSelector.addGoal(3, new RandomFlyGoal(this));
         super.goalSelector.addGoal(5, new LookAroundGoal(this));
-        super.goalSelector.addGoal(4, new FireballAttackGoal(this));
+        super.goalSelector.addGoal(4, new MagicProjectileAttackGoal(this));
         super.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 15, true, false, (p_213812_1_) -> {
             return Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D;
         }));
@@ -67,41 +72,41 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
     }
 
     @Override
-    public long getPower() {
+    public float getPower() {
         return this.power;
     }
 
 
 
     @Override
-    public long getMaxPower() {
+    public float getMaxPower() {
         return this.maxPower;
     }
 
     @Override
-    public IEntityMagic setPower(long power) {
+    public IEntityMagic setPower(float power) {
         if(power <= this.maxPower && power >= 0)
             this.power = power;
         return this;
     }
 
     @Override
-    public IEntityMagic setMaxPower(long maxPower) {
+    public IEntityMagic setMaxPower(float maxPower) {
         if(maxPower >= 0)
             this.maxPower = maxPower;
         return this;
     }
 
     @Override
-    public IEntityMagic usePower(long amount) {
-        long checkPower = this.power - amount;
+    public IEntityMagic usePower(float amount) {
+        float checkPower = this.power - amount;
         if(checkPower >= 0 && checkPower <= this.maxPower)
             this.power = checkPower;
         return this;
     }
 
     @Override
-    public IEntityMagic setPowerRegenerationAmount(long powerRegeneration) {
+    public IEntityMagic setPowerRegenerationAmount(float powerRegeneration) {
         this.regenerationAmount = powerRegeneration;
         return this;
     }
@@ -112,11 +117,11 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
         return this;
     }
 
-    static class FireballAttackGoal extends Goal {
+    static class MagicProjectileAttackGoal extends Goal {
         private final SoulEntity parentEntity;
         public int attackTimer;
 
-        public FireballAttackGoal(SoulEntity soul) {
+        public MagicProjectileAttackGoal(SoulEntity soul) {
             this.parentEntity = soul;
         }
 
@@ -148,24 +153,33 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
         public void tick() {
             LivingEntity livingentity = this.parentEntity.getAttackTarget();
             double d0 = 64.0D;
-            if (livingentity.getDistanceSq(this.parentEntity) < 4096.0D && this.parentEntity.canEntityBeSeen(livingentity)) {
+            if (livingentity != null && livingentity.getDistanceSq(this.parentEntity) < 4096.0D
+                    && this.parentEntity.canEntityBeSeen(livingentity)) {
                 World world = this.parentEntity.world;
                 ++this.attackTimer;
                 if (this.attackTimer == 10) {
-                    world.playEvent((PlayerEntity)null, 1015, new BlockPos(this.parentEntity), 0);
+                    //world.playEvent((PlayerEntity)null, 1015, new BlockPos(this.parentEntity), 0);
                 }
 
-                if (this.attackTimer == 20) {
+                if (this.attackTimer == 40) {
                     double d1 = 4.0D;
+
                     Vec3d vec3d = this.parentEntity.getLook(1.0F);
                     double d2 = livingentity.getPosX() - (this.parentEntity.getPosX() + vec3d.x * 4.0D);
                     double d3 = livingentity.getPosYHeight(0.5D) - (0.5D + this.parentEntity.getPosYHeight(0.5D));
                     double d4 = livingentity.getPosZ() - (this.parentEntity.getPosZ() + vec3d.z * 4.0D);
-                    world.playEvent((PlayerEntity)null, 1016, new BlockPos(this.parentEntity), 0);
-                    FireballEntity fireballentity = new FireballEntity(world, this.parentEntity, d2, d3, d4);
-                    fireballentity.explosionPower = 100;
-                    fireballentity.setPosition(this.parentEntity.getPosX() + vec3d.x * 4.0D, this.parentEntity.getPosYHeight(0.5D) + 0.5D, fireballentity.getPosZ() + vec3d.z * 4.0D);
-                    world.addEntity(fireballentity);
+                    //world.playEvent((PlayerEntity)null, 1016, new BlockPos(this.parentEntity), 0);
+                    MagicProjectileEntity magicProjectileEntity = new MagicProjectileEntity(this.parentEntity, world);
+                    //magicProjectileEntity.setItem(new ItemStack(ModItems.MAGIC_PROJECTILE.get()));
+                    magicProjectileEntity.shoot(parentEntity, parentEntity.rotationPitch, parentEntity.rotationYaw, 0.0F, 1.5F, 0.0F);
+                    //magicProjectileEntity.setPosition(this.parentEntity.getPosX() + vec3d.x * 4.0D, this.parentEntity.getPosYHeight(0.5D) + 0.5D, magicProjectileEntity.getPosZ() + vec3d.z * 4.0D);
+                    //magicProjectileEntity.setAttackTarget(livingentity);
+                    world.addEntity(magicProjectileEntity);
+                    EggEntity eggentity = new EggEntity(world, parentEntity);
+                    //eggentity.setItem(new ItemStack(ModItems.MAGIC_PROJECTILE.get()));
+                    //eggentity.shoot(parentEntity, parentEntity.rotationPitch, parentEntity.rotationYaw, 0.0F, 1.5F, 1.0F);
+                    //world.addEntity(eggentity);
+
                     this.attackTimer = -40;
                 }
             } else if (this.attackTimer > 0) {

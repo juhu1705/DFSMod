@@ -1,23 +1,17 @@
 package de.noisruker.dfs.tileentities.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.blocks.StoneLectern;
 import de.noisruker.dfs.tileentities.StoneLecternTileEntity;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
-import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Vector3f;
-import net.minecraft.client.renderer.entity.ItemFrameRenderer;
-import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.tileentity.*;
+import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.MathHelper;
 
 public class StoneLecternRenderer extends TileEntityRenderer<StoneLecternTileEntity> {
 
@@ -56,8 +50,6 @@ public class StoneLecternRenderer extends TileEntityRenderer<StoneLecternTileEnt
                     matrixStackIn.push();
                     matrixStackIn.translate(0.5D, 0.44921875D, 0.5D);
 
-                    float y_height = MathHelper.sin(Minecraft.getInstance().world.getGameTime());
-
                     Direction direction1 = Direction.byHorizontalIndex((i + direction.getHorizontalIndex()) % 4);
                     float f = -direction1.getHorizontalAngle();
 
@@ -65,7 +57,7 @@ public class StoneLecternRenderer extends TileEntityRenderer<StoneLecternTileEnt
 
                     matrixStackIn.rotate(Vector3f.YP.rotationDegrees((Minecraft.getInstance().world.getGameTime() % 360) + 180));
 
-                    matrixStackIn.translate(-0.40D, -0.125D + y_height, 0.25D);
+                    matrixStackIn.translate(-0.40D, -0.125D, 0.25D);
 
                     matrixStackIn.scale(0.5F, 0.5F, 0.5F);
 
@@ -78,8 +70,6 @@ public class StoneLecternRenderer extends TileEntityRenderer<StoneLecternTileEnt
                     matrixStackIn.push();
                     matrixStackIn.translate(0.5D, 0.44921875D, 0.5D);
 
-                    float y_height = MathHelper.sin(Minecraft.getInstance().world.getGameTime());
-
                     Direction direction1 = Direction.byHorizontalIndex((i + direction.getHorizontalIndex()) % 4);
                     float f = -direction1.getHorizontalAngle();
 
@@ -87,7 +77,7 @@ public class StoneLecternRenderer extends TileEntityRenderer<StoneLecternTileEnt
 
                     matrixStackIn.rotate(Vector3f.YP.rotationDegrees(Minecraft.getInstance().world.getGameTime() % 360));
 
-                    matrixStackIn.translate(-0.4D, -0.125D + y_height, 0.25D);
+                    matrixStackIn.translate(-0.4D, -0.125D, 0.25D);
 
                     matrixStackIn.scale(0.5F, 0.5F, 0.5F);
                     matrixStackIn.rotate(Vector3f.YN.rotationDegrees( Minecraft.getInstance().world.getGameTime() % 90 * 4));

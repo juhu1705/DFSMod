@@ -64,7 +64,7 @@ public class DesertStructuresPiece {
 
         @Override
         public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenIn, Random rand, MutableBoundingBox mutableBB, ChunkPos chunkPos) {
-            PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.NONE).setMirror(Mirror.NONE).setCenterOffset(BlockPos.ZERO).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
+            PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.randomRotation(rand)).setMirror(Mirror.NONE).setCenterOffset(BlockPos.ZERO).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
             BlockPos blockpos = this.template.getSize();
 
             int i = 256;
@@ -94,8 +94,7 @@ public class DesertStructuresPiece {
             DfSMod.LOGGER.debug("Template size y: " + j);
 
             this.templatePosition = new BlockPos(this.templatePosition.getX(), j, this.templatePosition.getZ());
-            boolean superReturn = super.create(worldIn, chunkGenIn, rand, mutableBB, chunkPos);
-            return superReturn;
+            return super.create(worldIn, chunkGenIn, rand, mutableBB, chunkPos);
         }
 
         @Override

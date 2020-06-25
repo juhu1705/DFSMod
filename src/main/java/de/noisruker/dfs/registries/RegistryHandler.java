@@ -1,16 +1,8 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.blocks.*;
-import de.noisruker.dfs.items.ItemBase;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class RegistryHandler {
 
@@ -25,6 +17,11 @@ public class RegistryHandler {
 
         DfSMod.LOGGER.debug("DfS Blocks are registered");
 
+        ModPotions.EFFECTS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ModPotions.POTIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        DfSMod.LOGGER.debug("DfS Potions are registered");
+
         ModTileEntityTypes.TILE_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         DfSMod.LOGGER.debug("DfS TileEntities are registered");
@@ -34,11 +31,7 @@ public class RegistryHandler {
         DfSMod.LOGGER.debug("DfS Entities are registered");
     }
 
-    public static void postInit() {
-        ModEntityTypes.SPAWN_EGGS.register(FMLJavaModLoadingContext.get().getModEventBus());
 
-        DfSMod.LOGGER.debug("Spawn Eggs are added");
-    }
 
 
     //Loot Tables

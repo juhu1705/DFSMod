@@ -1,9 +1,7 @@
 package de.noisruker.dfs.tileentities;
 
-import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.ModItems;
 import de.noisruker.dfs.registries.ModTileEntityTypes;
-import de.noisruker.dfs.registries.RegistryHandler;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;

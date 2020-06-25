@@ -2,13 +2,13 @@ package de.noisruker.dfs.world.gen;
 
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.ModBlocks;
-import de.noisruker.dfs.registries.RegistryHandler;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biomes;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
-import net.minecraft.world.gen.feature.structure.*;
+import net.minecraft.world.gen.feature.structure.IStructurePieceType;
+import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.CountRangeConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
@@ -94,6 +94,17 @@ public class DfSGenerator {
 
     public static IStructurePieceType DESERT_STRUCTURE_PIECE_TYPE = null;
 
+
+    @ObjectHolder(DfSMod.MOD_ID + ":giant_tree_structures")
+    public static Structure<NoFeatureConfig> GIANT_TREE_STRUCTURE;
+
+    public static final List<ResourceLocation> GIANT_TREE_STRUCTURES_RESOURCES = Arrays.asList(new ResourceLocation(DfSMod.MOD_ID, "tree_bottom"));
+
+    public static final List<Integer> Y_OFFSETS_OF_GIANT_TREE_STRUCTURES = Arrays.asList(0);
+
+    public static IStructurePieceType GIANT_TREE_STRUCTURE_PIECE_TYPE = null;
+
+
     @ObjectHolder(DfSMod.MOD_ID + ":plains_structures")
     public static Structure<NoFeatureConfig> PLAINS_STRUCTURE;
 
@@ -119,7 +130,10 @@ public class DfSGenerator {
                                     .withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
                 }
                 if(FORESTS.contains(biome)) {
-
+                    biome.addStructure(GIANT_TREE_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
+                            GIANT_TREE_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+                                    .withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
                 }
                 if(OCEAN.contains(biome)) {
 

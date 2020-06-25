@@ -11,6 +11,7 @@ import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.ScatteredStructure;
 import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
+import net.minecraft.world.gen.feature.structure.VillagePieces;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
 import java.util.Random;
@@ -54,7 +55,7 @@ public class PlainsStructure extends ScatteredStructure<NoFeatureConfig> {
             int rand = new Random().nextInt(DfSGenerator.PLAINS_STRUCTURES_RESOURCES.size());
             this.components.add(new PlainsStructuresPiece.Piece(templateManagerIn, blockpos,
                     DfSGenerator.PLAINS_STRUCTURES_RESOURCES.get(rand),
-                    DfSGenerator.Y_OFFSETS_OF_PLAINS_STRUCTURES.get(rand).intValue()));
+                    DfSGenerator.Y_OFFSETS_OF_PLAINS_STRUCTURES.get(rand)));
             this.recalculateStructureSize();
 
         }

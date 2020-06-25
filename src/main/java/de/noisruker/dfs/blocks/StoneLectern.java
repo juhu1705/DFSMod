@@ -3,7 +3,6 @@ package de.noisruker.dfs.blocks;
 import de.noisruker.dfs.tileentities.StoneLecternTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
@@ -18,9 +17,7 @@ import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
-
 import net.minecraft.world.IBlockReader;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
