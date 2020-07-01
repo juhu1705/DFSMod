@@ -1,5 +1,6 @@
 package de.noisruker.dfs;
 
+import de.noisruker.dfs.eventbus.ForgeEventBusSubscriber;
 import de.noisruker.dfs.items.ItemSpawnEggSoul;
 import de.noisruker.dfs.registries.*;
 import de.noisruker.dfs.tickrateHandling.TickrateReducer;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -37,6 +39,8 @@ public class DfSMod {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static final ResourceLocation DUNGEON_DIM_TYPE = new ResourceLocation(MOD_ID, "dungeon");
+
     public DfSMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
@@ -44,6 +48,7 @@ public class DfSMod {
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(TickrateReducer.getInstance());
+        MinecraftForge.EVENT_BUS.register(ForgeEventBusSubscriber.class);
     }
 
     private void setup(final FMLCommonSetupEvent event) {

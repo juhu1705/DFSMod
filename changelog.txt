@@ -308,7 +308,7 @@ Build: 1.15.2-31.1.41 - Thu Apr 09 00:19:35 GMT 2020
 =========
 Build: 1.15.2-31.1.40 - Thu Apr 09 00:12:15 GMT 2020
 	46117728+valoeghese:
-		Added hook to allow modded Hill Biomes (#6571)
+		Added hook to allow modded Hill de.noisruker.dfs.Biomes (#6571)
 
 =========
 Build: 1.15.2-31.1.39 - Wed Apr 08 01:45:04 GMT 2020

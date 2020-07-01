@@ -17,5 +17,6 @@ public class ModBlocks {
     public static final RegistryObject<Block> ANCIENT_STONE_BLOCK = BLOCKS.register("ancient_stone_block", AncientStoneBlock::new);
     public static final RegistryObject<Block> CRYSTAL_BLOCK = BLOCKS.register("crystal_block", CrystalBlock::new);
     public static final RegistryObject<Block> CHAIN_BLOCK = BLOCKS.register("chain", BlockChain::new);
+    public static final RegistryObject<Block> DUNGEON_PORTAL = BLOCKS.register("dungeon_portal", DungeonPortal::new);
 
 }
