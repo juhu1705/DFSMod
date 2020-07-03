@@ -1,8 +1,6 @@
-package de.noisruker.dfs.eventbus;
+package de.noisruker.dfs.registries;
 
-import Dimensions.DungeonDimension;
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.registries.ModDimensions;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.world.RegisterDimensionsEvent;
@@ -10,7 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DfSMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class ForgeEventBusSubscriber {
+public class ForgeRegistryEvents {
 
     @SubscribeEvent
     public static void registerDimension(final RegisterDimensionsEvent event){

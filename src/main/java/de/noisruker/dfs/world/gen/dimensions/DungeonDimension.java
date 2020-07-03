@@ -1,4 +1,4 @@
-package Dimensions;
+package de.noisruker.dfs.world.gen.dimensions;
 
 import de.noisruker.dfs.biomes.DungeonBiomeProvider;
 import net.minecraft.entity.player.PlayerEntity;
@@ -8,7 +8,10 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
-import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.EndChunkGenerator;
+import net.minecraft.world.gen.EndGenerationSettings;
+import net.minecraft.world.gen.FlatChunkGenerator;
+import net.minecraft.world.gen.FlatGenerationSettings;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;

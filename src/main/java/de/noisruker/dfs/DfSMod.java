@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -40,6 +41,8 @@ public class DfSMod {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
+    public static final ResourceLocation DUNGEON_DIM_TYPE = new ResourceLocation("dungeon_dimension");
+
     public DfSMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
@@ -49,6 +52,7 @@ public class DfSMod {
         MinecraftForge.EVENT_BUS.register(TickrateReducer.getInstance());
         MinecraftForge.EVENT_BUS.register(PlayerSpecies.class);
         MinecraftForge.EVENT_BUS.register(ModCommands.class);
+        MinecraftForge.EVENT_BUS.register(ForgeRegistryEvents.class);
 
         SpeciesMessages.registerMessages();
     }

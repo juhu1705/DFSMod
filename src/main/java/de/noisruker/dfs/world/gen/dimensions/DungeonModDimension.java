@@ -1,4 +1,4 @@
-package Dimensions;
+package de.noisruker.dfs.world.gen.dimensions;
 
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.Dimension;
