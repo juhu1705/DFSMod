@@ -342,6 +342,48 @@ public class PlayerSpecies implements IEntityMagic {
         playerSpecies.onSave();
     }
 
+    /**@OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public void onRenderManaBarEvent(RenderGameOverlayEvent event)	{
+        if(!event.isCancelable() && event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)	{
+            Minecraft mc = Minecraft.getInstance();
+            if(!mc.player.isCreative() && !mc.player.isSpectator())	{
+                int posX = event.getWindow().getScaledWidth() - 15;
+                int posY = event.getWindow().getScaledHeight() / 2 - 55;
+                mc.getTextureManager().bindTexture(new ResourceLocation(DfSMod.MOD_ID, "textures/gui/manabar.png"));
+                if(Util.ClientMaxPower != 0)	{
+                    mc.ingameGUI.blit(posX + 2, posY + 4, 11, 0, 7, 100);
+                    double newPowerToDraw = (1.0 - ((double) Util.ClientPower / (double) Util.ClientMaxPower)) * 100.0;
+                    if(waiting >= 2)	{
+                        if(powerToDraw < (int) newPowerToDraw)	{
+                            powerToDraw++;
+                        }	else if(powerToDraw > (int) newPowerToDraw)	{
+                            powerToDraw--;
+                        }
+                        waiting = 0;
+                    }	else	{
+                        waiting++;
+                    }
+                    mc.ingameGUI.blit(posX + 2, posY + 4, 18, 0, 7, (int) powerToDraw);
+                    mc.ingameGUI.blit(posX, posY, 0, 0, 11, 110);
+                }
+            }
+        }
+    }
+
+    public static void onPlayerHarvest(PlayerEvent.HarvestCheck event) {
+        PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(event.getPlayer());
+
+        if (playerSpecies == null)
+            return;
+
+        if(playerSpecies.getSpecies().equals(ModSpecies.DWARFS)) {
+            if(event.getTargetBlock().getMaterial().equals(Material.ROCK))
+                event.setCanHarvest(true);
+        }
+
+    }*/
+
     public PlayerEntity getPlayer() {
         return this.player;
     }

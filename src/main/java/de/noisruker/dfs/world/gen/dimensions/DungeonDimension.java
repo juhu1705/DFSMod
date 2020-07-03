@@ -10,8 +10,6 @@ import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.EndChunkGenerator;
 import net.minecraft.world.gen.EndGenerationSettings;
-import net.minecraft.world.gen.FlatChunkGenerator;
-import net.minecraft.world.gen.FlatGenerationSettings;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -26,7 +24,7 @@ public class DungeonDimension extends Dimension {
     @Override
     @Nonnull
     public EndChunkGenerator createChunkGenerator() {
-        new FlatChunkGenerator(world, new DungeonBiomeProvider(), new FlatGenerationSettings());
+        //new FlatChunkGenerator(world, new DungeonBiomeProvider(), new FlatGenerationSettings());
         return new EndChunkGenerator(world, new DungeonBiomeProvider(), new EndGenerationSettings());
     }
 
