@@ -1,3 +1,129 @@
+=========
+Build: 1.15.2-31.2.23 - Wed Jun 24 02:14:02 GMT 2020
+	cpw:
+		Modify how modfiles load slightly, for better decoupling.
+		
+		Signed-off-by: cpw <cpw+github@weeksfamily.ca>
+
+=========
+Build: 1.15.2-31.2.22 - Mon Jun 22 07:52:41 GMT 2020
+	diesieben07:
+		Throw an exception from DeferredRegister when trying to register entries after registry event has fired (#6789)
+
+=========
+Build: 1.15.2-31.2.21 - Thu Jun 18 21:24:34 GMT 2020
+	Colby Prince:
+		Potential userProperties Fix (#6740)
+
+=========
+Build: 1.15.2-31.2.20 - Mon Jun 15 16:37:17 GMT 2020
+	diesieben07:
+		Add system for dimensions to be marked for deletion (#6515)
+
+=========
+Build: 1.15.2-31.2.19 - Sat Jun 13 00:28:16 GMT 2020
+	lex:
+		Fix dedicated server issue in some implementations of Block.getPickBlock. Closes #6566
+
+=========
+Build: 1.15.2-31.2.18 - Fri Jun 12 23:53:12 GMT 2020
+	lex:
+		Fire SpecialSpawn event for mobs spawners. Closes #6700
+
+=========
+Build: 1.15.2-31.2.17 - Fri Jun 12 23:37:10 GMT 2020
+	lex:
+		Remove the yellow coloring on hover in ExtendedButton to match vanilla behavior. Closes #6714 Closes #6713
+
+=========
+Build: 1.15.2-31.2.16 - Fri Jun 12 23:24:45 GMT 2020
+	lex:
+		Fix entity pathing not matching vanilla. Closes #6755
+
+=========
+Build: 1.15.2-31.2.15 - Fri Jun 12 22:48:51 GMT 2020
+	brandon4261:
+		Fixed ItemStack comparison ignoring capabilities when stack nbt is null. (#6764)
+
+	Colby Prince:
+		Fixed --server argument crashing the client (#6754)
+		
+		Closes #6753
+		Moving the fadeOutStart setter above the callback invocation prevents re-entry into the block (which would result in an infinite loop and a StackOverflowException) if the callback causes a render tick (which creating a new ConnectionScreen does).
+
+=========
+Build: 1.15.2-31.2.13 - Fri Jun 12 22:42:58 GMT 2020
+	williewillus:
+		Supply matrixstack to IRenderHandler where possible. Closes #6439 (#6537)
+
+=========
+Build: 1.15.2-31.2.12 - Fri Jun 12 22:37:06 GMT 2020
+	Colby Prince:
+		Added ProjectileImpactEvent.FireworkRocket (#6758)
+
+	diesieben07:
+		Fix StartupQuery not working more than once on the client (#6699)
+
+=========
+Build: 1.15.2-31.2.9 - Sun Jun 07 15:55:20 GMT 2020
+	diesieben07:
+		Fix "overlayMessage" rendering in ForgeIngameGui being different than vanilla (#6748)
+
+=========
+Build: 1.15.2-31.2.8 - Thu Jun 04 14:16:58 GMT 2020
+	David Quintana:
+		Implement loader for ItemLayerModel.
+		Add support for specifying which layers are fullbright.
+		Fix improper generation of model edge. - Thanks to iChun and KnightMiner for the fix suggestions.
+
+=========
+Build: 1.15.2-31.2.7 - Thu Jun 04 03:08:27 GMT 2020
+	lex:
+		Add --flat argument to data generators to not create data in mod specific directores.
+		Useful For Forge's test mods mainly.
+		Standardized data gen cache file's folder separators.
+		Added ItemModelProvider to BlockStateProvider for cleaner datagen code.
+		Added .gitattributes to fix datagen json's line endings correct on windows.
+
+	lex:
+		Remove dead test classes.
+
+=========
+Build: 1.15.2-31.2.5 - Sun May 24 21:41:17 GMT 2020
+	cpw:
+		Improve the DistExecutor API and introduce some "almost completely" safe mechanisms to handle sided lambdas.
+		
+		In general, use sided lambdas safely by embedding them in a separately loaded class. There's a whole twitch stream
+		dedicated to investigating this problem. See link in DistExecutor if you're interested.
+		
+		Signed-off-by: cpw <cpw+github@weeksfamily.ca>
+
+=========
+Build: 1.15.2-31.2.4 - Sun May 24 01:25:42 GMT 2020
+	tterrag:
+		Fix typo in new registry fields' names
+		
+		Note: this is technically a breaking change. If you for some reason added code referencing these two fields in the last few hours, sorry.
+
+=========
+Build: 1.15.2-31.2.3 - Sat May 23 20:23:05 GMT 2020
+	tterrag:
+		Fix server startup query info not including new text
+
+=========
+Build: 1.15.2-31.2.2 - Sat May 23 20:08:11 GMT 2020
+	tterrag:
+		Improve look of notification GUI, improve StartupQuery API
+
+=========
+Build: 1.15.2-31.2.1 - Sat May 23 17:45:49 GMT 2020
+	tterrag:
+		Add forge registries for applicable new registry types
+		
+		Expose constructors for all forge registry entries
+		Also, remove deprecation on ItemCameraTransforms/TransformType
+
+=========
 Build: 1.15.2-31.2.0 - Fri May 15 19:34:16 GMT 2020
 	lex:
 		Bump version for new RB.
@@ -9,6 +135,9 @@ Build: 1.15.2-31.1.99 - Fri May 15 19:25:51 GMT 2020
 
 =========
 Build: 1.15.2-31.1.98 - Fri May 15 18:34:16 GMT 2020
+	ichttt:
+		fix test mod and add warning comment to framebuffer (#6698)
+
 	ichttt:
 		fix test mod and add warning comment to framebuffer (#6698)
 

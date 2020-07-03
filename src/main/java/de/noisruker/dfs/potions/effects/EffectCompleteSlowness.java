@@ -2,16 +2,12 @@ package de.noisruker.dfs.potions.effects;
 
 
 import de.noisruker.dfs.tickrateHandling.TickrateReducer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
-import net.minecraftforge.event.world.ChunkDataEvent;
 
 import javax.annotation.Nullable;
 
@@ -30,19 +26,6 @@ public class EffectCompleteSlowness extends Effect {
 
     @Override
     public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
-
-        Minecraft.getInstance().gameSettings.smoothCamera = false;
-
-        if (entityLivingBaseIn instanceof ClientPlayerEntity && !entityLivingBaseIn.world.isRemote) {
-
-            if (Minecraft.getInstance().player.equals(entityLivingBaseIn))
-                Minecraft.getInstance().gameSettings.smoothCamera = false;
-        }
-
-        if(!entityLivingBaseIn.isLiving()) {
-            Minecraft.getInstance().gameSettings.smoothCamera = false;
-        }
-
         super.performEffect(entityLivingBaseIn, amplifier);
     }
 
@@ -54,7 +37,6 @@ public class EffectCompleteSlowness extends Effect {
     @Override
     public boolean isReady(int duration, int amplifier) {
         if(duration < 1) {
-            Minecraft.getInstance().gameSettings.smoothCamera = false;
             TickrateReducer.setClientTickrate(20f);
             TickrateReducer.setServerTickrate(50L);
         }
