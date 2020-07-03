@@ -1,8 +1,12 @@
 package de.noisruker.dfs.blocks;
 
+import de.noisruker.dfs.registries.ModSpecies;
+import de.noisruker.dfs.screens.SpeciesScreen;
+import de.noisruker.dfs.species.Species;
 import de.noisruker.dfs.tileentities.StoneLecternTileEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
@@ -22,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
 
 import javax.annotation.Nullable;
+import java.util.Map.Entry;
 
 public class StoneLectern extends Block {
 
@@ -113,6 +118,18 @@ public class StoneLectern extends Block {
                 StoneLecternTileEntity stoneLecternTileEntity = (StoneLecternTileEntity) tile;
                 if(stoneLecternTileEntity.isFilledCompletely()) {
                     player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 1));
+
+                    Entry<String, Species>[] speciesToChoose = new Entry[Species.SPECIES.size() - 1];
+
+                    int i = 0;
+
+                    for(Entry<String, Species> e: Species.SPECIES.entrySet())
+                        if(!e.getValue().equals(ModSpecies.HUMAN))
+                            speciesToChoose[i++] = e;
+
+
+                    Minecraft.getInstance().displayGuiScreen(new SpeciesScreen(speciesToChoose));
+
                     stoneLecternTileEntity.clearItems();
 
                 } else

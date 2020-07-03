@@ -11,7 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModItems {
 
-    public static final DeferredRegister<Item> ITEMS = new DeferredRegister<>(ForgeRegistries.ITEMS, DfSMod.MOD_ID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, DfSMod.MOD_ID);
 
     // Items
     public static final RegistryObject<Item> ANCIENT_THING = ITEMS.register("ancient_paper", ItemBase::new);

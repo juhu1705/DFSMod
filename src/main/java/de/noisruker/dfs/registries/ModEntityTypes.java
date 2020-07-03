@@ -6,8 +6,6 @@ import de.noisruker.dfs.entities.SoulEntity;
 import de.noisruker.dfs.entities.renderers.MagicProjectileEntityRenderer;
 import de.noisruker.dfs.entities.renderers.SoulEntityRenderer;
 import de.noisruker.dfs.world.gen.DfSGenerator;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.entity.SpriteRenderer;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +17,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModEntityTypes {
 
-    public static final DeferredRegister<EntityType<?>> ENTITIES = new DeferredRegister<>(ForgeRegistries.ENTITIES, DfSMod.MOD_ID);
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITIES, DfSMod.MOD_ID);
 
     public static final RegistryObject<EntityType<SoulEntity>> ENTITY_SOUL = ENTITIES
             .register("soul_entity", () -> EntityType.Builder

@@ -1,35 +1,19 @@
 package de.noisruker.dfs.tickrateHandling;
 
 
-import cpw.mods.modlauncher.api.ITransformerVotingContext;
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.ModPotions;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MinecraftGame;
-import net.minecraft.client.audio.MinecartTickableSound;
-import net.minecraft.client.audio.SimpleSound;
-import net.minecraft.client.audio.Sound;
-import net.minecraft.client.audio.SoundSystem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.PlaySoundAtEntityEvent;
-import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.PotionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.NoteBlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.loading.FMLCommonLaunchHandler;
-import org.objectweb.asm.Opcodes;
-import org.objectweb.asm.tree.*;
 
 import java.util.ArrayList;
 
@@ -163,6 +147,25 @@ public class TickrateReducer {
         if(event.getPotionEffect().getPotion().equals(ModPotions.COMPLETE_SLOWNESS_EFFECT.get())) {
             checkForNormalTickrate(event.getEntity(), event.getPotionEffect());
         }
+    }
+
+    static boolean smoothed = false;
+
+    @SubscribeEvent
+    public static void clientTick(TickEvent.ClientTickEvent event) {
+        if(!halfRequestsEntities.isEmpty() && !quaterRequestsEntities.isEmpty()) {
+            if (!halfRequestsEntities.contains(Minecraft.getInstance().player) && !quaterRequestsEntities.contains(Minecraft.getInstance().player)) {
+                Minecraft.getInstance().gameSettings.smoothCamera = true;
+                smoothed = true;
+            }
+        } else if (halfRequestsEntities.isEmpty() && quaterRequestsEntities.isEmpty()) {
+            if(smoothed) {
+                Minecraft.getInstance().gameSettings.smoothCamera = false;
+                smoothed = false;
+            }
+        }
+
+        // DfSMod.LOGGER.debug("Species: " + Minecraft.getInstance().player);
     }
 
     @SubscribeEvent

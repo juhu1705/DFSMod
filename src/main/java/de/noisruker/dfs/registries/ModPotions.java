@@ -11,8 +11,8 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModPotions {
 
-    public static final DeferredRegister<Effect> EFFECTS = new DeferredRegister(ForgeRegistries.POTIONS, DfSMod.MOD_ID);
-    public static final DeferredRegister<Potion> POTIONS = new DeferredRegister(ForgeRegistries.POTION_TYPES, DfSMod.MOD_ID);
+    public static final DeferredRegister<Effect> EFFECTS = DeferredRegister.create(ForgeRegistries.POTIONS, DfSMod.MOD_ID);
+    public static final DeferredRegister<Potion> POTIONS = DeferredRegister.create(ForgeRegistries.POTION_TYPES, DfSMod.MOD_ID);
 
     public static final RegistryObject<Effect> COMPLETE_SLOWNESS_EFFECT = EFFECTS.register("complete_slowness", EffectCompleteSlowness::new);
 

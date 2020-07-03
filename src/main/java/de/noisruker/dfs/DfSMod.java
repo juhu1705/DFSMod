@@ -1,24 +1,25 @@
 package de.noisruker.dfs;
 
-import de.noisruker.dfs.eventbus.ForgeEventBusSubscriber;
+import de.noisruker.dfs.commands.ModCommands;
 import de.noisruker.dfs.items.ItemSpawnEggSoul;
+import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.registries.*;
+import de.noisruker.dfs.species.PlayerSpecies;
 import de.noisruker.dfs.tickrateHandling.TickrateReducer;
 import de.noisruker.dfs.world.gen.DfSGenerator;
-import de.noisruker.dfs.world.gen.structures.*;
+import de.noisruker.dfs.world.gen.structures.DesertStructure;
+import de.noisruker.dfs.world.gen.structures.DesertStructuresPiece;
+import de.noisruker.dfs.world.gen.structures.PlainsStructure;
+import de.noisruker.dfs.world.gen.structures.PlainsStructuresPiece;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructure;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructuresPiece;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
-import net.minecraft.world.gen.feature.structure.PillagerOutpostPieces;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.feature.structure.Structures;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -39,8 +40,6 @@ public class DfSMod {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final ResourceLocation DUNGEON_DIM_TYPE = new ResourceLocation(MOD_ID, "dungeon");
-
     public DfSMod() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
 
@@ -48,7 +47,10 @@ public class DfSMod {
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(TickrateReducer.getInstance());
-        MinecraftForge.EVENT_BUS.register(ForgeEventBusSubscriber.class);
+        MinecraftForge.EVENT_BUS.register(PlayerSpecies.class);
+        MinecraftForge.EVENT_BUS.register(ModCommands.class);
+
+        SpeciesMessages.registerMessages();
     }
 
     private void setup(final FMLCommonSetupEvent event) {

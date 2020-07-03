@@ -27,5 +27,16 @@
   "advancements.dfs.craft_stone_lectern.title": "I think it's not for books",
   "advancements.dfs.craft_stone_lectern.description": "Craft a stone lectern",
   "advancements.dfs.ancient_stone_rune.title": "Where does it come from?",
-  "advancements.dfs.ancient_stone_rune.description": "Find an ancient stone rune!"
+  "advancements.dfs.ancient_stone_rune.description": "Find an ancient stone rune!",
+
+  "screen.dfssul.species.enfali": "Enfali",
+  "screen.dfssul.species.nithriln": "Nithriln",
+  "screen.dfssul.species.human": "Human",
+  "screen.dfssul.species.elves": "Elf",
+  "screen.dfssul.species.dwarfs": "Dwarf",
+  "screen.dfssul.species.dragonth": "Dragonth",
+  "screen.dfssul.species.magic_human": "Human",
+  "screen.dfssul.species.continue": "Next",
+  "screen.dfssul.species.finish": "Finish",
+  "screen.dfssul.species.back": "Previous"
 }

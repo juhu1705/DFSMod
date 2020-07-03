@@ -15,7 +15,7 @@ import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nullable;
 
-public class StoneLecternTileEntity extends TileEntity {
+public class StoneLecternTileEntity extends TileEntity{
 
     public ItemStack item_1 = ItemStack.EMPTY;
     public ItemStack item_2 = ItemStack.EMPTY;
@@ -35,17 +35,29 @@ public class StoneLecternTileEntity extends TileEntity {
         ItemStack itemToAdd = playerEntity.inventory.getCurrentItem();
 
         if(itemToAdd.isItemEqual(ModItems.CRYSTAL_ITEM.get().getDefaultInstance())) {
-            if(item_2.isEmpty())
-                item_2 = playerEntity.inventory.decrStackSize(playerEntity.inventory.currentItem, 1);
-            else if(item_3.isEmpty())
-                item_3 = playerEntity.inventory.decrStackSize(playerEntity.inventory.currentItem, 1);
+            if(item_2.isEmpty()) {
+                if (!playerEntity.isCreative())
+                    item_2 = playerEntity.inventory.decrStackSize(playerEntity.inventory.currentItem, 1);
+                else
+                    item_2 = new ItemStack(playerEntity.inventory.getCurrentItem().getItem(), 1);
+            }
+            else if(item_3.isEmpty()) {
+                if (!playerEntity.isCreative())
+                    item_3 = playerEntity.inventory.decrStackSize(playerEntity.inventory.currentItem, 1);
+                else
+                    item_3 = new ItemStack(playerEntity.inventory.getCurrentItem().getItem(), 1);
+            }
 
             this.markDirty();
             world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
             return true;
         } else if(itemToAdd.isItemEqual(ModItems.ANCIENT_THING.get().getDefaultInstance())) {
-            if(item_1.isEmpty())
-                item_1 = playerEntity.inventory.decrStackSize(playerEntity.inventory.currentItem, 1);
+            if(item_1.isEmpty()) {
+                if (!playerEntity.isCreative())
+                    item_1 = playerEntity.inventory.decrStackSize(playerEntity.inventory.currentItem, 1);
+                else
+                    item_1 = new ItemStack(playerEntity.inventory.getCurrentItem().getItem(), 1);
+            }
             this.markDirty();
             world.notifyBlockUpdate(pos, getBlockState(), getBlockState(), 3);
             return true;
