@@ -59,6 +59,7 @@ public class PlayerSpecies implements IEntityMagic {
         species.updatePlayer(_new);
 
         putPlayer(_new, species);
+        species.setMaxPower(old.getGameProfile().get(PlayerSpecies.MAX_POWER_VALUE));
     }
 
     public static PlayerSpecies putPlayer(PlayerEntity player, PlayerSpecies species) {
