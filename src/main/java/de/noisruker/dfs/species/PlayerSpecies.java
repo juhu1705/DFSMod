@@ -60,6 +60,7 @@ public class PlayerSpecies implements IEntityMagic {
 
         putPlayer(_new, species);
         species.setMaxPower(old.getGameProfile().get(PlayerSpecies.MAX_POWER_VALUE));
+        species. setPowerRegenerationAmount(old.getGameProfile().get(PlayerSpecies.REGENERATION_VALUE));
     }
 
     public static PlayerSpecies putPlayer(PlayerEntity player, PlayerSpecies species) {
