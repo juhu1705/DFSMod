@@ -5,11 +5,16 @@ import de.noisruker.dfs.entities.IEntityMagic;
 import de.noisruker.dfs.registries.ModSpecies;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.server.ServerBossInfo;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.EntityEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -27,6 +32,7 @@ public class PlayerSpecies implements IEntityMagic {
     private static final String POWER = "power", REGENERATION = "power_regeneration", MAX_POWER = "max_power", SPECIES = "species";
     private static final DataParameter<Float> POWER_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.FLOAT), MAX_POWER_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.FLOAT), REGENERATION_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.FLOAT);
     private static final DataParameter<String> SPECIES_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.STRING);
+    private ServerBossInfo bossInfo = new ServerBossInfo(new TranslationTextComponent("Power"), BossInfo.Color.BLUE, BossInfo.Overlay.PROGRESS);
     private Species species;
     private PlayerEntity player;
     //private boolean dataRegistered = false;
@@ -59,8 +65,9 @@ public class PlayerSpecies implements IEntityMagic {
         species.updatePlayer(_new);
 
         putPlayer(_new, species);
-        species.setMaxPower(old.getGameProfile().get(PlayerSpecies.MAX_POWER_VALUE));
-        species. setPowerRegenerationAmount(old.getGameProfile().get(PlayerSpecies.REGENERATION_VALUE));
+        species.setPower(0.0f);
+        species.setMaxPower(old.getDataManager().get(PlayerSpecies.MAX_POWER_VALUE));
+        species.setPowerRegenerationAmount(old.getDataManager().get(PlayerSpecies.REGENERATION_VALUE));
     }
 
     public static PlayerSpecies putPlayer(PlayerEntity player, PlayerSpecies species) {
@@ -88,6 +95,9 @@ public class PlayerSpecies implements IEntityMagic {
         species.applyBaseValues(player);
         this.onResize();
 
+        if(!player.world.isRemote() && player instanceof ServerPlayerEntity)
+            this.bossInfo.addPlayer((ServerPlayerEntity) player);
+
         //this.registerDataParameters();
     }
 
@@ -97,6 +107,9 @@ public class PlayerSpecies implements IEntityMagic {
         this.onResize();
 
         //this.registerDataParameters();
+
+        if(!player.world.isRemote() && player instanceof ServerPlayerEntity)
+            this.bossInfo.addPlayer((ServerPlayerEntity) player);
 
         return this;
     }
@@ -110,6 +123,10 @@ public class PlayerSpecies implements IEntityMagic {
         this.setSpecies(species);
         species.applyBaseValues(player);
         this.onResize();
+
+        this.setPowerRegenerationAmount(species.getPowerRegeneration());
+        this.setMaxPower(species.getInitMaxPower());
+        this.setPower(0.0f);
 
         this.player.setHealth(this.player.getMaxHealth() - (10 - this.player.getHealth()));
 
@@ -133,10 +150,10 @@ public class PlayerSpecies implements IEntityMagic {
     private static void registerDataParameters(PlayerEntity player, Species species) {
         DfSMod.LOGGER.debug("Data Parameter are registered! ");
 
-            player.getDataManager().register(PlayerSpecies.POWER_VALUE, 0.0f);
-            player.getDataManager().register(PlayerSpecies.MAX_POWER_VALUE, species.getInitMaxPower());
-            player.getDataManager().register(PlayerSpecies.REGENERATION_VALUE, species.getPowerRegeneration());
-            player.getDataManager().register(PlayerSpecies.SPECIES_VALUE, Species.getKeyForSpecies(species));
+        player.getDataManager().register(PlayerSpecies.POWER_VALUE, 0.0f);
+        player.getDataManager().register(PlayerSpecies.MAX_POWER_VALUE, species.getInitMaxPower());
+        player.getDataManager().register(PlayerSpecies.REGENERATION_VALUE, species.getPowerRegeneration());
+        player.getDataManager().register(PlayerSpecies.SPECIES_VALUE, Species.getKeyForSpecies(species));
 
 
         DfSMod.LOGGER.debug("Data Parameter are registered! ");
@@ -179,10 +196,13 @@ public class PlayerSpecies implements IEntityMagic {
 
         this.setNewSpecies(this.species);
 
-        this.setMaxPower(this.player.getPersistentData().getFloat("maxPower"));
-        this.setPower(this.player.getPersistentData().getFloat("power"));
-        this.setPowerRegenerationAmount(this.player.getPersistentData().getFloat("powerRegeneration"));
+        DfSMod.LOGGER.debug("Loaded Max Power: " + this.player.getPersistentData().getFloat(PlayerSpecies.MAX_POWER));
+
+        this.setMaxPower(this.player.getPersistentData().getFloat(PlayerSpecies.MAX_POWER));
+        this.setPower(this.player.getPersistentData().getFloat(PlayerSpecies.POWER));
+        this.setPowerRegenerationAmount(this.player.getPersistentData().getFloat(PlayerSpecies.REGENERATION));
         this.species.applyBaseValues(this.player);
+        this.bossInfo.removeAllPlayers();
         this.onResize();
     }
 
@@ -204,6 +224,8 @@ public class PlayerSpecies implements IEntityMagic {
     public IEntityMagic setPower(float power) {
         if(power <= this.getMaxPower())
             this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, power);
+        else
+            this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, this.getMaxPower());
         return this;
     }
 
@@ -211,7 +233,7 @@ public class PlayerSpecies implements IEntityMagic {
     public IEntityMagic setMaxPower(float maxPower) {
         this.player.getDataManager().set(PlayerSpecies.MAX_POWER_VALUE, maxPower);
 
-        if(this.getPower() < this.getMaxPower())
+        if(this.getPower() > this.getMaxPower())
             this.setPower(this.getMaxPower());
 
         return this;
@@ -231,6 +253,44 @@ public class PlayerSpecies implements IEntityMagic {
     @Override
     public IEntityMagic regeneratePower() {
         return this;
+    }
+
+    public IEntityMagic regeneratePower(PlayerEntity serverPlayer) {
+        try {
+            if(this.getMaxPower() == 0) {
+                if(this.bossInfo.isVisible())
+                    this.bossInfo.setVisible(false);
+                return this;
+            }
+
+            if(!this.bossInfo.isVisible())
+                this.bossInfo.setVisible(true);
+
+            if (serverPlayer.world.rand.nextInt(20) == 1) {
+                this.setPower(this.getPower() + this.getPowerRegeneration() * serverPlayer.world.rand.nextFloat());
+                DfSMod.LOGGER.debug("Regenerate to " + this.getPower() + " / " + this.getMaxPower());
+            }
+
+            if(serverPlayer instanceof ServerPlayerEntity && !serverPlayer.world.isRemote()) {
+
+                try {
+                    ServerPlayerEntity playerEntity = (ServerPlayerEntity) serverPlayer;
+                    if(!this.bossInfo.getPlayers().contains(serverPlayer)) {
+                        this.bossInfo.removeAllPlayers();
+                        this.bossInfo.addPlayer(playerEntity);
+                    }
+                } catch (ClassCastException exception) {
+                    return this;
+                }
+
+            }
+
+            this.bossInfo.setPercent(this.getPower() / this.getMaxPower());
+
+        } catch (NullPointerException nullPointerException) {
+            return this;
+        }
+            return this;
     }
 
     @SubscribeEvent
@@ -280,7 +340,6 @@ public class PlayerSpecies implements IEntityMagic {
 
         playerSpecies.onLoad();
         playerSpecies.species.setHearts(player);
-
     }
 
     @SubscribeEvent
@@ -344,11 +403,24 @@ public class PlayerSpecies implements IEntityMagic {
         playerSpecies.onSave();
     }
 
+    @SubscribeEvent
+    public static void onPlayerServerTick(LivingEvent.LivingUpdateEvent event) {
+        if(event.getEntityLiving() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
+            PlayerSpecies species = PlayerSpecies.getOrCreatePlayer(player);
+
+            if(species != null)
+                species.regeneratePower(player);
+        }
+    }
+
     /**@OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderManaBarEvent(RenderGameOverlayEvent event)	{
         if(!event.isCancelable() && event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)	{
             Minecraft mc = Minecraft.getInstance();
+
+
             if(!mc.player.isCreative() && !mc.player.isSpectator())	{
                 int posX = event.getWindow().getScaledWidth() - 15;
                 int posY = event.getWindow().getScaledHeight() / 2 - 55;
@@ -371,8 +443,9 @@ public class PlayerSpecies implements IEntityMagic {
                 }
             }
         }
-    }
+    }*/
 
+    /**
     public static void onPlayerHarvest(PlayerEvent.HarvestCheck event) {
         PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(event.getPlayer());
 

@@ -18,6 +18,6 @@ public class ModCommands {
     }
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {
-        LiteralCommandNode<CommandSource> cmds = dispatcher.register(Commands.literal(DfSMod.MOD_ID).then(CommandGetSpecies.register(dispatcher)).then(CommandGetAllSpecies.register(dispatcher)));
+        LiteralCommandNode<CommandSource> cmds = dispatcher.register(Commands.literal(DfSMod.MOD_ID).then(CommandGetSpecies.register(dispatcher)).then(CommandGetAllSpecies.register(dispatcher)).then(CommandSetPower.register(dispatcher)));
     }
 }
