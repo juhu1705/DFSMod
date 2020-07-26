@@ -1,6 +1,7 @@
 package de.noisruker.dfs.species;
 
 import com.google.common.collect.ImmutableMap;
+import de.noisruker.dfs.registries.ModSpecies;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -40,6 +41,10 @@ public class Species {
         this.setAttackSpeed(playerEntity);
         this.setStrength(playerEntity);
         this.setHearts(playerEntity);
+        if(this.equals(ModSpecies.ENFALI)) {
+
+        }
+
     }
 
     public void setStrength(PlayerEntity playerEntity) {

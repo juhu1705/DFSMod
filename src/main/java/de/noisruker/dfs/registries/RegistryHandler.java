@@ -40,5 +40,7 @@ public class RegistryHandler {
 
     //Loot Tables
     public static final ResourceLocation DESERT_CHEST_LOOT = new ResourceLocation(DfSMod.MOD_ID, "chests/desert_structures");
+    public static final ResourceLocation ARMOR_CHEST_LOOT = new ResourceLocation(DfSMod.MOD_ID, "chests/chest_armor");
+    public static final ResourceLocation TREASURE_CHEST_LOOT = new ResourceLocation(DfSMod.MOD_ID, "chests/chest_treasure");
 
 }

@@ -4,6 +4,7 @@ package de.noisruker.dfs.tickrateHandling;
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.ModPotions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.EffectInstance;
@@ -117,6 +118,28 @@ public class TickrateReducer {
         }
     }
 
+    public static final ArrayList<ClientPlayerEntity> SMOOTHED_PLAYERS = new ArrayList<>();
+
+    @SubscribeEvent
+    public static void playerTick(TickEvent.ClientTickEvent event) {
+        if(Minecraft.getInstance().player == null)
+            return;
+
+
+
+        if(Minecraft.getInstance().player.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null && (tickrateHalfed || tickrateQuatered)) {
+            Minecraft.getInstance().gameSettings.smoothCamera = true;
+            if(!SMOOTHED_PLAYERS.contains(Minecraft.getInstance().player))
+                SMOOTHED_PLAYERS.add(Minecraft.getInstance().player);
+        } else if(!tickrateHalfed && !tickrateQuatered) {
+            if(SMOOTHED_PLAYERS.contains(Minecraft.getInstance().player)) {
+                SMOOTHED_PLAYERS.remove(Minecraft.getInstance().player);
+                Minecraft.getInstance().gameSettings.smoothCamera = false;
+            }
+        }
+
+    }
+
     @SubscribeEvent
     public static void slowmotionHaste(PlayerEvent.BreakSpeed event) {
         if(halfRequestsEntities.contains(event.getEntity()))
@@ -127,7 +150,7 @@ public class TickrateReducer {
 
     @SubscribeEvent
     public static void removeSlowmotion(PotionEvent.PotionRemoveEvent event) {
-        DfSMod.LOGGER.debug("Effect removed from player: " + event.getPotion().getName() + " to " + event.getPotionEffect());
+
 
         if(event.getPotionEffect() == null)
             return;
@@ -139,7 +162,6 @@ public class TickrateReducer {
 
     @SubscribeEvent
     public static void expireSlowmotion(PotionEvent.PotionExpiryEvent event) {
-        DfSMod.LOGGER.debug("Effect removed from player: " + event.getPotionEffect().getPotion().getName() + " to " + event.getPotionEffect());
 
         if(event.getPotionEffect() == null)
             return;
@@ -147,6 +169,20 @@ public class TickrateReducer {
         if(event.getPotionEffect().getPotion().equals(ModPotions.COMPLETE_SLOWNESS_EFFECT.get())) {
             checkForNormalTickrate(event.getEntity(), event.getPotionEffect());
         }
+    }
+
+    @SubscribeEvent
+    public static void playerDied(PlayerEvent.Clone playerEvent) {
+        if(playerEvent.getOriginal().getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) != null)
+            checkForNormalTickrate(playerEvent.getOriginal(),
+                    playerEvent.getOriginal().getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()));
+    }
+
+    @SubscribeEvent
+    public static void playerLeft(PlayerEvent.PlayerLoggedOutEvent playerEvent) {
+        if(playerEvent.getPlayer().getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) != null)
+            checkForNormalTickrate(playerEvent.getPlayer(),
+                    playerEvent.getPlayer().getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()));
     }
 
     static boolean smoothed = false;

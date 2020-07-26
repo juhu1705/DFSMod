@@ -130,6 +130,9 @@ public class DfSGenerator {
                                     .withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
                 }
                 if(FORESTS.contains(biome)) {
+
+                }
+                if(Biomes.GIANT_TREE_TAIGA.equals(biome) || Biomes.GIANT_SPRUCE_TAIGA.equals(biome)) {
                     biome.addStructure(GIANT_TREE_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
                     biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
                             GIANT_TREE_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)

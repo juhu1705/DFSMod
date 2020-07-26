@@ -2,6 +2,9 @@ package de.noisruker.dfs.species;
 
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.entities.IEntityMagic;
+import de.noisruker.dfs.network.PacketActiveAbility;
+import de.noisruker.dfs.network.SpeciesMessages;
+import de.noisruker.dfs.registries.ModKeyBindings;
 import de.noisruker.dfs.registries.ModSpecies;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,9 +12,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -241,6 +246,14 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public IEntityMagic usePower(float amount) {
+        if(this.getPower() < amount) {
+            amount -= this.getPower();
+            this.setPower(0);
+            amount *= 0.1;
+            this.player.attackEntityFrom(DamageSource.MAGIC, amount);
+            return this;
+        }
+        this.setPower(this.getPower() - amount);
         return this;
     }
 
@@ -266,9 +279,9 @@ public class PlayerSpecies implements IEntityMagic {
             if(!this.bossInfo.isVisible())
                 this.bossInfo.setVisible(true);
 
-            if (serverPlayer.world.rand.nextInt(20) == 1) {
+            if (serverPlayer.world.rand.nextInt(100) == 1 && !serverPlayer.isSprinting() && serverPlayer.getHealth() == serverPlayer.getMaxHealth()) {
                 this.setPower(this.getPower() + this.getPowerRegeneration() * serverPlayer.world.rand.nextFloat());
-                DfSMod.LOGGER.debug("Regenerate to " + this.getPower() + " / " + this.getMaxPower());
+                //DfSMod.LOGGER.debug("Regenerate to " + this.getPower() + " / " + this.getMaxPower());
             }
 
             if(serverPlayer instanceof ServerPlayerEntity && !serverPlayer.world.isRemote()) {
@@ -401,6 +414,8 @@ public class PlayerSpecies implements IEntityMagic {
             return;
 
         playerSpecies.onSave();
+
+
     }
 
     @SubscribeEvent
@@ -462,4 +477,13 @@ public class PlayerSpecies implements IEntityMagic {
     public PlayerEntity getPlayer() {
         return this.player;
     }
+
+    @SubscribeEvent
+    public static void onKeyPress(InputEvent.KeyInputEvent event) {
+        if(ModKeyBindings.USE_ACTIVE_ABILITY.isPressed()) {
+            SpeciesMessages.INSTANCE.sendToServer(new PacketActiveAbility());
+        }
+    }
+
+
 }
