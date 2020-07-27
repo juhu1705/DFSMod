@@ -1,6 +1,6 @@
-package de.noisruker.dfs.entities.renderers;
+package de.noisruker.dfs.objects.entities.renderers;
 
-import de.noisruker.dfs.entities.MagicProjectileEntity;
+import de.noisruker.dfs.objects.entities.MagicProjectileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;

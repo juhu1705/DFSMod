@@ -1,9 +1,9 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.blocks.BlocksItemBase;
-import de.noisruker.dfs.items.ItemBase;
-import de.noisruker.dfs.items.ItemSpawnEggSoul;
+import de.noisruker.dfs.objects.blocks.BlocksItemBase;
+import de.noisruker.dfs.objects.items.ItemBase;
+import de.noisruker.dfs.objects.items.ItemSpawnEggSoul;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

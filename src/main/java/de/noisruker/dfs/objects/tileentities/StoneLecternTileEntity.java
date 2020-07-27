@@ -1,4 +1,4 @@
-package de.noisruker.dfs.tileentities;
+package de.noisruker.dfs.objects.tileentities;
 
 import de.noisruker.dfs.registries.ModItems;
 import de.noisruker.dfs.registries.ModTileEntityTypes;

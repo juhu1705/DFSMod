@@ -1,4 +1,4 @@
-package de.noisruker.dfs.blocks;
+package de.noisruker.dfs.objects.blocks;
 
 import net.minecraft.block.OreBlock;
 import net.minecraft.block.SoundType;

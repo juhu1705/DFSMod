@@ -1,4 +1,4 @@
-package de.noisruker.dfs.entities;
+package de.noisruker.dfs.objects.entities;
 
 import de.noisruker.dfs.registries.ModItems;
 import net.minecraft.entity.EntityType;
@@ -8,6 +8,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.controller.MovementController;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
+import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -42,9 +43,8 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
         super.goalSelector.addGoal(3, new RandomFlyGoal(this));
         super.goalSelector.addGoal(5, new LookAroundGoal(this));
         super.goalSelector.addGoal(4, new MagicProjectileAttackGoal(this));
-        super.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 15, true, false, (p_213812_1_) -> {
-            return Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D;
-        }));
+        super.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 15, true, false, (p_213812_1_) -> Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D));
+        super.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 15, true, false, (p_213812_1_) -> Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D));
     }
 
     @Override

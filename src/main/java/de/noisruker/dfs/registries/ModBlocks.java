@@ -1,7 +1,7 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.blocks.*;
+import de.noisruker.dfs.objects.blocks.*;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

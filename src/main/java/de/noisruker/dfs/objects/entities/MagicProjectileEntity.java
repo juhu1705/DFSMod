@@ -1,10 +1,9 @@
-package de.noisruker.dfs.entities;
+package de.noisruker.dfs.objects.entities;
 
-import de.noisruker.dfs.blocks.AncientStoneBlock;
+import de.noisruker.dfs.objects.blocks.AncientStoneBlock;
 import de.noisruker.dfs.registries.ModEntityTypes;
 import de.noisruker.dfs.registries.ModItems;
 import de.noisruker.dfs.species.PlayerSpecies;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -90,8 +89,8 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
                 Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
                 if(explosion$mode.equals(Explosion.Mode.DESTROY)) {
                     if(!world.isRemote) {
-                        BlockState state = world.getBlockState(block);
-                        state.getBlock().onBlockHarvested(world, block, state, null);
+                        //BlockState state = world.getBlockState(block);
+                        //state.getBlock().onBlockHarvested(world, block, state, null);
                     }
                 }
             }

@@ -1,10 +1,10 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.entities.MagicProjectileEntity;
-import de.noisruker.dfs.entities.SoulEntity;
-import de.noisruker.dfs.entities.renderers.MagicProjectileEntityRenderer;
-import de.noisruker.dfs.entities.renderers.SoulEntityRenderer;
+import de.noisruker.dfs.objects.entities.MagicProjectileEntity;
+import de.noisruker.dfs.objects.entities.SoulEntity;
+import de.noisruker.dfs.objects.entities.renderers.MagicProjectileEntityRenderer;
+import de.noisruker.dfs.objects.entities.renderers.SoulEntityRenderer;
 import de.noisruker.dfs.world.gen.DfSGenerator;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;

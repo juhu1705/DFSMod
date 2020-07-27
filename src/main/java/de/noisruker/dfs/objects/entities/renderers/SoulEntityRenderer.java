@@ -1,9 +1,9 @@
-package de.noisruker.dfs.entities.renderers;
+package de.noisruker.dfs.objects.entities.renderers;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.entities.SoulEntity;
+import de.noisruker.dfs.objects.entities.SoulEntity;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;

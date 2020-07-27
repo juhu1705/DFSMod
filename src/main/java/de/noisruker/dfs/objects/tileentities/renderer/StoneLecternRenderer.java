@@ -1,8 +1,8 @@
-package de.noisruker.dfs.tileentities.renderer;
+package de.noisruker.dfs.objects.tileentities.renderer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import de.noisruker.dfs.blocks.StoneLectern;
-import de.noisruker.dfs.tileentities.StoneLecternTileEntity;
+import de.noisruker.dfs.objects.blocks.StoneLectern;
+import de.noisruker.dfs.objects.tileentities.StoneLecternTileEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.Vector3f;

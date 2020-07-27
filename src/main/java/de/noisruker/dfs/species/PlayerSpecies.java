@@ -1,12 +1,8 @@
 package de.noisruker.dfs.species;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.entities.IEntityMagic;
-import de.noisruker.dfs.network.PacketActiveAbility;
-import de.noisruker.dfs.network.SpeciesMessages;
-import de.noisruker.dfs.registries.ModKeyBindings;
+import de.noisruker.dfs.objects.entities.IEntityMagic;
 import de.noisruker.dfs.registries.ModSpecies;
-import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
@@ -16,19 +12,12 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.server.ServerBossInfo;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.event.entity.EntityEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = DfSMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class PlayerSpecies implements IEntityMagic {
 
     private static final HashMap<UUID, PlayerSpecies> PLAYER_SPECIES = new HashMap<>();
@@ -36,15 +25,17 @@ public class PlayerSpecies implements IEntityMagic {
 
     private static final String POWER = "power", REGENERATION = "power_regeneration", MAX_POWER = "max_power", SPECIES = "species";
     private static final DataParameter<Float> POWER_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.FLOAT), MAX_POWER_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.FLOAT), REGENERATION_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.FLOAT);
-    private static final DataParameter<String> SPECIES_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.STRING);
+    static final DataParameter<String> SPECIES_VALUE = EntityDataManager.createKey(PlayerEntity.class, DataSerializers.STRING);
+    static {
+        DfSMod.LOGGER.debug("IDs are registered " + POWER_VALUE.getId() + " | " + MAX_POWER_VALUE.getId() + " | " + REGENERATION_VALUE.getId() + " | " + SPECIES_VALUE.getId());
+    }
     private ServerBossInfo bossInfo = new ServerBossInfo(new TranslationTextComponent("Power"), BossInfo.Color.BLUE, BossInfo.Overlay.PROGRESS);
-    private Species species;
-    private PlayerEntity player;
+    Species species;
+    PlayerEntity player;
     //private boolean dataRegistered = false;
 
     public static PlayerSpecies getOrCreatePlayer(PlayerEntity player) {
         // DfSMod.LOGGER.debug("Containing Player: " + PlayerSpecies.PLAYER_SPECIES.containsKey(player));
-
 
         if (player.getGameProfile() == null)
             return null;
@@ -152,8 +143,8 @@ public class PlayerSpecies implements IEntityMagic {
 
     }
 
-    private static void registerDataParameters(PlayerEntity player, Species species) {
-        DfSMod.LOGGER.debug("Data Parameter are registered! ");
+    static void registerDataParameters(PlayerEntity player, Species species) {
+        DfSMod.LOGGER.debug("Data Parameter are registered!");
 
         player.getDataManager().register(PlayerSpecies.POWER_VALUE, 0.0f);
         player.getDataManager().register(PlayerSpecies.MAX_POWER_VALUE, species.getInitMaxPower());
@@ -181,7 +172,7 @@ public class PlayerSpecies implements IEntityMagic {
         this.species.applyBoundings(this.player);
     }
 
-    private void onSave() {
+    void onSave() {
         DfSMod.LOGGER.debug("Save Species Playerdata: " + Species.getKeyForSpecies(this.getSpecies()));
 
         this.player.getPersistentData().putFloat(PlayerSpecies.POWER, this.getPower());
@@ -190,7 +181,7 @@ public class PlayerSpecies implements IEntityMagic {
         this.player.getPersistentData().putString(PlayerSpecies.SPECIES, Species.getKeyForSpecies(this.getSpecies()));
     }
 
-    private void onLoad() {
+    void onLoad() {
         DfSMod.LOGGER.debug("Contains species: " + this.player.getPersistentData().contains(PlayerSpecies.SPECIES));
         if (this.player.getPersistentData().contains(PlayerSpecies.SPECIES))
             this.species = Species.SPECIES.get(this.player.getPersistentData().getString(PlayerSpecies.SPECIES));
@@ -333,129 +324,6 @@ public class PlayerSpecies implements IEntityMagic {
         return this;
     }
 
-    @SubscribeEvent
-    public static void onPlayerEyeHeightEvent(EntityEvent.EyeHeight event) {
-
-        if(event.getEntity() instanceof PlayerEntity) {
-
-            PlayerSpecies player = PlayerSpecies.getOrCreatePlayer((PlayerEntity) event.getEntity());
-
-            if(player == null)
-                return;
-
-            try {
-                switch (event.getPose()) {
-                    case SPIN_ATTACK:
-                    case FALL_FLYING:
-                    case SWIMMING:
-                        //event.setNewHeight(player.species.getEyeHeight() - 1.22f);
-                        event.setNewHeight(0.4f);
-                        break;
-                    case CROUCHING:
-                        event.setNewHeight(player.species.getEyeHeight() - 0.35f);
-                        break;
-                    default:
-                        event.setNewHeight(player.species.getEyeHeight());
-                }
-            } catch (NullPointerException exception) {
-                DfSMod.LOGGER.debug("Can't load eye height!");
-            }
-
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerJoin(PlayerEvent.PlayerLoggedInEvent event) {
-        registerDataParameters(event.getPlayer(), ModSpecies.HUMAN);
-
-        PlayerEntity player = (PlayerEntity) event.getEntity();
-
-        //registerDataParameters(player, ModSpecies.HUMAN);
-
-
-        PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(player);
-
-        if (playerSpecies == null)
-            return;
-
-        playerSpecies.onLoad();
-        playerSpecies.species.setHearts(player);
-    }
-
-    @SubscribeEvent
-    public static void onPlayerRespawn(PlayerEvent.Clone event) {
-        registerDataParameters(event.getPlayer(), Species.SPECIES.get(event.getOriginal().getDataManager().get(PlayerSpecies.SPECIES_VALUE)));
-
-        changePlayerBoundig(event.getOriginal(), event.getPlayer());
-    }
-
-    @SubscribeEvent
-    public static void onPlayerResize(RenderPlayerEvent event) {
-        if(event instanceof RenderPlayerEvent.Pre) {
-            PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(event.getPlayer());
-
-            event.getMatrixStack().push();
-
-            if(playerSpecies == null)
-                return;
-
-
-            float width = playerSpecies.species.getWidth() / 0.6f,
-                    height = playerSpecies.species.getHeight() / 1.8f;
-            //DfSMod.LOGGER.debug("Width: " + width + "; Height: " + height);
-
-            if(playerSpecies.player.getPose().equals(Pose.SWIMMING) ||playerSpecies.player.getPose().equals(Pose.FALL_FLYING) ||playerSpecies.player.getPose().equals(Pose.SPIN_ATTACK)) {
-
-
-                event.getMatrixStack().scale(height, height, height);
-            } else
-                event.getMatrixStack().scale(height, height, height);
-        } else if(event instanceof RenderPlayerEvent.Post) {
-            event.getMatrixStack().pop();
-        }
-    }
-
-    public static void onPlayer(EntityEvent.EntityConstructing event) {
-        if(event.getEntity() instanceof PlayerEntity) {
-
-            PlayerEntity player = (PlayerEntity) event.getEntity();
-
-            //registerDataParameters(player, ModSpecies.HUMAN);
-
-
-            PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(player);
-
-            if (playerSpecies == null)
-                return;
-
-            playerSpecies.onLoad();
-            playerSpecies.species.setHearts(player);
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerSave(PlayerEvent.PlayerLoggedOutEvent event) {
-        PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(event.getPlayer());
-
-        if (playerSpecies == null)
-            return;
-
-        playerSpecies.onSave();
-
-
-    }
-
-    @SubscribeEvent
-    public static void onPlayerServerTick(LivingEvent.LivingUpdateEvent event) {
-        if(event.getEntityLiving() instanceof PlayerEntity) {
-            PlayerEntity player = (PlayerEntity) event.getEntityLiving();
-            PlayerSpecies species = PlayerSpecies.getOrCreatePlayer(player);
-
-            if(species != null)
-                species.regeneratePower(player);
-        }
-    }
-
     /**@OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderManaBarEvent(RenderGameOverlayEvent event)	{
@@ -503,13 +371,6 @@ public class PlayerSpecies implements IEntityMagic {
 
     public PlayerEntity getPlayer() {
         return this.player;
-    }
-
-    @SubscribeEvent
-    public static void onKeyPress(InputEvent.KeyInputEvent event) {
-        if(ModKeyBindings.USE_ACTIVE_ABILITY.isPressed()) {
-            SpeciesMessages.INSTANCE.sendToServer(new PacketActiveAbility());
-        }
     }
 
     @Override

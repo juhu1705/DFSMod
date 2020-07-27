@@ -3,6 +3,7 @@ package de.noisruker.dfs.world.gen.structures.giant_tree;
 import com.google.common.collect.Lists;
 import com.mojang.datafixers.Dynamic;
 import de.noisruker.dfs.DfSMod;
+import de.noisruker.dfs.registries.ModEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SharedSeedRandom;
@@ -24,7 +25,7 @@ import java.util.function.Function;
 
 public class GiantTreeStructure extends ScatteredStructure<NoFeatureConfig> {
 
-    private static final List<Biome.SpawnListEntry> PILLAGE_OUTPOST_ENEMIES = Lists.newArrayList(new Biome.SpawnListEntry(EntityType.PILLAGER, 100, 1, 10));
+    private static final List<Biome.SpawnListEntry> GIANT_TREE_ENEMIES = Lists.newArrayList(new Biome.SpawnListEntry(EntityType.PILLAGER, 100, 1, 10), new Biome.SpawnListEntry(EntityType.CAT, 10, 1, 6), new Biome.SpawnListEntry(ModEntityTypes.ENTITY_SOUL.get(), 50, 2, 3), new Biome.SpawnListEntry(EntityType.VEX, 2, 1, 1));
 
     public GiantTreeStructure(Function<Dynamic<?>, ? extends NoFeatureConfig> pillageOutpostConfigIn) {
         super(pillageOutpostConfigIn);
@@ -39,7 +40,7 @@ public class GiantTreeStructure extends ScatteredStructure<NoFeatureConfig> {
     }
 
     public List<Biome.SpawnListEntry> getSpawnList() {
-        return PILLAGE_OUTPOST_ENEMIES;
+        return GIANT_TREE_ENEMIES;
     }
 
     protected ChunkPos getStartPositionForPosition(ChunkGenerator<?> chunkGenerator, Random random, int x, int z, int spacingOffsetsX, int spacingOffsetsZ) {

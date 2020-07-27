@@ -1,8 +1,8 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.tileentities.StoneLecternTileEntity;
-import de.noisruker.dfs.tileentities.renderer.StoneLecternRenderer;
+import de.noisruker.dfs.objects.tileentities.StoneLecternTileEntity;
+import de.noisruker.dfs.objects.tileentities.renderer.StoneLecternRenderer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.ClientRegistry;

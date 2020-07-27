@@ -1,4 +1,4 @@
-package de.noisruker.dfs.items;
+package de.noisruker.dfs.objects.items;
 
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.ModEntityTypes;

@@ -1,10 +1,10 @@
 package de.noisruker.dfs;
 
 import de.noisruker.dfs.commands.ModCommands;
-import de.noisruker.dfs.items.ItemSpawnEggSoul;
 import de.noisruker.dfs.network.SpeciesMessages;
+import de.noisruker.dfs.objects.items.ItemSpawnEggSoul;
 import de.noisruker.dfs.registries.*;
-import de.noisruker.dfs.species.PlayerSpecies;
+import de.noisruker.dfs.species.PlayerSpeciesEvents;
 import de.noisruker.dfs.species.SpeciesPassiveAbilities;
 import de.noisruker.dfs.tickrateHandling.TickrateReducer;
 import de.noisruker.dfs.world.gen.DfSGenerator;
@@ -52,7 +52,7 @@ public class DfSMod {
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(TickrateReducer.getInstance());
-        MinecraftForge.EVENT_BUS.register(PlayerSpecies.class);
+        MinecraftForge.EVENT_BUS.register(PlayerSpeciesEvents.class);
         MinecraftForge.EVENT_BUS.register(ModCommands.class);
         MinecraftForge.EVENT_BUS.register(ForgeRegistryEvents.class);
         MinecraftForge.EVENT_BUS.register(SpeciesPassiveAbilities.class);

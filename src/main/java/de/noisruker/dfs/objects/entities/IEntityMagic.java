@@ -1,4 +1,4 @@
-package de.noisruker.dfs.entities;
+package de.noisruker.dfs.objects.entities;
 
 public interface IEntityMagic {
 
