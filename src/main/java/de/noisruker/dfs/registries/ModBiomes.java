@@ -1,7 +1,7 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.biomes.DungeonBiome;
+import de.noisruker.dfs.world.gen.biomes.DungeonBiome;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

@@ -1,6 +1,6 @@
 package de.noisruker.dfs.world.gen.dimensions;
 
-import de.noisruker.dfs.biomes.DungeonBiomeProvider;
+import de.noisruker.dfs.world.gen.biomes.DungeonBiomeProvider;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;

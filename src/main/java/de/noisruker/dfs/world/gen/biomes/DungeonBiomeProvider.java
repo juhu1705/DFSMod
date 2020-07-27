@@ -1,4 +1,4 @@
-package de.noisruker.dfs.biomes;
+package de.noisruker.dfs.world.gen.biomes;
 
 
 import com.google.common.collect.ImmutableSet;

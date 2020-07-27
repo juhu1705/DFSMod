@@ -1,8 +1,7 @@
-package de.noisruker.dfs.biomes;
+package de.noisruker.dfs.world.gen.biomes;
 
 import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
-import net.minecraft.world.gen.EndGenerationSettings;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 
 public class DungeonChunkGenerator extends NoiseChunkGenerator<DungeonGenerationSettings> {
