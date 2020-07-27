@@ -46,19 +46,19 @@ public class PlayerSpecies implements IEntityMagic {
         // DfSMod.LOGGER.debug("Containing Player: " + PlayerSpecies.PLAYER_SPECIES.containsKey(player));
 
 
-        if(player.getGameProfile() == null)
+        if (player.getGameProfile() == null)
             return null;
 
         //DfSMod.LOGGER.debug("Erfolgreich");
 
-        for(Map.Entry<UUID, PlayerSpecies> entry: PlayerSpecies.PLAYER_SPECIES.entrySet()) {
+        for (Map.Entry<UUID, PlayerSpecies> entry : PlayerSpecies.PLAYER_SPECIES.entrySet()) {
             //DfSMod.LOGGER.debug("Hi " + entry.getKey().equals(player.getGameProfile().getId()) + " " + entry.getValue().updatePlayer(player).getSpecies() == null);
-            if(entry.getKey().equals(player.getGameProfile().getId()))
+            if (entry.getKey().equals(player.getGameProfile().getId()))
                 return entry.getValue().updatePlayer(player);
 
         }
 
-        if(PlayerSpecies.PLAYER_SPECIES.containsKey(player.getGameProfile().getId()))
+        if (PlayerSpecies.PLAYER_SPECIES.containsKey(player.getGameProfile().getId()))
             return PlayerSpecies.PLAYER_SPECIES.get(player.getGameProfile().getId());
 
         return PlayerSpecies.putPlayer(player, new PlayerSpecies(player)) == null ? PlayerSpecies.PLAYER_SPECIES.get(player.getGameProfile().getId()) : PlayerSpecies.PLAYER_SPECIES.get(player.getGameProfile().getId());
@@ -94,13 +94,13 @@ public class PlayerSpecies implements IEntityMagic {
 
         try {
             this.setSpecies(s);
-        } catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             DfSMod.LOGGER.debug("Can't load species to players data manager!");
         }
         species.applyBaseValues(player);
         this.onResize();
 
-        if(!player.world.isRemote() && player instanceof ServerPlayerEntity)
+        if (!player.world.isRemote() && player instanceof ServerPlayerEntity)
             this.bossInfo.addPlayer((ServerPlayerEntity) player);
 
         //this.registerDataParameters();
@@ -113,7 +113,7 @@ public class PlayerSpecies implements IEntityMagic {
 
         //this.registerDataParameters();
 
-        if(!player.world.isRemote() && player instanceof ServerPlayerEntity)
+        if (!player.world.isRemote() && player instanceof ServerPlayerEntity)
             this.bossInfo.addPlayer((ServerPlayerEntity) player);
 
         return this;
@@ -192,7 +192,7 @@ public class PlayerSpecies implements IEntityMagic {
 
     private void onLoad() {
         DfSMod.LOGGER.debug("Contains species: " + this.player.getPersistentData().contains(PlayerSpecies.SPECIES));
-        if(this.player.getPersistentData().contains(PlayerSpecies.SPECIES))
+        if (this.player.getPersistentData().contains(PlayerSpecies.SPECIES))
             this.species = Species.SPECIES.get(this.player.getPersistentData().getString(PlayerSpecies.SPECIES));
         else
             this.species = ModSpecies.HUMAN;
@@ -213,34 +213,55 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public float getPower() {
-        return this.player.getDataManager().get(PlayerSpecies.POWER_VALUE);
+        try {
+            return this.player.getDataManager().get(PlayerSpecies.POWER_VALUE);
+        } catch (NullPointerException ignore) {
+
+        }
+        return 0;
     }
 
     @Override
     public float getMaxPower() {
-        return this.player.getDataManager().get(PlayerSpecies.MAX_POWER_VALUE);
+        try {
+            return this.player.getDataManager().get(PlayerSpecies.MAX_POWER_VALUE);
+        } catch (NullPointerException ignore) {
+
+        }
+        return -1;
     }
 
     public float getPowerRegeneration() {
-        return this.player.getDataManager().get(PlayerSpecies.REGENERATION_VALUE);
+        try {
+            return this.player.getDataManager().get(PlayerSpecies.REGENERATION_VALUE);
+        } catch (NullPointerException ignore) {
+
+        }
+        return 0;
     }
 
     @Override
     public IEntityMagic setPower(float power) {
+        try {
         if(power <= this.getMaxPower())
             this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, power);
         else
             this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, this.getMaxPower());
+        } catch (NullPointerException ignore) {
+
+        }
         return this;
     }
 
     @Override
     public IEntityMagic setMaxPower(float maxPower) {
+        try {
         this.player.getDataManager().set(PlayerSpecies.MAX_POWER_VALUE, maxPower);
+        } catch (NullPointerException ignore) {
 
+        }
         if(this.getPower() > this.getMaxPower())
             this.setPower(this.getMaxPower());
-
         return this;
     }
 
@@ -259,7 +280,11 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public IEntityMagic setPowerRegenerationAmount(float powerRegeneration) {
-        this.player.getDataManager().set(PlayerSpecies.REGENERATION_VALUE, powerRegeneration);
+        try {
+            this.player.getDataManager().set(PlayerSpecies.REGENERATION_VALUE, powerRegeneration);
+        } catch (NullPointerException ignore) {
+
+        }
         return this;
     }
 
@@ -273,6 +298,8 @@ public class PlayerSpecies implements IEntityMagic {
             if(this.getMaxPower() == 0) {
                 if(this.bossInfo.isVisible())
                     this.bossInfo.setVisible(false);
+                return this;
+            } else if(this.getMaxPower() == -1) {
                 return this;
             }
 
@@ -300,10 +327,10 @@ public class PlayerSpecies implements IEntityMagic {
 
             this.bossInfo.setPercent(this.getPower() / this.getMaxPower());
 
-        } catch (NullPointerException nullPointerException) {
-            return this;
+        } catch (NullPointerException ignored) {
+
         }
-            return this;
+        return this;
     }
 
     @SubscribeEvent
@@ -485,5 +512,9 @@ public class PlayerSpecies implements IEntityMagic {
         }
     }
 
-
+    @Override
+    public IEntityMagic addPower(float power) {
+        this.setPower(this.getPower() + power);
+        return this;
+    }
 }

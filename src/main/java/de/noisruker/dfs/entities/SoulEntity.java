@@ -1,6 +1,5 @@
 package de.noisruker.dfs.entities;
 
-import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.ModItems;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.FlyingEntity;
@@ -11,12 +10,8 @@ import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.EggEntity;
-import net.minecraft.item.EggItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -117,6 +112,12 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
         return this;
     }
 
+    @Override
+    public IEntityMagic addPower(float power) {
+        this.setPower(this.getPower() + power);
+        return this;
+    }
+
     static class MagicProjectileAttackGoal extends Goal {
         private final SoulEntity parentEntity;
         public int attackTimer;
@@ -152,7 +153,7 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
          */
         public void tick() {
             LivingEntity livingentity = this.parentEntity.getAttackTarget();
-            double d0 = 64.0D;
+
             if (livingentity != null && livingentity.getDistanceSq(this.parentEntity) < 4096.0D
                     && this.parentEntity.canEntityBeSeen(livingentity)) {
                 World world = this.parentEntity.world;
@@ -162,23 +163,21 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
                 }
 
                 if (this.attackTimer == 40) {
-                    double d1 = 4.0D;
 
-                    Vec3d vec3d = this.parentEntity.getLook(1.0F);
-                    double d2 = livingentity.getPosX() - (this.parentEntity.getPosX() + vec3d.x * 4.0D);
-                    double d3 = livingentity.getPosYHeight(0.5D) - (0.5D + this.parentEntity.getPosYHeight(0.5D));
-                    double d4 = livingentity.getPosZ() - (this.parentEntity.getPosZ() + vec3d.z * 4.0D);
-                    //world.playEvent((PlayerEntity)null, 1016, new BlockPos(this.parentEntity), 0);
-                    MagicProjectileEntity magicProjectileEntity = new MagicProjectileEntity(this.parentEntity, world);
-                    //magicProjectileEntity.setItem(new ItemStack(ModItems.MAGIC_PROJECTILE.get()));
-                    magicProjectileEntity.shoot(parentEntity, parentEntity.rotationPitch, parentEntity.rotationYaw, 0.0F, 1.5F, 0.0F);
-                    //magicProjectileEntity.setPosition(this.parentEntity.getPosX() + vec3d.x * 4.0D, this.parentEntity.getPosYHeight(0.5D) + 0.5D, magicProjectileEntity.getPosZ() + vec3d.z * 4.0D);
-                    //magicProjectileEntity.setAttackTarget(livingentity);
+                    MagicProjectileEntity magicProjectileEntity = new MagicProjectileEntity(world, this.parentEntity);
+
+                    magicProjectileEntity.setItem(new ItemStack(ModItems.MAGIC_PROJECTILE.get()));
+
+                    double d0 = livingentity.getPosX() - this.parentEntity.getPosX();
+                    double d1 = livingentity.getPosYHeight(0.3333333333333333D) - magicProjectileEntity.getPosY();
+                    double d2 = livingentity.getPosZ() - this.parentEntity.getPosZ();
+                    double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+
+                    magicProjectileEntity.shoot(d0, d1 + d3 * (double)0.2F, d2, 1.6F, (float)(14 - this.parentEntity.world.getDifficulty().getId() * 4));
+
+                    magicProjectileEntity.setPower(100f);
+
                     world.addEntity(magicProjectileEntity);
-                    EggEntity eggentity = new EggEntity(world, parentEntity);
-                    //eggentity.setItem(new ItemStack(ModItems.MAGIC_PROJECTILE.get()));
-                    //eggentity.shoot(parentEntity, parentEntity.rotationPitch, parentEntity.rotationYaw, 0.0F, 1.5F, 1.0F);
-                    //world.addEntity(eggentity);
 
                     this.attackTimer = -40;
                 }

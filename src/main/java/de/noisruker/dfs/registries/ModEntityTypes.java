@@ -28,7 +28,7 @@ public class ModEntityTypes {
 
     public static final RegistryObject<EntityType<MagicProjectileEntity>> ENTITY_MAGIC_PROJECTILE = ENTITIES
             .register("magic_projectile_entity", () -> EntityType.Builder
-                    .<MagicProjectileEntity>create(MagicProjectileEntity::new, EntityClassification.MONSTER)
+                    .<MagicProjectileEntity>create(MagicProjectileEntity::new, EntityClassification.MISC)
                     .immuneToFire()
                     .size(0.2F, 0.2F)
                     .build(new ResourceLocation(DfSMod.MOD_ID, "magic_projectile_entity").toString()));
@@ -38,7 +38,7 @@ public class ModEntityTypes {
 
 
     public static void bindRenderers() {
-        RenderingRegistry.registerEntityRenderingHandler(ENTITY_MAGIC_PROJECTILE.get(), MagicProjectileEntityRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ENTITY_MAGIC_PROJECTILE.get(), new MagicProjectileEntityRenderer.Factory());
         RenderingRegistry.registerEntityRenderingHandler(ENTITY_SOUL.get(), SoulEntityRenderer::new);
 
 

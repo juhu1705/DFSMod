@@ -1,72 +1,51 @@
 package de.noisruker.dfs.entities;
 
-import com.google.common.collect.Lists;
-import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.blocks.AncientStoneBlock;
 import de.noisruker.dfs.registries.ModEntityTypes;
 import de.noisruker.dfs.registries.ModItems;
-import javafx.geometry.Side;
+import de.noisruker.dfs.species.PlayerSpecies;
 import net.minecraft.block.BlockState;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.entity.*;
-import net.minecraft.entity.ai.controller.MovementController;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
-import net.minecraft.entity.monster.BlazeEntity;
-import net.minecraft.entity.monster.PhantomEntity;
-import net.minecraft.entity.monster.ZombieEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.entity.projectile.EggEntity;
-import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
 import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.network.play.server.SSpawnObjectPacket;
+import net.minecraft.particles.IParticleData;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
-import net.minecraft.potion.EffectInstance;
-import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Direction;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvents;
-import net.minecraft.util.math.*;
-import net.minecraft.world.Difficulty;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-
-import javax.annotation.Nullable;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import net.minecraftforge.fml.network.NetworkHooks;
 
 public class MagicProjectileEntity extends ProjectileItemEntity implements IEntityMagic {
 
-    private float power = 0, maxPower = 100, regenerationAmount = 0;
     private static final DataParameter<Float> POWER = EntityDataManager.createKey(MagicProjectileEntity.class, DataSerializers.FLOAT);
-    private static final DataParameter<BlockPos> POSITION = EntityDataManager.createKey(MagicProjectileEntity.class, DataSerializers.BLOCK_POS);
+
+    private int ticker = 200;
 
     public MagicProjectileEntity(EntityType<? extends ProjectileItemEntity> type, World worldIn) {
-        super(type, worldIn);
+        super((EntityType<? extends SnowballEntity>) type, worldIn);
     }
 
-    public MagicProjectileEntity(double x, double y, double z, World worldIn) {
+    public MagicProjectileEntity(World worldIn, double x, double y, double z) {
         super(ModEntityTypes.ENTITY_MAGIC_PROJECTILE.get(), x, y, z, worldIn);
-
-
     }
 
-    public MagicProjectileEntity(LivingEntity livingEntityIn, World worldIn) {
+    public MagicProjectileEntity(World worldIn, LivingEntity livingEntityIn) {
         super(ModEntityTypes.ENTITY_MAGIC_PROJECTILE.get(), livingEntityIn, worldIn);
     }
 
@@ -79,15 +58,43 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
     protected void onImpact(RayTraceResult result) {
         if (result.getType() == RayTraceResult.Type.ENTITY) {
             Entity entity = ((EntityRayTraceResult)result).getEntity();
-            entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), power / 10f);
+            if(entity instanceof PlayerEntity) {
+                PlayerSpecies species = PlayerSpecies.getOrCreatePlayer((PlayerEntity) entity);
+
+                if(species != null) {
+                    if(species.getMaxPower() > 0) {
+                        float powerLeft = this.getPower() + species.getPower() - species.getMaxPower();
+
+                        species.addPower(this.getPower());
+
+                        entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), powerLeft / 10f);
+                    } else
+                        entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
+                } else
+                    entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
+            } else if(entity instanceof IEntityMagic) {
+                IEntityMagic entityMagic = (IEntityMagic) entity;
+
+                float powerLeft = this.getPower() + entityMagic.getPower() - entityMagic.getMaxPower();
+
+                entityMagic.addPower(this.getPower());
+
+                entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), powerLeft / 10f);
+            } else
+                entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
         } else if(result.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos block = ((BlockRayTraceResult)result).getPos();
-            if(world.getBlockState(block).getBlock() instanceof AncientStoneBlock)
-                ((AncientStoneBlock)world.getBlockState(block).getBlock()).asItem();
-            else
-                world.sendBlockBreakProgress(block.hashCode(), block, (int)(power / 10f));
-            
+            if(world.getBlockState(block).getBlock() instanceof AncientStoneBlock) {
 
+            } else {
+                Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
+                if(explosion$mode.equals(Explosion.Mode.DESTROY)) {
+                    if(!world.isRemote) {
+                        BlockState state = world.getBlockState(block);
+                        state.getBlock().onBlockHarvested(world, block, state, null);
+                    }
+                }
+            }
         }
 
         if (!this.world.isRemote) {
@@ -97,34 +104,66 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
     }
 
     @OnlyIn(Dist.CLIENT)
+    private IParticleData makeParticle() {
+        ItemStack itemstack = this.func_213882_k();
+        return (IParticleData)(itemstack.isEmpty() ? ParticleTypes.BUBBLE_POP : new ItemParticleData(ParticleTypes.ITEM, itemstack));
+    }
+
+    /**
+     * Handler for {@link World#setEntityState}
+     */
+    @OnlyIn(Dist.CLIENT)
     public void handleStatusUpdate(byte id) {
-        BlockPos pos = super.dataManager.get(POSITION);
-        super.setPosition(pos.getX(), pos.getY(), pos.getZ());
+        if (id == 3) {
+            IParticleData iparticledata = this.makeParticle();
+
+            for(int i = 0; i < 8; ++i) {
+                this.world.addParticle(iparticledata, this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
+            }
+        } else {
+            this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.func_213882_k()), this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
+        }
+
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if(this.world.isRemote)
+            this.world.addParticle(ParticleTypes.SMOKE, this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
+        else if(--ticker <= 0) {
+            this.setPower(this.getPower() - 0.1f);
+            ticker = 200;
+        }
+
     }
 
     @Override
     protected void registerData() {
+        this.dataManager.register(MagicProjectileEntity.POWER, 0f);
+
         super.registerData();
-        super.dataManager.register(POSITION, super.getPosition());
-        super.dataManager.register(POWER, this.power);
     }
 
     @Override
     public float getPower() {
-        return this.power;
+        return this.dataManager.get(MagicProjectileEntity.POWER);
     }
-
-
 
     @Override
     public float getMaxPower() {
-        return this.maxPower;
+        return 0;
     }
 
     @Override
     public IEntityMagic setPower(float power) {
-        if(power <= this.maxPower && power >= 0)
-            this.power = power;
+        if(power >= 0)
+            this.dataManager.set(MagicProjectileEntity.POWER, power);
+        else if (!this.world.isRemote) {
+            this.world.setEntityState(this, (byte)3);
+            this.remove();
+        }
         return this;
     }
 
@@ -136,21 +175,30 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
 
     @Override
     public IEntityMagic usePower(float amount) {
-        float checkPower = this.power - amount;
-        if(checkPower >= 0 && checkPower <= this.maxPower)
-            this.power = checkPower;
+
         return this;
     }
 
     @Override
     public IEntityMagic setPowerRegenerationAmount(float powerRegeneration) {
-        this.regenerationAmount = powerRegeneration;
+
         return this;
     }
 
     @Override
     public IEntityMagic regeneratePower() {
-        this.usePower(-this.regenerationAmount);
+
         return this;
+    }
+
+    @Override
+    public IEntityMagic addPower(float power) {
+        this.setPower(this.getPower() + power);
+        return this;
+    }
+
+    @Override
+    public IPacket<?> createSpawnPacket() {
+        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

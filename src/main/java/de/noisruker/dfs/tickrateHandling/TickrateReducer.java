@@ -100,8 +100,6 @@ public class TickrateReducer {
     @SubscribeEvent
     public static void applySlowmotion(PotionEvent.PotionAddedEvent event) {
 
-        DfSMod.LOGGER.debug("Effect added to player: " + event.getPotionEffect().getPotion().getName() + " | " + event.toString());
-
         if(event.getPotionEffect().getPotion().equals(ModPotions.COMPLETE_SLOWNESS_EFFECT.get())) {
             if (event.getPotionEffect().getAmplifier() == 0 && !halfRequestsEntities.contains(event.getEntity())) {
                 halfTickrate();

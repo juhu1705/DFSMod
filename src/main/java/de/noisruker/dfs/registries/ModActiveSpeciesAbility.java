@@ -38,8 +38,8 @@ public class ModActiveSpeciesAbility {
 
     public static final IAbility DRAGONTH_ABILITY = ABILITIES.put(ModSpecies.DRAGONTH, (playerSpecies -> {
         playerSpecies.usePower(100);
-        playerSpecies.getPlayer().addPotionEffect(new EffectInstance(Effects.ABSORPTION, 100, 1));
-        playerSpecies.getPlayer().addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 1, 2));
+        playerSpecies.getPlayer().addPotionEffect(new EffectInstance(Effects.ABSORPTION, 20, 0));
+        //playerSpecies.getPlayer().addPotionEffect(new EffectInstance(Effects.INSTANT_HEALTH, 1, 0));
         playerSpecies.getPlayer().addPotionEffect(new EffectInstance(Effects.RESISTANCE, 1000, 2));
     }));
 

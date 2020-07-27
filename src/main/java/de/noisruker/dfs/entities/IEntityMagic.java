@@ -16,4 +16,6 @@ public interface IEntityMagic {
 
     public IEntityMagic regeneratePower();
 
+    public IEntityMagic addPower(float power);
+
 }
