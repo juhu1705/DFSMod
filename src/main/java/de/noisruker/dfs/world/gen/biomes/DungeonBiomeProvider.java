@@ -12,10 +12,10 @@ import java.util.Set;
 public class DungeonBiomeProvider extends BiomeProvider {
 
     public DungeonBiomeProvider() {
-        super(ImmutableSet.of(Biomes.PLAINS));
+        super(ImmutableSet.of(Biomes.END_BARRENS));
     }
 
-    private static final Set<Biome> biomeList= ImmutableSet.of(Biomes.PLAINS);
+    private static final Set<Biome> biomeList= ImmutableSet.of(Biomes.END_HIGHLANDS);
 
     @Override
     @Nonnull
