@@ -11,6 +11,8 @@ import net.minecraft.entity.ai.goal.NearestAttackableTargetGoal;
 import net.minecraft.entity.monster.CreeperEntity;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -43,7 +45,18 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
         super.goalSelector.addGoal(3, new RandomFlyGoal(this));
         super.goalSelector.addGoal(5, new LookAroundGoal(this));
         super.goalSelector.addGoal(4, new MagicProjectileAttackGoal(this));
-        super.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 15, true, false, (p_213812_1_) -> Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D));
+        super.goalSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, PlayerEntity.class, 15, true, false, (p_213812_1_) -> {
+            if(p_213812_1_ instanceof PlayerEntity) {
+                for(ItemStack stack: ((PlayerEntity) p_213812_1_).getArmorInventoryList()) {
+                    if(stack.getItem() instanceof ArmorItem){
+                        if(((ArmorItem) stack.getItem()).getEquipmentSlot().equals(EquipmentSlotType.HEAD))
+                            return false;
+                    }
+                }
+            }
+
+            return Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D;
+        }));
         super.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, CreeperEntity.class, 15, true, false, (p_213812_1_) -> Math.abs(p_213812_1_.getPosY() - this.getPosY()) <= 6.0D));
     }
 
@@ -153,6 +166,17 @@ public class SoulEntity extends FlyingEntity implements IEntityMagic, IMob {
          */
         public void tick() {
             LivingEntity livingentity = this.parentEntity.getAttackTarget();
+
+            if(livingentity instanceof PlayerEntity) {
+                for(ItemStack stack: ((PlayerEntity) livingentity).getArmorInventoryList()) {
+                    if(stack.getItem() instanceof ArmorItem){
+                        if(((ArmorItem) stack.getItem()).getEquipmentSlot().equals(EquipmentSlotType.HEAD)) {
+                            this.parentEntity.setAttackTarget(null);
+                            return;
+                        }
+                    }
+                }
+            }
 
             if (livingentity != null && livingentity.getDistanceSq(this.parentEntity) < 4096.0D
                     && this.parentEntity.canEntityBeSeen(livingentity)) {
