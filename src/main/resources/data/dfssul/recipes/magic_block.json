@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "AAA",
+    "ALA",
+    "AAA"
+  ],
+  "key": {
+    "L": {
+      "item": "dfssul:magic_shard"
+    },
+    "A": {
+      "item": "dfssul:ancient_shard"
+    }
+  },
+  "result": {
+    "item": "dfssul:magic_block",
+    "count": 4
+  }
+}

@@ -8,10 +8,7 @@ import de.noisruker.dfs.species.PlayerSpeciesEvents;
 import de.noisruker.dfs.species.SpeciesPassiveAbilities;
 import de.noisruker.dfs.tickrateHandling.TickrateReducer;
 import de.noisruker.dfs.world.gen.DfSGenerator;
-import de.noisruker.dfs.world.gen.structures.DesertStructure;
-import de.noisruker.dfs.world.gen.structures.DesertStructuresPiece;
-import de.noisruker.dfs.world.gen.structures.PlainsStructure;
-import de.noisruker.dfs.world.gen.structures.PlainsStructuresPiece;
+import de.noisruker.dfs.world.gen.structures.*;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructure;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructuresPiece;
 import net.minecraft.client.renderer.RenderType;
@@ -114,6 +111,11 @@ public class DfSMod {
                 DfSMod.MOD_ID + ":giant_tree_structures", GiantTreeStructuresPiece.GiantTree::new);
         args.getRegistry().register(new GiantTreeStructure(NoFeatureConfig::deserialize)
                 .setRegistryName(DfSMod.MOD_ID + ":giant_tree_structures"));
+
+        DfSGenerator.GIANT_TREE_STRUCTURE_PIECE_TYPE = Registry.register(Registry.STRUCTURE_PIECE,
+                DfSMod.MOD_ID + ":mountain_structures", MountainStructuresPiece.Piece::new);
+        args.getRegistry().register(new MountainStructure(NoFeatureConfig::deserialize)
+                .setRegistryName(DfSMod.MOD_ID + ":mountain_structures"));
 
 
 

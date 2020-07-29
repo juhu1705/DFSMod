@@ -1,6 +1,5 @@
 package de.noisruker.dfs.world.gen.structures;
 
-import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.RegistryHandler;
 import de.noisruker.dfs.world.gen.DfSGenerator;
 import net.minecraft.nbt.CompoundNBT;
@@ -70,9 +69,6 @@ public class PlainsStructuresPiece {
             int i = 256;
             int j = 0;
 
-            DfSMod.LOGGER.debug("Template size x: " + blockpos.getX());
-            DfSMod.LOGGER.debug("Template size z: " + blockpos.getZ());
-
             int k = blockpos.getX() * blockpos.getZ();
 
             if(k == 0)
@@ -90,8 +86,6 @@ public class PlainsStructuresPiece {
             }
 
             j -= y_offset;
-
-            DfSMod.LOGGER.debug("Template size y: " + j);
 
             this.templatePosition = new BlockPos(this.templatePosition.getX(), j, this.templatePosition.getZ());
             boolean superReturn = super.create(worldIn, chunkGenIn, rand, mutableBB, chunkPos);

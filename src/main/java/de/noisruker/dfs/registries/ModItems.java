@@ -18,6 +18,7 @@ public class ModItems {
     public static final RegistryObject<Item> ANCIENT_SHARD = ITEMS.register("ancient_shard", ItemBase::new);
     public static final RegistryObject<Item> ANCIENT_STONE_RUNE = ITEMS.register("ancient_stone_rune", ItemBase::new);
     public static final RegistryObject<Item> MAGIC_PROJECTILE = ITEMS.register("magic_projectile", ItemBase::new);
+    public static final RegistryObject<Item> MAGIC_SHARD = ITEMS.register("magic_shard", ItemBase::new);
 
     //Block Items
     public static final RegistryObject<Item> STONE_PILLAR_ITEM = ITEMS.register("stone_pillar_block", () -> new BlocksItemBase(ModBlocks.STONE_PILLAR_BLOCK.get()));
@@ -26,6 +27,8 @@ public class ModItems {
     public static final RegistryObject<Item> CRYSTAL_ITEM = ITEMS.register("crystal_block", () -> new BlocksItemBase(ModBlocks.CRYSTAL_BLOCK.get()));
     public static final RegistryObject<Item> CHAIN_ITEM = ITEMS.register("chain", () -> new BlocksItemBase(ModBlocks.CHAIN_BLOCK.get()));
     public static final RegistryObject<Item> DUNGEON_PORTAL_ITEM = ITEMS.register("dungeon_portal", () -> new BlocksItemBase(ModBlocks.DUNGEON_PORTAL.get()));
+    public static final RegistryObject<Item> MAGIC_ORE_BLOCK_ITEM = ITEMS.register("magic_ore_block", () -> new BlocksItemBase(ModBlocks.MAGIC_ORE_BLOCK.get()));
+    public static final RegistryObject<Item> MAGIC_BLOCK_ITEM = ITEMS.register("magic_block", () -> new BlocksItemBase(ModBlocks.MAGIC_BLOCK.get()));
 
     //Spawn Eggs
     public static final RegistryObject<Item> SPAWN_SOUL = ITEMS.register("soul_spawn_egg", ItemSpawnEggSoul::new);

@@ -1,4 +1,4 @@
-package de.noisruker.dfs.screens;
+package de.noisruker.dfs.objects.screens;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.noisruker.dfs.DfSMod;

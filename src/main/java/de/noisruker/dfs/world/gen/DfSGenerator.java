@@ -52,6 +52,17 @@ public class DfSGenerator {
             Biomes.WARM_OCEAN,
             Biomes.LUKEWARM_OCEAN);
 
+    public static final List<Biome> MOUNTAINS = Arrays.asList(Biomes.MOUNTAIN_EDGE,
+            Biomes.MOUNTAINS,
+            Biomes.GRAVELLY_MOUNTAINS,
+            Biomes.SNOWY_MOUNTAINS,
+            Biomes.MODIFIED_GRAVELLY_MOUNTAINS,
+            Biomes.SNOWY_TAIGA_MOUNTAINS,
+            Biomes.TAIGA_MOUNTAINS,
+            Biomes.WOODED_MOUNTAINS,
+            Biomes.SAVANNA_PLATEAU,
+            Biomes.SHATTERED_SAVANNA_PLATEAU);
+
     public static final List<Biome> FORESTS = Arrays.asList(Biomes.TAIGA,
             Biomes.TAIGA_HILLS,
             Biomes.TAIGA_MOUNTAINS,
@@ -80,6 +91,14 @@ public class DfSGenerator {
                     .withPlacement(Placement.COUNT_RANGE.configure(cAncientStone));
 
             b.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, cfAncientStone);
+
+            CountRangeConfig cMagicOre = new CountRangeConfig(16, 5, 5, 30);
+            OreFeatureConfig oMagicOre = new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
+                    ModBlocks.MAGIC_ORE_BLOCK.get().getDefaultState(), 2);
+            ConfiguredFeature<?, ?> cfMagicOre = Feature.ORE.withConfiguration(oMagicOre)
+                    .withPlacement(Placement.COUNT_RANGE.configure(cMagicOre));
+
+            b.addFeature(GenerationStage.Decoration.UNDERGROUND_ORES, cfMagicOre);
         }
     }
 
@@ -116,8 +135,10 @@ public class DfSGenerator {
 
     public static IStructurePieceType PLAINS_STRUCTURE_PIECE_TYPE = null;
 
+    @ObjectHolder(DfSMod.MOD_ID + ":mountain_structures")
+    public static Structure<NoFeatureConfig> MOUNTAIN_STRUCTURE;
 
-
+    public static IStructurePieceType MOUNTAIN_STRUCTURE_PIECE_TYPE = null;
 
     private static void setupStructureGeneration() {
         DeferredWorkQueue.runLater(() -> {
@@ -140,6 +161,12 @@ public class DfSGenerator {
                 }
                 if(OCEAN.contains(biome)) {
 
+                }
+                if(MOUNTAINS.contains(biome)) {
+                    biome.addStructure(MOUNTAIN_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));
+                    biome.addFeature(GenerationStage.Decoration.SURFACE_STRUCTURES,
+                            MOUNTAIN_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG)
+                                    .withPlacement(Placement.NOPE.configure(IPlacementConfig.NO_PLACEMENT_CONFIG)));
                 }
                 if(FLAT_LANDS.contains(biome)) {
                     biome.addStructure(PLAINS_STRUCTURE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG));

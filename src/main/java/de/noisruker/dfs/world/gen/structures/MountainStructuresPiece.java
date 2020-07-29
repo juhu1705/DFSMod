@@ -1,7 +1,9 @@
 package de.noisruker.dfs.world.gen.structures;
 
+import com.google.common.collect.ImmutableList;
 import de.noisruker.dfs.registries.RegistryHandler;
 import de.noisruker.dfs.world.gen.DfSGenerator;
+import net.minecraft.block.Blocks;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.Mirror;
@@ -11,19 +13,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
-import net.minecraft.world.gen.feature.template.BlockIgnoreStructureProcessor;
-import net.minecraft.world.gen.feature.template.PlacementSettings;
-import net.minecraft.world.gen.feature.template.Template;
-import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.storage.loot.LootTables;
+import net.minecraft.world.gen.feature.template.*;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Random;
 
-public class DesertStructuresPiece {
+public class MountainStructuresPiece {
 
     public static class Piece extends TemplateStructurePiece {
         private final ResourceLocation resourceLocation;
@@ -57,13 +57,39 @@ public class DesertStructuresPiece {
                     .setRotation(Rotation.NONE)
                     .setMirror(Mirror.NONE)
                     .setCenterOffset(BlockPos.ZERO)
-                    .addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
+                    .addProcessor(new BlockIgnoreStructureProcessor(ImmutableList.of(Blocks.STRUCTURE_BLOCK)) {
+                        @Override
+                        protected IStructureProcessorType getType() {
+                            return IStructureProcessorType.BLOCK_IGNORE;
+                        }
+
+                        @Nullable
+                        @Override
+                        public Template.BlockInfo process(IWorldReader worldReaderIn, BlockPos pos, Template.BlockInfo p_215194_3_, Template.BlockInfo blockInfo, PlacementSettings placementSettingsIn) {
+                            if(ImmutableList.of(Blocks.STRUCTURE_BLOCK).contains(blockInfo.state.getBlock()))
+                                blockInfo = new Template.BlockInfo(blockInfo.pos, Blocks.AIR.getDefaultState(), null);
+                            return blockInfo;
+                        }
+                    });
             this.setup(template, this.templatePosition, placementsettings);
         }
 
         @Override
         public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenIn, Random rand, MutableBoundingBox mutableBB, ChunkPos chunkPos) {
-            PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.randomRotation(rand)).setMirror(Mirror.NONE).setCenterOffset(BlockPos.ZERO).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
+            PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.randomRotation(rand)).setMirror(Mirror.NONE).setCenterOffset(BlockPos.ZERO).addProcessor(new BlockIgnoreStructureProcessor(ImmutableList.of(Blocks.STRUCTURE_BLOCK)) {
+                @Override
+                protected IStructureProcessorType getType() {
+                    return IStructureProcessorType.BLOCK_IGNORE;
+                }
+
+                @Nullable
+                @Override
+                public Template.BlockInfo process(IWorldReader worldReaderIn, BlockPos pos, Template.BlockInfo p_215194_3_, Template.BlockInfo blockInfo, PlacementSettings placementSettingsIn) {
+                    if(ImmutableList.of(Blocks.STRUCTURE_BLOCK).contains(blockInfo.state.getBlock()))
+                        blockInfo = new Template.BlockInfo(blockInfo.pos, Blocks.AIR.getDefaultState(), null);
+                    return blockInfo;
+                }
+            });
             BlockPos blockpos = this.template.getSize();
 
             int i = 256;
@@ -93,12 +119,19 @@ public class DesertStructuresPiece {
 
         @Override
         protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
-            if ("chest".equals(function)) {
-                LockableLootTileEntity.setLootTable(worldIn, rand, pos.down(), RegistryHandler.DESERT_CHEST_LOOT);
-            } else if ("chest_to_lava".equals(function)) {
-                LockableLootTileEntity.setLootTable(worldIn, rand, pos.down(), LootTables.CHESTS_SHIPWRECK_TREASURE);
-            } else if ("chest_to_stone".equals(function)) {
-                LockableLootTileEntity.setLootTable(worldIn, rand, pos.down(), LootTables.CHESTS_SHIPWRECK_SUPPLY);
+            switch (function) {
+                case "chest_treasure":
+                    LockableLootTileEntity.setLootTable(worldIn, rand, pos.north(), RegistryHandler.MOUNTAIN_TRESURE_CHEST_LOOT);
+                    break;
+                case "chest_east":
+                    LockableLootTileEntity.setLootTable(worldIn, rand, pos.east(), RegistryHandler.BARREL_MOUNTAIN_LOOT);
+                    break;
+                case "chest_south":
+                    LockableLootTileEntity.setLootTable(worldIn, rand, pos.south(), RegistryHandler.BARREL_MOUNTAIN_LOOT);
+                    break;
+                case "chest_west":
+                    LockableLootTileEntity.setLootTable(worldIn, rand, pos.west(), RegistryHandler.BARREL_MOUNTAIN_LOOT);
+                    break;
             }
         }
     }

@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dfssul:magic_block"
+    ]
+  },
+  "criteria": {
+    "has_ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:ancient_shard"
+          }
+        ]
+      }
+    },
+    "has_magic_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:magic_shard"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dfssul:magic_block"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ancient_shard",
+      "has_magic_shard",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -1,6 +1,7 @@
 package de.noisruker.dfs.network;
 
 import de.noisruker.dfs.registries.ModActiveSpeciesAbility;
+import de.noisruker.dfs.registries.ModSpecies;
 import de.noisruker.dfs.species.PlayerSpecies;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketBuffer;
@@ -29,7 +30,7 @@ public class PacketActiveAbility {
                 return;
             PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(player);
 
-            if(playerSpecies == null)
+            if(playerSpecies == null || playerSpecies.getSpecies().equals(ModSpecies.HUMAN))
                 return;
 
             ModActiveSpeciesAbility.ABILITIES.get(playerSpecies.getSpecies()).process(playerSpecies);

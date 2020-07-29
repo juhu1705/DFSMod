@@ -1,8 +1,8 @@
 package de.noisruker.dfs.objects.blocks;
 
+import de.noisruker.dfs.objects.screens.SpeciesScreen;
 import de.noisruker.dfs.objects.tileentities.StoneLecternTileEntity;
 import de.noisruker.dfs.registries.ModSpecies;
-import de.noisruker.dfs.screens.SpeciesScreen;
 import de.noisruker.dfs.species.Species;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
