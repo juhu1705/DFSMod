@@ -5,10 +5,18 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.NetherPortalBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.state.properties.StructureMode;
+import net.minecraft.tileentity.StructureBlockTileEntity;
+import net.minecraft.util.ResourceLocationException;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.gen.feature.template.PlacementSettings;
+import net.minecraft.world.gen.feature.template.Template;
+import net.minecraft.world.gen.feature.template.TemplateManager;
+import net.minecraft.world.server.ServerWorld;
 
 public class DungeonPortal extends NetherPortalBlock {
 
@@ -28,7 +36,55 @@ public class DungeonPortal extends NetherPortalBlock {
     public boolean trySpawnPortal(IWorld worldIn, BlockPos pos) {
         NetherPortalBlock.Size netherportalblock$size = this.isPortal(worldIn, pos);
         if (netherportalblock$size != null && !net.minecraftforge.event.ForgeEventFactory.onTrySpawnPortal(worldIn, pos, netherportalblock$size)) {
-            
+
+
+            /*if (this.mode == StructureMode.LOAD && !this.world.isRemote && this.name != null) {
+                ServerWorld serverworld = (ServerWorld)this.world;
+                TemplateManager templatemanager = serverworld.getStructureTemplateManager();
+
+                Template template;
+                try {
+                    template = templatemanager.getTemplate(this.name);
+                } catch (ResourceLocationException var6) {
+                    return false;
+                }
+
+                return template == null ? false : this.load(requireMatchingSize, template);
+            } else {
+                return false;
+            }
+
+
+            BlockPos blockpos = this.getPos();
+            if (!StringUtils.isNullOrEmpty(templateIn.getAuthor())) {
+                this.author = templateIn.getAuthor();
+            }
+
+            BlockPos blockpos1 = templateIn.getSize();
+            boolean flag = this.size.equals(blockpos1);
+            if (!flag) {
+                this.size = blockpos1;
+                this.markDirty();
+                BlockState blockstate = this.world.getBlockState(blockpos);
+                this.world.notifyBlockUpdate(blockpos, blockstate, blockstate, 3);
+            }
+
+            if (requireMatchingSize && !flag) {
+                return false;
+            } else {
+                PlacementSettings placementsettings = (new PlacementSettings()).setMirror(this.mirror).setRotation(this.rotation).setIgnoreEntities(this.ignoreEntities).setChunk((ChunkPos)null);
+                if (this.integrity < 1.0F) {
+                    placementsettings.clearProcessors().addProcessor(new IntegrityProcessor(MathHelper.clamp(this.integrity, 0.0F, 1.0F))).setRandom(func_214074_b(this.seed));
+                }
+
+                BlockPos blockpos2 = blockpos.add(this.position);
+                templateIn.addBlocksToWorldChunk(this.world, blockpos2, placementsettings);
+                return true;
+            }
+        }*/
+
+
+
             return true;
         } else {
             return false;
