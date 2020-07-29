@@ -1,13 +1,12 @@
 package de.noisruker.dfs.objects.blocks;
 
-import de.noisruker.dfs.objects.screens.SpeciesScreen;
+import de.noisruker.dfs.network.PacketDisplayScreen;
+import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.objects.tileentities.StoneLecternTileEntity;
-import de.noisruker.dfs.registries.ModSpecies;
-import de.noisruker.dfs.species.Species;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.potion.EffectInstance;
@@ -24,9 +23,9 @@ import net.minecraft.util.math.shapes.VoxelShapes;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ToolType;
+import net.minecraftforge.fml.network.NetworkDirection;
 
 import javax.annotation.Nullable;
-import java.util.Map.Entry;
 
 public class StoneLectern extends Block {
 
@@ -119,7 +118,7 @@ public class StoneLectern extends Block {
                 if(stoneLecternTileEntity.isFilledCompletely()) {
                     player.addPotionEffect(new EffectInstance(Effects.BLINDNESS, 100, 1));
 
-                    Entry<String, Species>[] speciesToChoose = new Entry[Species.SPECIES.size() - 1];
+                    /**Entry<String, Species>[] speciesToChoose = new Entry[Species.SPECIES.size() - 1];
 
                     int i = 0;
 
@@ -127,8 +126,10 @@ public class StoneLectern extends Block {
                         if(!e.getValue().equals(ModSpecies.HUMAN))
                             speciesToChoose[i++] = e;
 
+                    Minecraft.getInstance().displayGuiScreen(new SpeciesScreen(speciesToChoose));*/
 
-                    Minecraft.getInstance().displayGuiScreen(new SpeciesScreen(speciesToChoose));
+                    if(player instanceof ServerPlayerEntity)
+                        SpeciesMessages.INSTANCE.sendTo(new PacketDisplayScreen(),((ServerPlayerEntity)player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
 
                     stoneLecternTileEntity.clearItems();
 

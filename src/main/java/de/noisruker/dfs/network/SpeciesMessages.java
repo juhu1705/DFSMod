@@ -20,6 +20,7 @@ public class SpeciesMessages {
     public static void registerMessages() {
         INSTANCE.registerMessage(getNextID(), PacketSetSpecies.class, PacketSetSpecies::toBytes, PacketSetSpecies::new, PacketSetSpecies::handle);
         INSTANCE.registerMessage(getNextID(), PacketActiveAbility.class, PacketActiveAbility::toBytes, PacketActiveAbility::new, PacketActiveAbility::handle);
+        INSTANCE.registerMessage(getNextID(), PacketDisplayScreen.class, PacketDisplayScreen::toBytes, PacketDisplayScreen::new, PacketDisplayScreen::handle);
     }
 
 }

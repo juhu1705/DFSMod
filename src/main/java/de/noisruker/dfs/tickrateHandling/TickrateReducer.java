@@ -6,7 +6,7 @@ import de.noisruker.dfs.registries.ModPotions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.event.TickEvent;
@@ -35,8 +35,8 @@ public class TickrateReducer {
     private static boolean tickrateHalfed = false;
     private static boolean tickrateQuatered = false;
 
-    private static ArrayList<Entity> halfRequestsEntities = new ArrayList<>();
-    private static ArrayList<Entity> quaterRequestsEntities = new ArrayList<>();
+    private static ArrayList<LivingEntity> halfRequestsEntities = new ArrayList<>();
+    private static ArrayList<LivingEntity> quaterRequestsEntities = new ArrayList<>();
 
     public static void halfTickrate() {
         if(!tickrateQuatered) {
@@ -68,13 +68,9 @@ public class TickrateReducer {
 
         if(effectInstance.getAmplifier() == 0 && halfRequestsEntities.contains(entity)) {
             halfRequestsEntities.remove(entity);
-            if(entity instanceof PlayerEntity)
-                ((PlayerEntity) entity).jumpMovementFactor /= 2;
         }
         else if(effectInstance.getAmplifier() == 1 && quaterRequestsEntities.contains(entity)) {
             quaterRequestsEntities.remove(entity);
-            if(entity instanceof PlayerEntity)
-                ((PlayerEntity) entity).jumpMovementFactor /= 4;
         }
 
         DfSMod.LOGGER.debug("Effect Amount Half: " + halfRequestsEntities.size());
@@ -101,17 +97,13 @@ public class TickrateReducer {
     public static void applySlowmotion(PotionEvent.PotionAddedEvent event) {
 
         if(event.getPotionEffect().getPotion().equals(ModPotions.COMPLETE_SLOWNESS_EFFECT.get())) {
-            if (event.getPotionEffect().getAmplifier() == 0 && !halfRequestsEntities.contains(event.getEntity())) {
+            if (event.getPotionEffect().getAmplifier() == 0 && !halfRequestsEntities.contains(event.getEntityLiving())) {
                 halfTickrate();
-                halfRequestsEntities.add(event.getEntity());
-                if(event.getEntityLiving() instanceof PlayerEntity)
-                    ((PlayerEntity) event.getEntityLiving()).jumpMovementFactor *= 2;
+                halfRequestsEntities.add(event.getEntityLiving());
             }
-            else if (event.getPotionEffect().getAmplifier() == 1 && !quaterRequestsEntities.contains(event.getEntity())) {
+            else if (event.getPotionEffect().getAmplifier() == 1 && !quaterRequestsEntities.contains(event.getEntityLiving())) {
                 quaterTickrate();
-                quaterRequestsEntities.add(event.getEntity());
-                if(event.getEntityLiving() instanceof PlayerEntity)
-                    ((PlayerEntity) event.getEntityLiving()).jumpMovementFactor *= 4;
+                quaterRequestsEntities.add(event.getEntityLiving());
             }
         }
     }
@@ -122,8 +114,6 @@ public class TickrateReducer {
     public static void playerTick(TickEvent.ClientTickEvent event) {
         if(Minecraft.getInstance().player == null)
             return;
-
-
 
         if(Minecraft.getInstance().player.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null && (tickrateHalfed || tickrateQuatered)) {
             Minecraft.getInstance().gameSettings.smoothCamera = true;
@@ -140,9 +130,9 @@ public class TickrateReducer {
 
     @SubscribeEvent
     public static void slowmotionHaste(PlayerEvent.BreakSpeed event) {
-        if(halfRequestsEntities.contains(event.getEntity()))
+        if(halfRequestsEntities.contains(event.getPlayer()))
             event.setNewSpeed(event.getOriginalSpeed() * 2);
-        else if(quaterRequestsEntities.contains(event.getEntity()))
+        else if(quaterRequestsEntities.contains(event.getPlayer()))
             event.setNewSpeed(event.getOriginalSpeed() * 4);
     }
 
@@ -187,6 +177,18 @@ public class TickrateReducer {
 
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent event) {
+        for (LivingEntity e: halfRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
+                checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 0));
+            }
+        }
+
+        for (LivingEntity e: quaterRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
+                checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 1));
+            }
+        }
+
         if(!halfRequestsEntities.isEmpty() && !quaterRequestsEntities.isEmpty()) {
             if (!halfRequestsEntities.contains(Minecraft.getInstance().player) && !quaterRequestsEntities.contains(Minecraft.getInstance().player)) {
                 Minecraft.getInstance().gameSettings.smoothCamera = true;
@@ -210,6 +212,18 @@ public class TickrateReducer {
 
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
+        for (LivingEntity e: halfRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
+                checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 0));
+            }
+        }
+
+        for (LivingEntity e: quaterRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
+                checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 1));
+            }
+        }
+
         if(event.phase.equals(TickEvent.Phase.START) && server != null) {
             //DfSMod.LOGGER.debug("Ticking : " + SERVER_TICKRATE);
 
