@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "dfssul:blocks/ancient_furnace_top",
+        "front": "dfssul:blocks/ancient_furnace_front",
+        "side": "dfssul:blocks/ancient_furnace_side"
+    }
+}

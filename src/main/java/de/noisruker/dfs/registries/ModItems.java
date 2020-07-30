@@ -29,6 +29,7 @@ public class ModItems {
     public static final RegistryObject<Item> DUNGEON_PORTAL_ITEM = ITEMS.register("dungeon_portal", () -> new BlocksItemBase(ModBlocks.DUNGEON_PORTAL.get()));
     public static final RegistryObject<Item> MAGIC_ORE_BLOCK_ITEM = ITEMS.register("magic_ore_block", () -> new BlocksItemBase(ModBlocks.MAGIC_ORE_BLOCK.get()));
     public static final RegistryObject<Item> MAGIC_BLOCK_ITEM = ITEMS.register("magic_block", () -> new BlocksItemBase(ModBlocks.MAGIC_BLOCK.get()));
+    public static final RegistryObject<Item> ANCIENT_FURNACE_ITEM = ITEMS.register("ancient_furnace", () -> new BlocksItemBase(ModBlocks.ANCIENT_FURNACE.get()));
 
     //Spawn Eggs
     public static final RegistryObject<Item> SPAWN_SOUL = ITEMS.register("soul_spawn_egg", ItemSpawnEggSoul::new);

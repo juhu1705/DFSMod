@@ -1,0 +1,65 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dfssul:ancient_furnace"
+    ]
+  },
+  "criteria": {
+    "has_ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:ancient_shard"
+          }
+        ]
+      }
+    },
+    "has_magic_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:magic_shard"
+          }
+        ]
+      }
+    },
+    "has_magic_block": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:magic_block"
+          }
+        ]
+      }
+    },
+    "has_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:furnace"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dfssul:ancient_furnace"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_ancient_shard",
+      "has_magic_shard",
+      "has_the_recipe",
+      "has_magic_block",
+      "has_furnace"
+    ]
+  ]
+}

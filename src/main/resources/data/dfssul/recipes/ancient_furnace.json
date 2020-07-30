@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "aAa",
+    "ALA",
+    "lAl"
+  ],
+  "key": {
+    "a": {
+      "item": "dfssul:ancient_shard"
+    },
+    "L": {
+      "item": "minecraft:furnace"
+    },
+    "l": {
+      "item": "dfssul:magic_shard"
+    },
+    "A": {
+      "item": "dfssul:magic_block"
+    }
+  },
+  "result": {
+    "item": "dfssul:ancient_furnace",
+    "count": 1
+  }
+}

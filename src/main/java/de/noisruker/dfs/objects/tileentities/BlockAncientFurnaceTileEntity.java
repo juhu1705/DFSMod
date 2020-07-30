@@ -1,18 +1,18 @@
 package de.noisruker.dfs.objects.tileentities;
 
+import de.noisruker.dfs.registries.ModTileEntityTypes;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.BlastFurnaceContainer;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.tileentity.AbstractFurnaceTileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
 public class BlockAncientFurnaceTileEntity extends AbstractFurnaceTileEntity {
 
     public BlockAncientFurnaceTileEntity() {
-        super(TileEntityType.BLAST_FURNACE, IRecipeType.SMELTING);
+        super(ModTileEntityTypes.ANCIENT_FURNACE.get(), IRecipeType.SMELTING);
     }
 
     @Override
