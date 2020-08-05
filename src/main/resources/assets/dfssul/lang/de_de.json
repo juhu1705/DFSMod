@@ -36,5 +36,18 @@
   "advancements.dfs.craft_stone_lectern.title": "Ich glaube, es ist nicht für Bücher!",
   "advancements.dfs.craft_stone_lectern.description": "Erstelle ein steinernes Lesepult",
   "advancements.dfs.ancient_stone_rune.title": "Wo kam es her?",
-  "advancements.dfs.ancient_stone_rune.description": "Finde eine antike Steinrune!"
+  "advancements.dfs.ancient_stone_rune.description": "Finde eine antike Steinrune!",
+
+  "screen.dfssul.species.enfali": "Enfali",
+  "screen.dfssul.species.nithriln": "Nithriln",
+  "screen.dfssul.species.human": "Mensch",
+  "screen.dfssul.species.elves": "Elf",
+  "screen.dfssul.species.dwarfs": "Zwerg",
+  "screen.dfssul.species.dragonth": "Dragonth",
+  "screen.dfssul.species.magic_human": "Mensch",
+  "screen.dfssul.species.continue": "Nächster",
+  "screen.dfssul.species.finish": "Fertig",
+  "screen.dfssul.species.back": "Vorheriger",
+
+  "container.ancient_furnace": "Antiker Ofen"
 }

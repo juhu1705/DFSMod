@@ -204,6 +204,9 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public float getPower() {
+        if(this.player.isCreative())
+            return 100000;
+
         try {
             return this.player.getDataManager().get(PlayerSpecies.POWER_VALUE);
         } catch (NullPointerException ignore) {
@@ -214,6 +217,9 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public float getMaxPower() {
+        if(this.player.isCreative())
+            return 100000;
+
         try {
             return this.player.getDataManager().get(PlayerSpecies.MAX_POWER_VALUE);
         } catch (NullPointerException ignore) {
@@ -258,6 +264,8 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public IEntityMagic usePower(float amount) {
+        if(this.player.isCreative())
+            return this;
         if(this.getPower() < amount) {
             amount -= this.getPower();
             this.setPower(0);

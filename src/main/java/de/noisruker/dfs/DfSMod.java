@@ -2,7 +2,9 @@ package de.noisruker.dfs;
 
 import de.noisruker.dfs.commands.ModCommands;
 import de.noisruker.dfs.network.SpeciesMessages;
+import de.noisruker.dfs.objects.containers.AncientFurnaceContainer;
 import de.noisruker.dfs.objects.items.ItemSpawnEggSoul;
+import de.noisruker.dfs.objects.screens.AncientFurnaceScreen;
 import de.noisruker.dfs.registries.*;
 import de.noisruker.dfs.species.PlayerSpeciesEvents;
 import de.noisruker.dfs.species.SpeciesPassiveAbilities;
@@ -11,6 +13,7 @@ import de.noisruker.dfs.world.gen.DfSGenerator;
 import de.noisruker.dfs.world.gen.structures.*;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructure;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructuresPiece;
+import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraft.item.ItemGroup;
@@ -74,6 +77,8 @@ public class DfSMod {
 
         DfSMod.LOGGER.debug("Register Keys");
         ClientRegistry.registerKeyBinding(ModKeyBindings.USE_ACTIVE_ABILITY);
+
+        ScreenManager.<AncientFurnaceContainer, AncientFurnaceScreen>registerFactory(ModContainerTypes.ANCIENT_FURNACE_CONTAINER.get(), AncientFurnaceScreen::new);
     }
 
     @SubscribeEvent
@@ -112,7 +117,7 @@ public class DfSMod {
         args.getRegistry().register(new GiantTreeStructure(NoFeatureConfig::deserialize)
                 .setRegistryName(DfSMod.MOD_ID + ":giant_tree_structures"));
 
-        DfSGenerator.GIANT_TREE_STRUCTURE_PIECE_TYPE = Registry.register(Registry.STRUCTURE_PIECE,
+        DfSGenerator.MOUNTAIN_STRUCTURE_PIECE_TYPE = Registry.register(Registry.STRUCTURE_PIECE,
                 DfSMod.MOD_ID + ":mountain_structures", MountainStructuresPiece.Piece::new);
         args.getRegistry().register(new MountainStructure(NoFeatureConfig::deserialize)
                 .setRegistryName(DfSMod.MOD_ID + ":mountain_structures"));

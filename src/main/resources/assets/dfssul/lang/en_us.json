@@ -47,5 +47,7 @@
   "screen.dfssul.species.magic_human": "Human",
   "screen.dfssul.species.continue": "Next",
   "screen.dfssul.species.finish": "Finish",
-  "screen.dfssul.species.back": "Previous"
+  "screen.dfssul.species.back": "Previous",
+
+  "container.ancient_furnace": "Ancient Furnace"
 }

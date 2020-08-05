@@ -5,6 +5,7 @@ import de.noisruker.dfs.objects.blocks.BlocksItemBase;
 import de.noisruker.dfs.objects.items.ItemBase;
 import de.noisruker.dfs.objects.items.ItemSpawnEggSoul;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -18,7 +19,12 @@ public class ModItems {
     public static final RegistryObject<Item> ANCIENT_SHARD = ITEMS.register("ancient_shard", ItemBase::new);
     public static final RegistryObject<Item> ANCIENT_STONE_RUNE = ITEMS.register("ancient_stone_rune", ItemBase::new);
     public static final RegistryObject<Item> MAGIC_PROJECTILE = ITEMS.register("magic_projectile", ItemBase::new);
-    public static final RegistryObject<Item> MAGIC_SHARD = ITEMS.register("magic_shard", ItemBase::new);
+    public static final RegistryObject<Item> MAGIC_SHARD = ITEMS.register("magic_shard", () -> new ItemBase() {
+        @Override
+        public int getBurnTime(ItemStack itemStack) {
+            return 5000;
+        }
+    });
 
     //Block Items
     public static final RegistryObject<Item> STONE_PILLAR_ITEM = ITEMS.register("stone_pillar_block", () -> new BlocksItemBase(ModBlocks.STONE_PILLAR_BLOCK.get()));

@@ -4,8 +4,10 @@ import com.mojang.datafixers.Dynamic;
 import de.noisruker.dfs.DfSMod;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeManager;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.ScatteredStructure;
@@ -13,6 +15,7 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
+import java.util.Random;
 import java.util.function.Function;
 
 public class MountainStructure extends ScatteredStructure<NoFeatureConfig> {
@@ -33,6 +36,22 @@ public class MountainStructure extends ScatteredStructure<NoFeatureConfig> {
 
     public String getStructureName() {
         return DfSMod.MOD_ID + ":mountain_structures";
+    }
+
+    /**
+     * decide whether the Structure can be generated
+     */
+    public boolean canBeGenerated(BiomeManager biomeManagerIn, ChunkGenerator<?> generatorIn, Random randIn, int chunkX, int chunkZ, Biome biomeIn) {
+        ChunkPos chunkpos = this.getStartPositionForPosition(generatorIn, randIn, chunkX, chunkZ, 0, 0);
+        return (chunkX == chunkpos.x && chunkZ == chunkpos.z) && generatorIn.hasStructure(biomeIn, this) && checkChunks(biomeManagerIn, chunkpos, biomeIn);
+    }
+
+    public boolean checkChunks(BiomeManager biomeManagerIn, ChunkPos chunkpos, Biome biomeIn) {
+        for(int i = -2; i <= 2; i++)
+            for(int i1 = -2; i1 <= 2; i1++)
+                if(biomeManagerIn.getBiome(new BlockPos(chunkpos.asBlockPos().getX() + (16 * i), chunkpos.asBlockPos().getY(), chunkpos.asBlockPos().getZ() + (16 * i1))) != biomeIn)
+                    return false;
+        return true;
     }
 
     public int getSize() {

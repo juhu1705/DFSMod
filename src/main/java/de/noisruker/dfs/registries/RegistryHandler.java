@@ -23,6 +23,7 @@ public class RegistryHandler {
         DfSMod.LOGGER.debug("DfS Potions are registered");
 
         ModTileEntityTypes.TILE_ENTITY_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
+        ModContainerTypes.CONTAINER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
         DfSMod.LOGGER.debug("DfS TileEntities are registered");
 

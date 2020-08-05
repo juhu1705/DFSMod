@@ -1,6 +1,7 @@
 package de.noisruker.dfs.world.gen.structures;
 
 import com.google.common.collect.ImmutableList;
+import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.registries.RegistryHandler;
 import de.noisruker.dfs.world.gen.DfSGenerator;
 import net.minecraft.block.Blocks;
@@ -30,14 +31,14 @@ public class MountainStructuresPiece {
         private final int y_offset;
 
         public Piece(TemplateManager templateMgr, CompoundNBT nbt) {
-            super(DfSGenerator.DESERT_STRUCTURE_PIECE_TYPE, nbt);
+            super(DfSGenerator.MOUNTAIN_STRUCTURE_PIECE_TYPE, nbt);
             this.resourceLocation = new ResourceLocation(nbt.getString("Template"));
             this.y_offset = nbt.getInt("yOffset");
             this.setupTemplate(templateMgr);
         }
 
         public Piece(TemplateManager templateMgr, BlockPos blockPos, ResourceLocation resourceLocation, int y_offset) {
-            super(DfSGenerator.DESERT_STRUCTURE_PIECE_TYPE, 0);
+            super(DfSGenerator.MOUNTAIN_STRUCTURE_PIECE_TYPE, 0);
             this.templatePosition = new BlockPos(blockPos.getX(), blockPos.getY(), blockPos.getZ());
             this.resourceLocation = resourceLocation;
             this.y_offset = y_offset;
@@ -118,7 +119,8 @@ public class MountainStructuresPiece {
         }
 
         @Override
-        protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
+        protected void handleDataMarker(String function, @Nonnull BlockPos pos, @Nonnull IWorld worldIn, @Nonnull Random rand, @Nonnull MutableBoundingBox sbb) {
+            DfSMod.LOGGER.debug("Hallo ich heiße " + function);
             switch (function) {
                 case "chest_treasure":
                     LockableLootTileEntity.setLootTable(worldIn, rand, pos.north(), RegistryHandler.MOUNTAIN_TRESURE_CHEST_LOOT);

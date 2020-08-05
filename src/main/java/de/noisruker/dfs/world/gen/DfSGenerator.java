@@ -94,7 +94,7 @@ public class DfSGenerator {
 
             CountRangeConfig cMagicOre = new CountRangeConfig(16, 5, 5, 30);
             OreFeatureConfig oMagicOre = new OreFeatureConfig(OreFeatureConfig.FillerBlockType.NATURAL_STONE,
-                    ModBlocks.MAGIC_ORE_BLOCK.get().getDefaultState(), 2);
+                    ModBlocks.MAGIC_ORE_BLOCK.get().getDefaultState(), 4);
             ConfiguredFeature<?, ?> cfMagicOre = Feature.ORE.withConfiguration(oMagicOre)
                     .withPlacement(Placement.COUNT_RANGE.configure(cMagicOre));
 
