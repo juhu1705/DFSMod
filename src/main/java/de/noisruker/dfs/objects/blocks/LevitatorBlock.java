@@ -79,10 +79,6 @@ public class LevitatorBlock extends Block {
             double ySpeed = ((double) worldIn.getRedstonePowerFromNeighbors(pos)) / 16d;
 
             worldIn.addParticle(ParticleTypes.CLOUD, d0 + d5, d1 + d6, d2 + d7, 0.0D, ySpeed, 0.0D);
-
-            d4 = rand.nextDouble() * 0.6D - 0.3D;
-            d6 = rand.nextDouble() * 9.0D / 16.0D;
-            worldIn.addParticle(ParticleTypes.CLOUD, d0 + d5, d1 + d6, d2 + d7, 0.0D, ySpeed, 0.0D);
         }
     }
 }
