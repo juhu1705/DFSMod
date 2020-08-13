@@ -7,6 +7,7 @@ import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraft.stats.Stats;
@@ -39,6 +40,16 @@ public class BlockAncientFurnace extends AbstractFurnaceBlock implements IMagicB
             player.addStat(Stats.INTERACT_WITH_BLAST_FURNACE);
         }
 
+    }
+
+    @Override
+    public void onReplaced(BlockState state, World worldIn, BlockPos pos, BlockState newState, boolean isMoving) {
+        if(state.getBlock() != newState.getBlock()) {
+            TileEntity te = worldIn.getTileEntity(pos);
+            if(te instanceof BlockAncientFurnaceTileEntity) {
+                InventoryHelper.dropItems(worldIn, pos, ((BlockAncientFurnaceTileEntity)te).getItems());
+            }
+        }
     }
 
     @Override

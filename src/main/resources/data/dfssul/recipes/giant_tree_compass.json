@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "ALA",
+    " A "
+  ],
+  "key": {
+    "L": {
+      "item": "minecraft:compass"
+    },
+    "A": {
+      "item": "dfssul:magic_shard"
+    }
+  },
+  "result": {
+    "item": "dfssul:giant_tree_compass",
+    "count": 1
+  }
+}

@@ -2,6 +2,7 @@ package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.objects.tileentities.BlockAncientFurnaceTileEntity;
+import de.noisruker.dfs.objects.tileentities.LevitatorTileEntity;
 import de.noisruker.dfs.objects.tileentities.StoneLecternTileEntity;
 import de.noisruker.dfs.objects.tileentities.renderer.StoneLecternRenderer;
 import net.minecraft.tileentity.TileEntityType;
@@ -18,6 +19,8 @@ public class ModTileEntityTypes {
             .register("stone_lectern", () -> TileEntityType.Builder.create(StoneLecternTileEntity::new, ModBlocks.STONE_LECTERN_BLOCK.get()).build(null));
     public static final RegistryObject<TileEntityType<BlockAncientFurnaceTileEntity>> ANCIENT_FURNACE = TILE_ENTITY_TYPES
             .register("ancient_furnace", () -> TileEntityType.Builder.create(BlockAncientFurnaceTileEntity::new, ModBlocks.ANCIENT_FURNACE.get()).build(null));
+    public static final RegistryObject<TileEntityType<LevitatorTileEntity>> LEVITATOR = TILE_ENTITY_TYPES
+            .register("levitator", () -> TileEntityType.Builder.create(LevitatorTileEntity::new, ModBlocks.LEVITATOR.get()).build(null));
 
     public static void bindSpecialRenderers() {
         ClientRegistry.bindTileEntityRenderer(STONE_LECTERN.get(), StoneLecternRenderer::new);

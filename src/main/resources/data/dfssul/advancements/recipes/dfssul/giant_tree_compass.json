@@ -1,0 +1,43 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "dfssul:giant_tree_compass"
+    ]
+  },
+  "criteria": {
+    "has_magic_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:magic_shard"
+          }
+        ]
+      }
+    },
+    "has_compass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "minecraft:compass"
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "dfssul:ancient_furnace"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_magic_shard",
+      "has_the_recipe",
+      "has_compass"
+    ]
+  ]
+}

@@ -34,5 +34,6 @@ public class ModBlocks {
                     .sound(SoundType.STONE)
                     .harvestLevel(1)
                     .harvestTool(ToolType.PICKAXE)));
+    public static final RegistryObject<Block> LEVITATOR = BLOCKS.register("levitator_block", LevitatorBlock::new);
 
 }

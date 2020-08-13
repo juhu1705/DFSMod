@@ -8,6 +8,8 @@ import de.noisruker.dfs.species.Species;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.settings.IteratableOption;
+import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
@@ -21,6 +23,8 @@ public class SpeciesScreen extends Screen {
 
     public static final ResourceLocation SCREEN_TEXTURE = new ResourceLocation(DfSMod.MOD_ID, "textures/screen/choose_species_window.png");
 
+    public final IteratableOption species_optioned;
+
     public int speciesPosition = 0;
 
     public final Map.Entry<String, Species>[] species;
@@ -29,11 +33,22 @@ public class SpeciesScreen extends Screen {
         super(new TranslationTextComponent(""));
 
         this.species = species;
+
+        species_optioned = new IteratableOption("options.particles", (p_216622_0_, p_216622_1_) -> {
+            p_216622_0_.particles = ParticleStatus.byId(p_216622_0_.particles.getId() + p_216622_1_);
+        }, (p_216616_0_, p_216616_1_) -> {
+            return p_216616_1_.getDisplayString() + I18n.format(p_216616_0_.particles.getResourceKey());
+        });
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return false;
     }
 
     @Override
     protected void init() {
-        super.addButton(new Button(this.width / 2 + 40, this.height / 6 + 70, 100, 20, I18n.format("screen.dfssul.species.continue"), (event) -> {
+        super.addButton(new Button(this.width / 2 + 80, this.height / 6 + 70, 20, 20, I18n.format(">"), (event) -> {
             speciesPosition++;
             if(speciesPosition >= species.length)
                 speciesPosition = 0;
@@ -43,7 +58,7 @@ public class SpeciesScreen extends Screen {
 
             this.onClose();
         }));
-        super.addButton(new Button(this.width / 2 - 140, this.height / 6 + 70, 100, 20, I18n.format("screen.dfssul.species.back"), (event) -> {
+        super.addButton(new Button(this.width / 2 - 100, this.height / 6 + 70, 20, 20, I18n.format("<"), (event) -> {
             speciesPosition--;
             if(speciesPosition < 0)
                 speciesPosition = species.length - 1;
@@ -55,7 +70,11 @@ public class SpeciesScreen extends Screen {
         this.renderBackground();
         super.render(p_render_1_, p_render_2_, p_render_3_);
 
-        this.drawCenteredString(this.font, I18n.format("screen.dfssul.species." + species[speciesPosition].getKey()), super.width / 2, super.height / 2 - 75, 0);
+        String name = I18n.format("screen.dfssul.species." + species[speciesPosition].getKey());
+        String description = I18n.format("screen.dfssul.species." + species[speciesPosition].getKey() + ".description");
+
+        this.font.drawString(name, (float)(super.width / 2 - this.font.getStringWidth(name) / 2), (float)super.height / 2 - 75, 0);
+        this.font.drawSplitString(description, super.width / 2 - 60, super.height / 2 - 60, 120, 0);
     }
 
     @Override
@@ -74,9 +93,9 @@ public class SpeciesScreen extends Screen {
 
         RenderSystem.clearCurrentColor();
 
-        this.minecraft.getTextureManager().bindTexture(new ResourceLocation(DfSMod.MOD_ID, "textures/screen/species/" + species[speciesPosition].getKey() + ".png"));
+        //this.minecraft.getTextureManager().bindTexture(new ResourceLocation(DfSMod.MOD_ID, "textures/screen/species/" + species[speciesPosition].getKey() + ".png"));
 
-        this.blit((super.width - 128) / 2, (super.height - 128) / 2, 0, 0, 128, 128);
+        //this.blit((super.width - 128) / 2, (super.height - 128) / 2, 0, 0, 128, 128);
 
     }
 }

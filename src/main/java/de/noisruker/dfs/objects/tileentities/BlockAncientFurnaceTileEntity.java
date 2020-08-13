@@ -3,6 +3,7 @@ package de.noisruker.dfs.objects.tileentities;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.noisruker.dfs.objects.containers.AncientFurnaceContainer;
+import de.noisruker.dfs.registries.ModRecipeTypes;
 import de.noisruker.dfs.registries.ModTileEntityTypes;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Blocks;
@@ -17,10 +18,7 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.item.crafting.FurnaceRecipe;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeItemHelper;
+import net.minecraft.item.crafting.*;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.LockableTileEntity;
@@ -100,11 +98,13 @@ public class BlockAncientFurnaceTileEntity extends LockableTileEntity implements
         }
     };
     private final Map<ResourceLocation, Integer> field_214022_n = Maps.newHashMap();
-    protected final IRecipeType<? extends FurnaceRecipe> recipeType;
+    protected final IRecipeType<? extends AbstractCookingRecipe> recipeType;
+    protected final IRecipeType<? extends AbstractCookingRecipe> magicFurnaceRecipeType;
 
-    protected BlockAncientFurnaceTileEntity(TileEntityType<?> tileTypeIn, IRecipeType<? extends FurnaceRecipe> recipeTypeIn) {
+    protected BlockAncientFurnaceTileEntity(TileEntityType<?> tileTypeIn, IRecipeType<? extends AbstractCookingRecipe> recipeTypeIn) {
         super(tileTypeIn);
         this.recipeType = recipeTypeIn;
+        this.magicFurnaceRecipeType = ModRecipeTypes.ANCIENT_FURNACE_RECIPE;
     }
 
     public BlockAncientFurnaceTileEntity() {
@@ -165,7 +165,7 @@ public class BlockAncientFurnaceTileEntity extends LockableTileEntity implements
         if (!this.world.isRemote) {
             ItemStack itemstack = this.items.get(1);
             if (this.isBurning() || this.hasPower() && !this.items.get(0).isEmpty()) {
-                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<FurnaceRecipe>)this.recipeType, this, this.world).orElse(null);
+                IRecipe<?> irecipe = this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.recipeType, this, this.world).orElse(this.world.getRecipeManager().getRecipe((IRecipeType<AbstractCookingRecipe>)this.magicFurnaceRecipeType, this, this.world).orElse(null));
                 if (!this.isBurning() && this.canSmelt(irecipe)) {
                     if(this.usePower(10))
                         this.burnTime = 100;
@@ -260,8 +260,10 @@ public class BlockAncientFurnaceTileEntity extends LockableTileEntity implements
     protected int getCookTime() {
         if(this.world != null)
             return this.world.getRecipeManager()
-                    .getRecipe((IRecipeType<FurnaceRecipe>)this.recipeType, this, this.world)
-                    .map(FurnaceRecipe::getCookTime).orElse(200) / 2;
+                    .getRecipe((IRecipeType<AbstractCookingRecipe>)this.recipeType, this, this.world)
+                    .map(AbstractCookingRecipe::getCookTime).orElse(this.world.getRecipeManager()
+                            .getRecipe((IRecipeType<AbstractCookingRecipe>)this.magicFurnaceRecipeType, this, this.world)
+                            .map(AbstractCookingRecipe::getCookTime).orElse(200));
         return 200 / 2;
     }
 
@@ -532,5 +534,9 @@ public class BlockAncientFurnaceTileEntity extends LockableTileEntity implements
     @Override
     public boolean hasPower() {
         return this.getPower() > 0;
+    }
+
+    public NonNullList<ItemStack> getItems() {
+        return this.items;
     }
 }

@@ -3,6 +3,7 @@ package de.noisruker.dfs.objects.containers;
 import com.google.common.collect.Lists;
 import de.noisruker.dfs.objects.tileentities.BlockAncientFurnaceTileEntity;
 import de.noisruker.dfs.registries.ModContainerTypes;
+import de.noisruker.dfs.registries.ModRecipeTypes;
 import de.noisruker.dfs.registries.ModTileEntityTypes;
 import net.minecraft.client.util.RecipeBookCategories;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,15 +33,17 @@ public class AncientFurnaceContainer extends RecipeBookContainer<IInventory> {
     private final IInventory furnaceInventory;
     private final IIntArray furnaceData;
     protected final World world;
-    private final IRecipeType<? extends FurnaceRecipe> recipeType;
+    private final IRecipeType<? extends AbstractCookingRecipe> recipeType;
+    private final IRecipeType<? extends AbstractCookingRecipe> magicFurnaceRecipeType;
 
     protected AncientFurnaceContainer(int p_i50098_1_, PlayerInventory p_i50098_2_, IInventory p_i50098_3_, IIntArray p_i50098_4_) {
-        this(ModContainerTypes.ANCIENT_FURNACE_CONTAINER.get(), IRecipeType.SMELTING, p_i50098_1_, p_i50098_2_, p_i50098_3_, p_i50098_4_);
+        this(ModContainerTypes.ANCIENT_FURNACE_CONTAINER.get(), IRecipeType.SMELTING, ModRecipeTypes.ANCIENT_FURNACE_RECIPE, p_i50098_1_, p_i50098_2_, p_i50098_3_, p_i50098_4_);
     }
 
-    protected AncientFurnaceContainer(ContainerType<?> containerTypeIn, IRecipeType<? extends FurnaceRecipe> recipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn) {
+    protected AncientFurnaceContainer(ContainerType<?> containerTypeIn, IRecipeType<? extends AbstractCookingRecipe> recipeTypeIn, IRecipeType<? extends AbstractCookingRecipe> magicFurnaceRecipeTypeIn, int id, PlayerInventory playerInventoryIn, IInventory furnaceInventoryIn, IIntArray furnaceDataIn) {
         super(containerTypeIn, id);
         this.recipeType = recipeTypeIn;
+        this.magicFurnaceRecipeType = magicFurnaceRecipeTypeIn;
         assertInventorySize(furnaceInventoryIn, 3);
         assertIntArraySize(furnaceDataIn, 4);
         this.furnaceInventory = furnaceInventoryIn;
@@ -173,7 +176,7 @@ public class AncientFurnaceContainer extends RecipeBookContainer<IInventory> {
     }
 
     protected boolean hasRecipe(ItemStack stack) {
-        return this.world.getRecipeManager().getRecipe((IRecipeType)this.recipeType, new Inventory(stack), this.world).isPresent();
+        return this.world.getRecipeManager().getRecipe((IRecipeType)this.recipeType, new Inventory(stack), this.world).isPresent() || this.world.getRecipeManager().getRecipe((IRecipeType)this.magicFurnaceRecipeType, new Inventory(stack), this.world).isPresent();
     }
 
     protected boolean isFuel(ItemStack stack) {

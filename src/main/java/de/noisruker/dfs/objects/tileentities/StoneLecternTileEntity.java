@@ -9,7 +9,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 
@@ -21,15 +20,9 @@ public class StoneLecternTileEntity extends TileEntity{
     public ItemStack item_2 = ItemStack.EMPTY;
     public ItemStack item_3 = ItemStack.EMPTY;
 
-    public StoneLecternTileEntity(final TileEntityType<?> tileEntityTypeIn) {
-        super(tileEntityTypeIn);
-    }
-
     public StoneLecternTileEntity() {
         super(ModTileEntityTypes.STONE_LECTERN.get());
     }
-
-
 
     public boolean onAddItem(PlayerEntity playerEntity) {
         ItemStack itemToAdd = playerEntity.inventory.getCurrentItem();

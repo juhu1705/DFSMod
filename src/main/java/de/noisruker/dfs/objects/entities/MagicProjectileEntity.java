@@ -1,6 +1,6 @@
 package de.noisruker.dfs.objects.entities;
 
-import de.noisruker.dfs.objects.blocks.AncientStoneBlock;
+import de.noisruker.dfs.objects.tileentities.IMagicTileEntity;
 import de.noisruker.dfs.registries.ModEntityTypes;
 import de.noisruker.dfs.registries.ModItems;
 import de.noisruker.dfs.species.PlayerSpecies;
@@ -9,9 +9,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileItemEntity;
-import net.minecraft.entity.projectile.SnowballEntity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.IPacket;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -19,6 +17,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.particles.IParticleData;
 import net.minecraft.particles.ItemParticleData;
 import net.minecraft.particles.ParticleTypes;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -37,7 +36,7 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
     private int ticker = 200;
 
     public MagicProjectileEntity(EntityType<? extends ProjectileItemEntity> type, World worldIn) {
-        super((EntityType<? extends SnowballEntity>) type, worldIn);
+        super((EntityType<? extends ProjectileItemEntity>) type, worldIn);
     }
 
     public MagicProjectileEntity(World worldIn, double x, double y, double z) {
@@ -51,6 +50,11 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
     @Override
     protected Item getDefaultItem() {
         return ModItems.MAGIC_PROJECTILE.get();
+    }
+
+    @Override
+    public boolean hasNoGravity() {
+        return true;
     }
 
     @Override
@@ -83,8 +87,8 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
                 entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
         } else if(result.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos block = ((BlockRayTraceResult)result).getPos();
-            if(world.getBlockState(block).getBlock() instanceof AncientStoneBlock) {
-
+            if(world.getTileEntity(block) instanceof IMagicTileEntity && world.getBlockState(block).hasTileEntity()) {
+                ((IMagicTileEntity)world.getTileEntity(block)).addPower(this.getPower());
             } else {
                 Explosion.Mode explosion$mode = net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this) ? Explosion.Mode.DESTROY : Explosion.Mode.NONE;
                 if(explosion$mode.equals(Explosion.Mode.DESTROY)) {
@@ -104,8 +108,7 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
 
     @OnlyIn(Dist.CLIENT)
     private IParticleData makeParticle() {
-        ItemStack itemstack = this.func_213882_k();
-        return (IParticleData)(itemstack.isEmpty() ? ParticleTypes.BUBBLE_POP : new ItemParticleData(ParticleTypes.ITEM, itemstack));
+        return new RedstoneParticleData(0.25f, 0.5f, 0.5f, 1.0f);
     }
 
     /**
@@ -116,8 +119,8 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
         if (id == 3) {
             IParticleData iparticledata = this.makeParticle();
 
-            for(int i = 0; i < 8; ++i) {
-                this.world.addParticle(iparticledata, this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
+            for(int i = 0; i < 16; ++i) {
+                this.world.addParticle(iparticledata, this.getPosX(), this.getPosY() + 0.1f, this.getPosZ(), 0.15f * (rand.nextFloat() - 0.5f), 0.15f * (rand.nextFloat() - 0.5f), 0.15f * (rand.nextFloat() - 0.5f));
             }
         } else {
             this.world.addParticle(new ItemParticleData(ParticleTypes.ITEM, this.func_213882_k()), this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
@@ -129,11 +132,18 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
     public void tick() {
         super.tick();
 
-        if(this.world.isRemote)
-            this.world.addParticle(ParticleTypes.SMOKE, this.getPosX(), this.getPosY(), this.getPosZ(), 0.0D, 0.0D, 0.0D);
-        else if(--ticker <= 0) {
-            this.setPower(this.getPower() - 0.1f);
-            ticker = 200;
+        if(this.getMotion().length() < 0.25f)
+            this.setMotion(this.getMotion().scale(1.2d));
+
+
+        if(this.world.isRemote) {
+            this.world.addParticle(new RedstoneParticleData(0.25f, 0.5f, 0.5f, 1.0f), this.getPosX() + 0.01f, this.getPosY() + 0.1f, this.getPosZ() + 0.01f, 0.125f * (rand.nextFloat() - 0.5f), 0.125f * (rand.nextFloat() - 0.5f), 0.125f * (rand.nextFloat() - 0.5f));
+            this.world.addParticle(new RedstoneParticleData(0.25f, 0.5f, 0.5f, 1.0f), this.getPosX() + 0.01f, this.getPosY() + 0.2f, this.getPosZ() + 0.01f, 0.25f * (rand.nextFloat() - 0.5f), 0.25f * (rand.nextFloat() - 0.5f), 0.25f * (rand.nextFloat() - 0.5f));
+            this.world.addParticle(new RedstoneParticleData(0.25f, 0.5f, 0.5f, 1.0f), this.getPosX() - 0.01f, this.getPosY() + 0.1f, this.getPosZ() - 0.01f, 0.125f * (rand.nextFloat() - 0.5f), 0.125f * (rand.nextFloat() - 0.5f), 0.125f * (rand.nextFloat() - 0.5f));
+            this.world.addParticle(new RedstoneParticleData(0.25f, 0.5f, 0.5f, 1.0f), this.getPosX() - 0.01f, this.getPosY() + 0.2f, this.getPosZ() - 0.01f, 0.25f * (rand.nextFloat() - 0.5f), 0.25f * (rand.nextFloat() - 0.5f), 0.25f * (rand.nextFloat() - 0.5f));
+        } else if(--ticker <= 0) {
+            this.setPower(this.getPower() - 4f);
+            ticker = 20;
         }
 
     }

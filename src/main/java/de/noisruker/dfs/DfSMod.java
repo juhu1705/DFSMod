@@ -3,6 +3,7 @@ package de.noisruker.dfs;
 import de.noisruker.dfs.commands.ModCommands;
 import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.objects.containers.AncientFurnaceContainer;
+import de.noisruker.dfs.objects.entities.MagicProjectileEntity;
 import de.noisruker.dfs.objects.items.ItemSpawnEggSoul;
 import de.noisruker.dfs.objects.screens.AncientFurnaceScreen;
 import de.noisruker.dfs.registries.*;
@@ -13,13 +14,19 @@ import de.noisruker.dfs.world.gen.DfSGenerator;
 import de.noisruker.dfs.world.gen.structures.*;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructure;
 import de.noisruker.dfs.world.gen.structures.giant_tree.GiantTreeStructuresPiece;
+import net.minecraft.block.DispenserBlock;
 import net.minecraft.client.gui.ScreenManager;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
+import net.minecraft.dispenser.IPosition;
+import net.minecraft.dispenser.ProjectileDispenseBehavior;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Util;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraftforge.client.event.ColorHandlerEvent;
@@ -64,6 +71,16 @@ public class DfSMod {
         DfSGenerator.generate();
 
         LOGGER.debug("Loaded Generator");
+
+        DispenserBlock.registerDispenseBehavior(ModItems.MAGIC_PROJECTILE.get(), new ProjectileDispenseBehavior() {
+            protected IProjectile getProjectileEntity(World worldIn, IPosition position, ItemStack stackIn) {
+                return (IProjectile) Util.make(() -> {
+                    MagicProjectileEntity projectileEntity = new MagicProjectileEntity(worldIn, position.getX(), position.getY(), position.getZ());
+                    projectileEntity.setPower(10f);
+                    return projectileEntity;
+                });
+            }
+        });
     }
 
     @SubscribeEvent

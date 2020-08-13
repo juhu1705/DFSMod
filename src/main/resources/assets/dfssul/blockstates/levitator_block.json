@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "lit=false": { "model": "dfssul:block/levitator_block" },
+        "lit=true": { "model": "dfssul:block/levitator_block_on" }
+    }
+}

@@ -4,6 +4,12 @@
   "item.dfssul.ancient_stone_rune": "Alte Steinrune",
   "item.dfssul.soul_spawn_egg": "Erstelle Seele",
   "item.dfssul.magic_shard": "Magische Scherbe",
+  "item.dfssul.giant_tree_compass": "Riesen Baum Finder",
+
+  "dfssul.giant_tree_compass.found.tooltip": "Ein riesen Baum wurde gefunden, folge der Kompassnadel.",
+  "dfssul.giant_tree_compass.failed.tooltip": "Es konnte kein riesen Baum gefunden werden. Versuche es wo anders erneut!",
+  "dfssul.giant_tree_compass.unset.tooltip": "Du hast noch nicht nach einem riesen Baum gesucht. Rechtsklicke diesen Gegenstand um nach einem riesen Baum zu suchen!",
+
   "item.minecraft.potion.effect.complete_slowness": "Slowmotion",
 
   "block.dfssul.stone_pillar_block": "Steinsäule",
@@ -14,6 +20,7 @@
   "block.dfssul.magic_ore_block": "Magisches Erz",
   "block.dfssul.magic_block": "Magischer Stein",
   "block.dfssul.ancient_furnace": "Antiker Ofen",
+  "block.dfssul.levitator_block": "Schebenlasser",
 
   "entity.dfssul.soul_entity": "Seele",
   "entity.dfssul.magic_projectile_entity": "Magisches Projektil",
@@ -44,10 +51,19 @@
   "screen.dfssul.species.elves": "Elf",
   "screen.dfssul.species.dwarfs": "Zwerg",
   "screen.dfssul.species.dragonth": "Dragonth",
-  "screen.dfssul.species.magic_human": "Mensch",
+  "screen.dfssul.species.enfali.description": "Die Enfali sind eine stolze Spezies. Einst aus dem Meer gekommen witmen sie ihr Leben voll und ganz dem Licht. In ihm haben sie ihre ganz eigene Form der Magie gefunden. Doch ihre wahre Macht begreifen nur die, die sie einmal erleben konnten.",
+  "screen.dfssul.species.nithriln.description": "Es zieht sie stehts in die Kälte. Das stolze und starke Volk der Nithriln ist nicht nur von Natur aus stark, sondern ihre Macht und Magie liegen ganz in dieser Kälte verborgen. Man sollte es sich nicht mit ihnen verschärzen, wenn man noch warme Sommer erleben will!",
+  "screen.dfssul.species.magic_human.description": "Ganz und gar normale Menschen, naja, nicht 'ganz'. Sie haben leichte magische Fähigkeiten entdeckt und können auch das ein oder andere kunstvolle Handwerk verrichten.",
+  "screen.dfssul.species.elves.description": "Sie leben in der grüne der Wälder, verborgen zwischen Bäumen, Büschen und Sträuchern. Ihr höchstes ziel ist der Schutz des Lebens, der Schutz ihrer heiligsten Bäume. Sie haben gelernt schnell wieder zu regenerieren und das leben um sie herum zu fördern.",
+  "screen.dfssul.species.dwarfs.description": "Tief in der Erde schürfen die kleinen Zwerge riesige Hallen aus dem Stein. Erstaunlich schnell können sie graben und ihre Schmiedekunst ist weithin bekannt, auch wenn wohl die wenigsten einem Zwerg je begegnet sind.",
+  "screen.dfssul.species.dragonth.description": "Als geschöpfe des Feuers sind sie weithin bekannt. Auch wenn sie nicht so mächtig sind wie in ihrer Drachengestallt, sind sie doch robust und selbst die größte Hitze kann ihnen nichts ausmachen.",
+
   "screen.dfssul.species.continue": "Nächster",
   "screen.dfssul.species.finish": "Fertig",
   "screen.dfssul.species.back": "Vorheriger",
 
-  "container.ancient_furnace": "Antiker Ofen"
+  "container.ancient_furnace": "Antiker Ofen",
+
+  "keys_dfs": "DfS - Mod",
+  "key_use_spell": "Aktive Fähigkeit aufrufen"
 }

@@ -4,6 +4,12 @@
   "item.dfssul.ancient_stone_rune": "Ancient Stone Rune",
   "item.dfssul.soul_spawn_egg": "Spawn Soul",
   "item.dfssul.magic_shard": "Magic Shard",
+  "item.dfssul.giant_tree_compass": "Giant Tree Locator",
+
+  "dfssul.giant_tree_compass.found.tooltip": "Found a giant tree, follow the compass to get to it.",
+  "dfssul.giant_tree_compass.failed.tooltip": "Could not find a giant tree!",
+  "dfssul.giant_tree_compass.unset.tooltip": "No Giant Tree is searched for, right-click the compass to locate one!",
+
   "item.minecraft.potion.effect.complete_slowness": "Slowmotion",
 
   "block.dfssul.stone_pillar_block": "Stone Pillar",
@@ -14,6 +20,7 @@
   "block.dfssul.magic_ore_block": "Magic Ore",
   "block.dfssul.magic_block": "Magic Stone",
   "block.dfssul.ancient_furnace": "Ancient Furnace",
+  "block.dfssul.levitator_block": "Levitator",
 
   "entity.dfssul.soul_entity": "Soul",
   "entity.dfssul.magic_projectile_entity": "Magic Projectile",
@@ -45,9 +52,20 @@
   "screen.dfssul.species.dwarfs": "Dwarf",
   "screen.dfssul.species.dragonth": "Dragonth",
   "screen.dfssul.species.magic_human": "Human",
+
+  "screen.dfssul.species.enfali.description": "Die Enfali sind eine stolze Spezies. Einst aus dem Meer gekommen witmen sie ihr Leben voll und ganz dem Licht. In ihm haben sie ihre ganz eigene Form der Magie gefunden. Doch ihre wahre Macht begreifen nur die, die sie einmal erleben konnten.",
+  "screen.dfssul.species.nithriln.description": "Es zieht sie stehts in die Kälte. Das stolze und starke Volk der Nithriln ist nicht nur von Natur aus stark, sondern ihre Macht und Magie liegen ganz in dieser Kälte verborgen. Man sollte es sich nicht mit ihnen verschärzen, wenn man noch warme Sommer erleben will!",
+  "screen.dfssul.species.magic_human.description": "Ganz und gar normale Menschen, naja, nicht 'ganz'. Sie haben leichte magische Fähigkeiten entdeckt und können auch das ein oder andere kunstvolle Handwerk verrichten.",
+  "screen.dfssul.species.elves.description": "Sie leben in der grüne der Wälder, verborgen zwischen Bäumen, Büschen und Sträuchern. Ihr höchstes ziel ist der Schutz des Lebens, der Schutz ihrer heiligsten Bäume. Sie haben gelernt schnell wieder zu regenerieren und das leben um sie herum zu fördern.",
+  "screen.dfssul.species.dwarfs.description": "Tief in der Erde schürfen die kleinen Zwerge riesige Hallen aus dem Stein. Erstaunlich schnell können sie graben und ihre Schmiedekunst ist weithin bekannt, auch wenn wohl die wenigsten einem Zwerg je begegnet sind.",
+  "screen.dfssul.species.dragonth.description": "Als geschöpfe des Feuers sind sie weithin bekannt. Auch wenn sie nicht so mächtig sind wie in ihrer Drachengestallt, sind sie doch robust und selbst die größte Hitze kann ihnen nichts ausmachen.",
+
   "screen.dfssul.species.continue": "Next",
   "screen.dfssul.species.finish": "Finish",
   "screen.dfssul.species.back": "Previous",
 
-  "container.ancient_furnace": "Ancient Furnace"
+  "container.ancient_furnace": "Ancient Furnace",
+
+  "keys_dfs": "DfS - Mod",
+  "key_use_spell": "Use Active Ability"
 }
