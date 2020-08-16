@@ -77,7 +77,7 @@ public class LevitatorTileEntity extends TileEntity implements ITickableTileEnti
     }
 
     public void resetFlightTime(ServerPlayerEntity player) {
-        //player.connection.floatingTickCount = 0;
+        player.connection.floatingTickCount = 0;
     }
 
     public void setStrength(int strength) {

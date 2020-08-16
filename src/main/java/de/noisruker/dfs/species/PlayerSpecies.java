@@ -1,6 +1,8 @@
 package de.noisruker.dfs.species;
 
 import de.noisruker.dfs.DfSMod;
+import de.noisruker.dfs.network.PacketPower;
+import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.objects.entities.IEntityMagic;
 import de.noisruker.dfs.registries.ModSpecies;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,9 +11,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.TranslationTextComponent;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.server.ServerBossInfo;
+import net.minecraftforge.fml.network.NetworkDirection;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +29,7 @@ public class PlayerSpecies implements IEntityMagic {
     static {
         DfSMod.LOGGER.debug("IDs are registered " + POWER_VALUE.getId() + " | " + MAX_POWER_VALUE.getId() + " | " + REGENERATION_VALUE.getId() + " | " + SPECIES_VALUE.getId());
     }
-    private ServerBossInfo bossInfo = new ServerBossInfo(new TranslationTextComponent("Power"), BossInfo.Color.BLUE, BossInfo.Overlay.PROGRESS);
+
     Species species;
     PlayerEntity player;
     //private boolean dataRegistered = false;
@@ -91,9 +91,6 @@ public class PlayerSpecies implements IEntityMagic {
         species.applyBaseValues(player);
         this.onResize();
 
-        if (!player.world.isRemote() && player instanceof ServerPlayerEntity)
-            this.bossInfo.addPlayer((ServerPlayerEntity) player);
-
         //this.registerDataParameters();
     }
 
@@ -103,9 +100,6 @@ public class PlayerSpecies implements IEntityMagic {
         this.onResize();
 
         //this.registerDataParameters();
-
-        if (!player.world.isRemote() && player instanceof ServerPlayerEntity)
-            this.bossInfo.addPlayer((ServerPlayerEntity) player);
 
         return this;
     }
@@ -198,7 +192,6 @@ public class PlayerSpecies implements IEntityMagic {
         this.setPower(this.player.getPersistentData().getFloat(PlayerSpecies.POWER));
         this.setPowerRegenerationAmount(this.player.getPersistentData().getFloat(PlayerSpecies.REGENERATION));
         this.species.applyBaseValues(this.player);
-        this.bossInfo.removeAllPlayers();
         this.onResize();
     }
 
@@ -295,15 +288,10 @@ public class PlayerSpecies implements IEntityMagic {
     public IEntityMagic regeneratePower(PlayerEntity serverPlayer) {
         try {
             if(this.getMaxPower() == 0) {
-                if(this.bossInfo.isVisible())
-                    this.bossInfo.setVisible(false);
                 return this;
             } else if(this.getMaxPower() == -1) {
                 return this;
             }
-
-            if(!this.bossInfo.isVisible())
-                this.bossInfo.setVisible(true);
 
             if (serverPlayer.world.rand.nextInt(100) == 1 && !serverPlayer.isSprinting() && serverPlayer.getHealth() == serverPlayer.getMaxHealth()) {
                 this.setPower(this.getPower() + this.getPowerRegeneration() * serverPlayer.world.rand.nextFloat());
@@ -314,18 +302,13 @@ public class PlayerSpecies implements IEntityMagic {
 
                 try {
                     ServerPlayerEntity playerEntity = (ServerPlayerEntity) serverPlayer;
-                    if(!this.bossInfo.getPlayers().contains(serverPlayer)) {
-                        this.bossInfo.removeAllPlayers();
-                        this.bossInfo.addPlayer(playerEntity);
-                    }
+
+                    SpeciesMessages.INSTANCE.sendTo(new PacketPower(this.getPower(), this.getMaxPower()), playerEntity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
                 } catch (ClassCastException exception) {
                     return this;
                 }
 
             }
-
-            this.bossInfo.setPercent(this.getPower() / this.getMaxPower());
-
         } catch (NullPointerException ignored) {
 
         }

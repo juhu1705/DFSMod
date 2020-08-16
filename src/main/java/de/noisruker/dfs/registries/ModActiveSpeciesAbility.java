@@ -13,7 +13,7 @@ public class ModActiveSpeciesAbility {
 
     public static final IAbility ENFALI_ABILITY = ABILITIES.put(ModSpecies.ENFALI, (playerSpecies -> {
         playerSpecies.usePower(100);
-        playerSpecies.getPlayer().addPotionEffect(new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 500, 1));
+        playerSpecies.getPlayer().addPotionEffect(new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 250, 1));
         playerSpecies.getPlayer().addPotionEffect(new EffectInstance(Effects.SPEED, 500, 5));
     }));
 

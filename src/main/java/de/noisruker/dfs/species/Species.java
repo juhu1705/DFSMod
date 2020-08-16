@@ -67,6 +67,8 @@ public class Species {
             PlayerEntity.STANDING_SIZE = EntitySize.flexible(width, height);;
 
             PlayerEntity.SIZE_BY_POSE = ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, PlayerEntity.STANDING_SIZE).put(Pose.SLEEPING, EntitySize.fixed(0.2F, 0.2F)).put(Pose.FALL_FLYING, EntitySize.flexible(0.6F, 0.6F)).put(Pose.SWIMMING, EntitySize.flexible(0.6F, 0.6F)).put(Pose.SPIN_ATTACK, EntitySize.flexible(0.6F, 0.6F)).put(Pose.CROUCHING, EntitySize.flexible(width, height - 0.3f)).put(Pose.DYING, EntitySize.fixed(0.2F, 0.2F)).build();
+
+            playerEntity.setSneaking(true);
         }
     }
 

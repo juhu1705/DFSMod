@@ -5,9 +5,14 @@ import de.noisruker.dfs.network.PacketActiveAbility;
 import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.registries.ModKeyBindings;
 import de.noisruker.dfs.registries.ModSpecies;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -17,6 +22,11 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DfSMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class PlayerSpeciesEvents {
+
+    public static final ResourceLocation POWER_BAR = new ResourceLocation(DfSMod.MOD_ID, "textures/gui/power_bar.png");
+
+    @OnlyIn(Dist.CLIENT)
+    public static float powerAmount = 0, maxPowerAmount = 0, shownPower = 0;
 
     @SubscribeEvent
     public static void onPlayerEyeHeightEvent(EntityEvent.EyeHeight event) {
@@ -113,13 +123,47 @@ public class PlayerSpeciesEvents {
     }
 
     @SubscribeEvent
-    public static void onPlayerServerTick(LivingEvent.LivingUpdateEvent event) {
+    public static void onPlayerUpdate(LivingEvent.LivingUpdateEvent event) {
         if(event.getEntityLiving() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) event.getEntityLiving();
             PlayerSpecies species = PlayerSpecies.getOrCreatePlayer(player);
 
             if(species != null)
                 species.regeneratePower(player);
+        }
+
+    }
+
+    @SubscribeEvent
+    public static void onRenderPower(RenderGameOverlayEvent event) {
+        if(event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE) {
+            Minecraft minecraft = Minecraft.getInstance();
+            if(!minecraft.player.isCreative() && !minecraft.player.isSpectator()) {
+                minecraft.getTextureManager().bindTexture(PlayerSpeciesEvents.POWER_BAR);
+
+                if(PlayerSpeciesEvents.shownPower < PlayerSpeciesEvents.powerAmount) {
+                    if(PlayerSpeciesEvents.shownPower + 0.1f >= PlayerSpeciesEvents.powerAmount)
+                        PlayerSpeciesEvents.shownPower = PlayerSpeciesEvents.powerAmount;
+                    else
+                        PlayerSpeciesEvents.shownPower += 0.1f;
+                } else if(PlayerSpeciesEvents.shownPower > PlayerSpeciesEvents.powerAmount) {
+                    if(PlayerSpeciesEvents.shownPower - 0.1f <= PlayerSpeciesEvents.powerAmount)
+                        PlayerSpeciesEvents.shownPower = PlayerSpeciesEvents.powerAmount;
+                    else
+                        PlayerSpeciesEvents.shownPower -= 0.1f;
+                }
+
+                float i = PlayerSpeciesEvents.maxPowerAmount * 10f;
+                int x = event.getWindow().getScaledWidth() / 2 - 91;
+                if (i > 0) {
+                    int j = 182;
+                    int k = (int)(((PlayerSpeciesEvents.shownPower * 10f) / i) * 183f);
+                    int l = event.getWindow().getScaledHeight() - 32 + 3;
+                    if (k > 0) {
+                        minecraft.ingameGUI.blit(x, l, 0, 0, k, 5);
+                    }
+                }
+            }
         }
     }
 
