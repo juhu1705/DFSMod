@@ -1,6 +1,7 @@
 package de.noisruker.dfs.species;
 
 import de.noisruker.dfs.DfSMod;
+import de.noisruker.dfs.network.PacketAcceptSpecies;
 import de.noisruker.dfs.network.PacketPower;
 import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.objects.entities.IEntityMagic;
@@ -10,7 +11,11 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.ParticleTypes;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.fml.network.NetworkDirection;
 
 import java.util.HashMap;
@@ -122,6 +127,32 @@ public class PlayerSpecies implements IEntityMagic {
 
         this.player.setSneaking(false);
 
+        if(!this.player.world.isRemote) {
+            ServerWorld world = (ServerWorld) this.player.world;
+
+            world.spawnParticle((ServerPlayerEntity) player, ParticleTypes.LARGE_SMOKE, true, player.getPosX() - 0.5, player.getPosY(), player.getPosZ() - 0.5, 50, 1, 2, 1, 0.1);
+            world.spawnParticle((ServerPlayerEntity) player, ParticleTypes.FIREWORK, true, player.getPosX() - 0.5, player.getPosY(), player.getPosZ() - 0.5, 2, 1, 2, 1, 0.1);
+            world.spawnParticle((ServerPlayerEntity) player, ParticleTypes.FLAME, true, player.getPosX() - 0.5, player.getPosY(), player.getPosZ() - 0.5, 20, 1, 2, 1, 0.1);
+
+            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundCategory.AMBIENT, 100f, 1f);
+        }
+        return this;
+    }
+
+    public PlayerSpecies setSpeciesCreating(Species species) {
+        this.species = species;
+        this.setSpecies(species);
+        species.applyBaseValues(player);
+        this.onResize();
+
+        this.setPowerRegenerationAmount(species.getPowerRegeneration());
+        this.setMaxPower(species.getInitMaxPower());
+        this.setPower(0.0f);
+
+        this.player.setHealth(this.player.getMaxHealth() - (10 - this.player.getHealth()));
+
+        this.player.setSneaking(false);
+
         return this;
     }
 
@@ -160,6 +191,9 @@ public class PlayerSpecies implements IEntityMagic {
 
     private void setSpecies(Species species) {
         this.player.getDataManager().set(PlayerSpecies.SPECIES_VALUE, Species.getKeyForSpecies(species));
+
+        if(!player.world.isRemote && player instanceof ServerPlayerEntity)
+            SpeciesMessages.INSTANCE.sendTo(new PacketAcceptSpecies(Species.getKeyForSpecies(this.getSpecies())), ((ServerPlayerEntity)player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
     }
 
     private void onResize() {
@@ -184,7 +218,7 @@ public class PlayerSpecies implements IEntityMagic {
 
         DfSMod.LOGGER.debug("Load Species Playerdata: " + Species.getKeyForSpecies(this.species));
 
-        this.setNewSpecies(this.species);
+        this.setSpeciesCreating(this.species);
 
         DfSMod.LOGGER.debug("Loaded Max Power: " + this.player.getPersistentData().getFloat(PlayerSpecies.MAX_POWER));
 
@@ -197,9 +231,6 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public float getPower() {
-        if(this.player.isCreative())
-            return 100000;
-
         try {
             return this.player.getDataManager().get(PlayerSpecies.POWER_VALUE);
         } catch (NullPointerException ignore) {
@@ -210,9 +241,6 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public float getMaxPower() {
-        if(this.player.isCreative())
-            return 100000;
-
         try {
             return this.player.getDataManager().get(PlayerSpecies.MAX_POWER_VALUE);
         } catch (NullPointerException ignore) {
@@ -233,13 +261,23 @@ public class PlayerSpecies implements IEntityMagic {
     @Override
     public IEntityMagic setPower(float power) {
         try {
-        if(power <= this.getMaxPower())
-            this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, power);
-        else
-            this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, this.getMaxPower());
-        } catch (NullPointerException ignore) {
+            if(power <= this.getMaxPower())
+                this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, power);
+            else
+                this.player.getDataManager().set(PlayerSpecies.POWER_VALUE, this.getMaxPower());
+        } catch (NullPointerException ignored) {
 
         }
+
+        if(this.player instanceof ServerPlayerEntity && !this.player.world.isRemote()) {
+
+
+            ServerPlayerEntity playerEntity = (ServerPlayerEntity) this.player;
+
+            SpeciesMessages.INSTANCE.sendTo(new PacketPower(this.getPower(), this.getMaxPower()), playerEntity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+
+        }
+
         return this;
     }
 
@@ -282,7 +320,7 @@ public class PlayerSpecies implements IEntityMagic {
 
     @Override
     public IEntityMagic regeneratePower() {
-        return this;
+        return this.regeneratePower(player);
     }
 
     public IEntityMagic regeneratePower(PlayerEntity serverPlayer) {
@@ -293,72 +331,15 @@ public class PlayerSpecies implements IEntityMagic {
                 return this;
             }
 
-            if (serverPlayer.world.rand.nextInt(100) == 1 && !serverPlayer.isSprinting() && serverPlayer.getHealth() == serverPlayer.getMaxHealth()) {
+            if (serverPlayer.world.rand.nextInt(50) == 1 && !serverPlayer.isSprinting() && serverPlayer.getHealth() == serverPlayer.getMaxHealth()) {
                 this.setPower(this.getPower() + this.getPowerRegeneration() * serverPlayer.world.rand.nextFloat());
                 //DfSMod.LOGGER.debug("Regenerate to " + this.getPower() + " / " + this.getMaxPower());
-            }
-
-            if(serverPlayer instanceof ServerPlayerEntity && !serverPlayer.world.isRemote()) {
-
-                try {
-                    ServerPlayerEntity playerEntity = (ServerPlayerEntity) serverPlayer;
-
-                    SpeciesMessages.INSTANCE.sendTo(new PacketPower(this.getPower(), this.getMaxPower()), playerEntity.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
-                } catch (ClassCastException exception) {
-                    return this;
-                }
-
             }
         } catch (NullPointerException ignored) {
 
         }
         return this;
     }
-
-    /**@OnlyIn(Dist.CLIENT)
-    @SubscribeEvent
-    public void onRenderManaBarEvent(RenderGameOverlayEvent event)	{
-        if(!event.isCancelable() && event.getType() == RenderGameOverlayEvent.ElementType.EXPERIENCE)	{
-            Minecraft mc = Minecraft.getInstance();
-
-
-            if(!mc.player.isCreative() && !mc.player.isSpectator())	{
-                int posX = event.getWindow().getScaledWidth() - 15;
-                int posY = event.getWindow().getScaledHeight() / 2 - 55;
-                mc.getTextureManager().bindTexture(new ResourceLocation(DfSMod.MOD_ID, "textures/gui/manabar.png"));
-                if(Util.ClientMaxPower != 0)	{
-                    mc.ingameGUI.blit(posX + 2, posY + 4, 11, 0, 7, 100);
-                    double newPowerToDraw = (1.0 - ((double) Util.ClientPower / (double) Util.ClientMaxPower)) * 100.0;
-                    if(waiting >= 2)	{
-                        if(powerToDraw < (int) newPowerToDraw)	{
-                            powerToDraw++;
-                        }	else if(powerToDraw > (int) newPowerToDraw)	{
-                            powerToDraw--;
-                        }
-                        waiting = 0;
-                    }	else	{
-                        waiting++;
-                    }
-                    mc.ingameGUI.blit(posX + 2, posY + 4, 18, 0, 7, (int) powerToDraw);
-                    mc.ingameGUI.blit(posX, posY, 0, 0, 11, 110);
-                }
-            }
-        }
-    }*/
-
-    /**
-    public static void onPlayerHarvest(PlayerEvent.HarvestCheck event) {
-        PlayerSpecies playerSpecies = PlayerSpecies.getOrCreatePlayer(event.getPlayer());
-
-        if (playerSpecies == null)
-            return;
-
-        if(playerSpecies.getSpecies().equals(ModSpecies.DWARFS)) {
-            if(event.getTargetBlock().getMaterial().equals(Material.ROCK))
-                event.setCanHarvest(true);
-        }
-
-    }*/
 
     public PlayerEntity getPlayer() {
         return this.player;

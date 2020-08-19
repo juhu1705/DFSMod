@@ -22,6 +22,7 @@ public class SpeciesMessages {
         INSTANCE.registerMessage(getNextID(), PacketActiveAbility.class, PacketActiveAbility::toBytes, PacketActiveAbility::new, PacketActiveAbility::handle);
         INSTANCE.registerMessage(getNextID(), PacketDisplayScreen.class, PacketDisplayScreen::toBytes, PacketDisplayScreen::new, PacketDisplayScreen::handle);
         INSTANCE.registerMessage(getNextID(), PacketPower.class, PacketPower::toBytes, PacketPower::new, PacketPower::handle);
+        INSTANCE.registerMessage(getNextID(), PacketAcceptSpecies.class, PacketAcceptSpecies::toBytes, PacketAcceptSpecies::new, PacketAcceptSpecies::handle);
     }
 
 }

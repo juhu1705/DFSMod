@@ -14,6 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -27,10 +28,10 @@ public class PlayerSpeciesEvents {
 
     @OnlyIn(Dist.CLIENT)
     public static float powerAmount = 0, maxPowerAmount = 0, shownPower = 0;
+    public static Species species = ModSpecies.HUMAN;
 
     @SubscribeEvent
     public static void onPlayerEyeHeightEvent(EntityEvent.EyeHeight event) {
-
         if(event.getEntity() instanceof PlayerEntity) {
 
             PlayerSpecies player = PlayerSpecies.getOrCreatePlayer((PlayerEntity) event.getEntity());
@@ -55,7 +56,6 @@ public class PlayerSpeciesEvents {
             } catch (NullPointerException exception) {
                 DfSMod.LOGGER.debug("Can't load eye height!");
             }
-
         }
     }
 
@@ -100,8 +100,6 @@ public class PlayerSpeciesEvents {
             //DfSMod.LOGGER.debug("Width: " + width + "; Height: " + height);
 
             if(playerSpecies.player.getPose().equals(Pose.SWIMMING) ||playerSpecies.player.getPose().equals(Pose.FALL_FLYING) ||playerSpecies.player.getPose().equals(Pose.SPIN_ATTACK)) {
-
-
                 event.getMatrixStack().scale(height, height, height);
             } else
                 event.getMatrixStack().scale(height, height, height);
@@ -118,8 +116,6 @@ public class PlayerSpeciesEvents {
             return;
 
         playerSpecies.onSave();
-
-
     }
 
     @SubscribeEvent
@@ -131,7 +127,36 @@ public class PlayerSpeciesEvents {
             if(species != null)
                 species.regeneratePower(player);
         }
+    }
 
+    @SubscribeEvent
+    public static void onPlayerTickLast(TickEvent.PlayerTickEvent playerTickEvent) {
+        PlayerEntity player = playerTickEvent.player;
+        if(playerTickEvent.phase == TickEvent.Phase.START /*&& player.getPose().equals(Pose.STANDING) || player.getPose().equals(Pose.CROUCHING)*/) {
+            Species species;
+            if(!player.world.isRemote) {
+                PlayerSpecies pSpecies = PlayerSpecies.getOrCreatePlayer(player);
+
+                if (pSpecies == null)
+                    return;
+
+                species = pSpecies.species;
+            } else
+                species = PlayerSpeciesEvents.species;
+
+            // Edit bounding box
+            try {
+                species.loadSizeForPlayer();
+                /*player.boundingBox = new AxisAlignedBB(player.boundingBox.minX,
+                        player.boundingBox.minY,
+                        player.boundingBox.minZ,
+                        player.boundingBox.minX + species.getWidth(),
+                        player.boundingBox.minY + species.getHeight() - (player.getPose().equals(Pose.STANDING) ? 0f : 0.3f),
+                        player.boundingBox.minZ + species.getWidth());*/
+            } catch (NullPointerException ignored) {
+
+            }
+        }
     }
 
     @SubscribeEvent
