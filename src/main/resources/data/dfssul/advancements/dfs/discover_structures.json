@@ -15,13 +15,19 @@
     "announce_to_chat": true
   },
   "reward": {
-    "experience": 500
+    "experience": 1000
   },
   "criteria": {
     "plains": {
       "trigger": "minecraft:location",
       "conditions": {
         "feature": "dfssul:plains_structures"
+      }
+    },
+    "mountain": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "dfssul:mountain_structures"
       }
     },
     "desert": {
@@ -37,6 +43,9 @@
     ],
     [
       "desert"
+    ],
+    [
+      "mountain"
     ]
   ]
 }

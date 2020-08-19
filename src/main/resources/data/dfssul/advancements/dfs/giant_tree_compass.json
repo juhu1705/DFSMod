@@ -1,0 +1,28 @@
+{
+  "parent": "dfssul:dfs/magic_shard",
+  "display": {
+    "icon": {
+      "item": "dfssul:giant_tree_compass"
+    },
+    "title": {
+      "translate": "advancements.dfs.giant_tree_compass.title"
+    },
+    "description": {
+      "translate": "advancements.dfs.giant_tree_compass.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:giant_tree_compass"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -4,7 +4,10 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import de.noisruker.dfs.objects.containers.AncientFurnaceContainer;
 import de.noisruker.dfs.registries.ModRecipeTypes;
+import de.noisruker.dfs.registries.ModSpecies;
 import de.noisruker.dfs.registries.ModTileEntityTypes;
+import de.noisruker.dfs.species.PlayerSpecies;
+import de.noisruker.dfs.species.PlayerSpeciesEvents;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ExperienceOrbEntity;
@@ -361,6 +364,16 @@ public class BlockAncientFurnaceTileEntity extends LockableTileEntity implements
      * Don't rename this method to canInteractWith due to conflicts with Container
      */
     public boolean isUsableByPlayer(PlayerEntity player) {
+
+        if(world.isRemote) {
+            if(PlayerSpeciesEvents.species.equals(ModSpecies.HUMAN))
+                return false;
+        } else {
+            PlayerSpecies species = PlayerSpecies.getOrCreatePlayer(player);
+            if(species == null || species.getSpecies().equals(ModSpecies.HUMAN))
+                return false;
+        }
+
         if (this.world.getTileEntity(this.pos) != this) {
             return false;
         } else {

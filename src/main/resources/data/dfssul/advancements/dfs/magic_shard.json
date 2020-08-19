@@ -1,0 +1,28 @@
+{
+  "parent": "dfssul:dfs/root",
+  "display": {
+    "icon": {
+      "item": "dfssul:magic_shard"
+    },
+    "title": {
+      "translate": "advancements.dfs.magic_shard.title"
+    },
+    "description": {
+      "translate": "advancements.dfs.magic_shard.description"
+    },
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "criteria": {
+    "ancient_shard": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "dfssul:magic_shard"
+          }
+        ]
+      }
+    }
+  }
+}

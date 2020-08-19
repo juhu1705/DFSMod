@@ -63,18 +63,12 @@ public class TickrateReducer {
 
     public static void checkForNormalTickrate(Entity entity, EffectInstance effectInstance) {
 
-        DfSMod.LOGGER.debug("Effect Amount Half: " + halfRequestsEntities.size());
-        DfSMod.LOGGER.debug("Effect Amount Quater: " + quaterRequestsEntities.size());
-
         if(effectInstance.getAmplifier() == 0 && halfRequestsEntities.contains(entity)) {
             halfRequestsEntities.remove(entity);
         }
         else if(effectInstance.getAmplifier() == 1 && quaterRequestsEntities.contains(entity)) {
             quaterRequestsEntities.remove(entity);
         }
-
-        DfSMod.LOGGER.debug("Effect Amount Half: " + halfRequestsEntities.size());
-        DfSMod.LOGGER.debug("Effect Amount Quater: " + quaterRequestsEntities.size());
 
         if(quaterRequestsEntities.isEmpty()) {
             tickrateQuatered = false;
@@ -178,19 +172,31 @@ public class TickrateReducer {
     @SubscribeEvent
     public static void clientTick(TickEvent.ClientTickEvent event) {
         for (LivingEntity e: halfRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) != null) {
+                if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()).getDuration() <= 1)
+                    e.removeActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get());
+            }
+
             if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
                 checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 0));
+                break;
             }
         }
 
         for (LivingEntity e: quaterRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) != null) {
+                if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()).getDuration() <= 1)
+                    e.removeActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get());
+            }
+
             if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
                 checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 1));
+                break;
             }
         }
 
         if(!halfRequestsEntities.isEmpty() && !quaterRequestsEntities.isEmpty()) {
-            if (!halfRequestsEntities.contains(Minecraft.getInstance().player) && !quaterRequestsEntities.contains(Minecraft.getInstance().player)) {
+            if (!halfRequestsEntities.contains(Minecraft.getInstance().player) && !quaterRequestsEntities.contains(Minecraft.getInstance().player) && Minecraft.getInstance().player.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
                 Minecraft.getInstance().gameSettings.smoothCamera = true;
                 smoothed = true;
             }
@@ -213,14 +219,24 @@ public class TickrateReducer {
     @SubscribeEvent
     public static void serverTick(TickEvent.ServerTickEvent event) {
         for (LivingEntity e: halfRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) != null) {
+                if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()).getDuration() <= 1)
+                    e.removeActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get());
+            }
             if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
                 checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 0));
+                break;
             }
         }
 
         for (LivingEntity e: quaterRequestsEntities) {
+            if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) != null) {
+                if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()).getDuration() <= 1)
+                    e.removeActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get());
+            }
             if(e.getActivePotionEffect(ModPotions.COMPLETE_SLOWNESS_EFFECT.get()) == null) {
                 checkForNormalTickrate(e, new EffectInstance(ModPotions.COMPLETE_SLOWNESS_EFFECT.get(), 0, 1));
+                break;
             }
         }
 

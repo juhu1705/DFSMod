@@ -1,15 +1,12 @@
-package de.noisruker.dfs.potions.effects;
+package de.noisruker.dfs.objects.potions.effects;
 
 
 import de.noisruker.dfs.tickrateHandling.TickrateReducer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectType;
-
-import javax.annotation.Nullable;
 
 
 public class EffectCompleteSlowness extends Effect {
@@ -24,22 +21,12 @@ public class EffectCompleteSlowness extends Effect {
     }
 
     @Override
-    public void performEffect(LivingEntity entityLivingBaseIn, int amplifier) {
-        super.performEffect(entityLivingBaseIn, amplifier);
-    }
-
-    @Override
-    public void affectEntity(@Nullable Entity source, @Nullable Entity indirectSource, LivingEntity entityLivingBaseIn, int amplifier, double health) {
-        this.performEffect(entityLivingBaseIn, amplifier);
-    }
-
-    @Override
     public boolean isReady(int duration, int amplifier) {
         if(duration < 1) {
             TickrateReducer.setClientTickrate(20f);
             TickrateReducer.setServerTickrate(50L);
         }
 
-        return duration >= 10;
+        return duration > 0;
     }
 }

@@ -44,6 +44,12 @@
   "advancements.dfs.craft_stone_lectern.description": "Erstelle ein steinernes Lesepult",
   "advancements.dfs.ancient_stone_rune.title": "Wo kam es her?",
   "advancements.dfs.ancient_stone_rune.description": "Finde eine antike Steinrune!",
+  "advancements.dfs.giant_tree_compass.title": "Wo führt er mich hin?",
+  "advancements.dfs.giant_tree_compass.description": "Folge dem Kompass nachdem du ihn gerechtskickt hast!",
+  "advancements.dfs.giant_tree_structure.title": "Wie hoch ist der denn?",
+  "advancements.dfs.giant_tree_structure.description": "Kann ich wohl die plündernden Plünderer loswerden und nach versteckten Schätzen suchen?",
+  "advancements.dfs.magic_shard.title": "Wunderschön!",
+  "advancements.dfs.magic_shard.description": "Sollange man es nicht ansehen muss! (Lieber schnell verarbeiten)",
 
   "screen.dfssul.species.enfali": "Enfali",
   "screen.dfssul.species.nithriln": "Nithriln",

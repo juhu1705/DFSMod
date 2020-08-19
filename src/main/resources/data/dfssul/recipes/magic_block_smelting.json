@@ -1,9 +1,9 @@
 {
   "type": "dfssul:ancient_smelting",
   "ingredient": {
-    "item": "minecraft:book"
+    "item": "minecraft:diamond"
   },
-  "result": "minecraft:charcoal",
+  "result": "dfssul:crystal_block",
   "experience": 20.0,
-  "cookingtime": 2000
+  "cookingtime": 1000
 }

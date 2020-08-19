@@ -1,7 +1,7 @@
 package de.noisruker.dfs.registries;
 
 import de.noisruker.dfs.DfSMod;
-import de.noisruker.dfs.potions.effects.EffectCompleteSlowness;
+import de.noisruker.dfs.objects.potions.effects.EffectCompleteSlowness;
 import net.minecraft.potion.Effect;
 import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Potion;

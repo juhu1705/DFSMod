@@ -1,0 +1,33 @@
+{
+  "parent": "dfssul:dfs/giant_tree_compass",
+  "display": {
+    "icon": {
+      "item": "minecraft:lantern"
+    },
+    "title": {
+      "translate": "advancements.dfs.giant_tree_structure.title"
+    },
+    "description": {
+      "translate": "advancements.dfs.giant_tree_structure.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true
+  },
+  "reward": {
+    "experience": 500
+  },
+  "criteria": {
+    "giant_tree": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "feature": "dfssul:giant_tree_structure"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "giant_tree"
+    ]
+  ]
+}
