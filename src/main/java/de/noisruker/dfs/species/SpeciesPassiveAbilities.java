@@ -58,20 +58,21 @@ public class SpeciesPassiveAbilities {
 
         if(species == null)
             return;
-    try {
-        if (species.getSpecies().equals(ModSpecies.DRAGONTH)) {
-            if (player.world.rand.nextInt(100) == 1 || true) {
-                event.getTarget().setFire(player.world.rand.nextInt(10000));
-            }
-        } else if (species.getSpecies().equals(ModSpecies.NITHRILN)) {
-            if (player.world.rand.nextInt(5) == 1 || true) {
-                if (event.getTarget() instanceof LivingEntity)
-                    ((LivingEntity) event.getTarget()).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 1000, 1));
-            }
-        }
-    } catch (NullPointerException ignored) {
 
-    }
+        try {
+            if (species.getSpecies().equals(ModSpecies.DRAGONTH)) {
+                if (player.world.rand.nextInt(10) == 1) {
+                    event.getTarget().setFire(player.world.rand.nextInt(10000));
+                }
+            } else if (species.getSpecies().equals(ModSpecies.NITHRILN)) {
+                if (player.world.rand.nextInt(5) == 1) {
+                    if (event.getTarget() instanceof LivingEntity)
+                        ((LivingEntity) event.getTarget()).addPotionEffect(new EffectInstance(Effects.SLOWNESS, 1000, 1));
+                }
+            }
+        } catch (NullPointerException ignored) {
+
+        }
 
     }
 
@@ -141,7 +142,6 @@ public class SpeciesPassiveAbilities {
         try {
             if (species.getSpecies().equals(ModSpecies.ENFALI)) {
                 if(event.getPlayer().isInWaterOrBubbleColumn()) {
-                    DfSMod.LOGGER.debug("Double Speed " + event.getNewSpeed());
                     if(event.getPlayer().areEyesInFluid(FluidTags.WATER))
                         event.setNewSpeed(event.getNewSpeed() * 6f);
 

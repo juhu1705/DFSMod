@@ -18,6 +18,4 @@ public class ModPotions {
 
     public static final RegistryObject<Potion> COMPLETE_SLOWNESS_POTION = POTIONS.register("complete_slowness", () -> new Potion(new EffectInstance(COMPLETE_SLOWNESS_EFFECT.get(), 2400)));
 
-
-
 }
