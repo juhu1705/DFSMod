@@ -63,7 +63,6 @@ public class ModItems {
     public static final RegistryObject<Item> STONE_LECTERN_ITEM = ITEMS.register("stone_lectern_block", () -> new BlocksItemBase(ModBlocks.STONE_LECTERN_BLOCK.get()));
     public static final RegistryObject<Item> ANCIENT_STONE_ITEM = ITEMS.register("ancient_stone_block", () -> new BlocksItemBase(ModBlocks.ANCIENT_STONE_BLOCK.get()));
     public static final RegistryObject<Item> CRYSTAL_ITEM = ITEMS.register("crystal_block", () -> new BlocksItemBase(ModBlocks.CRYSTAL_BLOCK.get()));
-    public static final RegistryObject<Item> CHAIN_ITEM = ITEMS.register("chain", () -> new BlocksItemBase(ModBlocks.CHAIN_BLOCK.get()));
     public static final RegistryObject<Item> DUNGEON_PORTAL_ITEM = ITEMS.register("dungeon_portal", () -> new BlocksItemBase(ModBlocks.DUNGEON_PORTAL.get()));
     public static final RegistryObject<Item> MAGIC_ORE_BLOCK_ITEM = ITEMS.register("magic_ore_block", () -> new BlocksItemBase(ModBlocks.MAGIC_ORE_BLOCK.get()));
     public static final RegistryObject<Item> MAGIC_BLOCK_ITEM = ITEMS.register("magic_block", () -> new BlocksItemBase(ModBlocks.MAGIC_BLOCK.get()));

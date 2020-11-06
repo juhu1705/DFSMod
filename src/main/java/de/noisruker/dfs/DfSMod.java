@@ -101,7 +101,6 @@ public class DfSMod {
     @SubscribeEvent
     public static void clientSetup(FMLClientSetupEvent event) {
         RenderTypeLookup.setRenderLayer(ModBlocks.CRYSTAL_BLOCK.get(), RenderType.getTranslucent());
-        RenderTypeLookup.setRenderLayer(ModBlocks.CHAIN_BLOCK.get(), RenderType.getTranslucent());
 
         ModEntityTypes.bindRenderers();
 
