@@ -2,6 +2,7 @@ package de.noisruker.dfs.objects.tileentities;
 
 import de.noisruker.dfs.registries.ModTileEntityTypes;
 import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
@@ -9,7 +10,7 @@ import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 
 public class LevitatorTileEntity extends TileEntity implements ITickableTileEntity {
 
@@ -50,10 +51,14 @@ public class LevitatorTileEntity extends TileEntity implements ITickableTileEnti
         }
         this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(AbstractFurnaceBlock.LIT, Boolean.TRUE), 3);
 
-        AxisAlignedBB aabb = new AxisAlignedBB(super.pos.offset(this.direction)).expand(new Vec3d(this.direction.getDirectionVec()).scale(this.strength));
+        AxisAlignedBB aabb = new AxisAlignedBB(super.pos.offset(this.direction)).expand(
+                new Vector3d(this.direction.getDirectionVec().getX(),
+                        this.direction.getDirectionVec().getY(),
+                        this.direction.getDirectionVec().getZ())
+                        .scale(this.strength));
 
         for(Entity e: super.world.getEntitiesWithinAABBExcludingEntity(null, aabb)) {
-            Vec3d vec3d = e.getMotion();
+            Vector3d vec3d = e.getMotion();
             double d0;
 
             if(this.push)
@@ -91,10 +96,11 @@ public class LevitatorTileEntity extends TileEntity implements ITickableTileEnti
         return super.write(compound);
     }
 
+
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         this.strength = compound.getInt("strength");
-        super.read(compound);
+        super.read(state, compound);
     }
 
     public Direction getDirection() {

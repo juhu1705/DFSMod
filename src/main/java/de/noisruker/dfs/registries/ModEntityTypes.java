@@ -5,11 +5,13 @@ import de.noisruker.dfs.objects.entities.MagicProjectileEntity;
 import de.noisruker.dfs.objects.entities.SoulEntity;
 import de.noisruker.dfs.objects.entities.renderers.MagicProjectileEntityRenderer;
 import de.noisruker.dfs.objects.entities.renderers.SoulEntityRenderer;
-import de.noisruker.dfs.world.gen.DfSGenerator;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biomes;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.registries.DeferredRegister;
@@ -36,22 +38,22 @@ public class ModEntityTypes {
 
 
 
-
     public static void bindRenderers() {
         RenderingRegistry.registerEntityRenderingHandler(ENTITY_MAGIC_PROJECTILE.get(), new MagicProjectileEntityRenderer.Factory());
         RenderingRegistry.registerEntityRenderingHandler(ENTITY_SOUL.get(), SoulEntityRenderer::new);
+    }
 
-
-
+    public static void registerEntityAttributes() {
+        GlobalEntityTypeAttributes.put(ENTITY_SOUL.get(), SoulEntity.registerAttributes().create());
     }
 
     public static void registerEntityWorldSpawns() {
-        ModEntityTypes.registerEntitySpawning(ENTITY_SOUL.get(), EntityClassification.MONSTER, 5, 3, 13, (Biome[])DfSGenerator.DESERT.toArray());
+        ModEntityTypes.registerEntitySpawning(ENTITY_SOUL.get(), EntityClassification.MONSTER, 5, 3, 13, ForgeRegistries.BIOMES.getValue(Biomes.DESERT.getRegistryName()));
     }
 
     public static void registerEntitySpawning(EntityType<?> entity, EntityClassification classification, int weight, int minGroupCount, int maxGroupCount, Biome... biomes) {
         for(Biome b: biomes)
             if(b != null)
-                b.getSpawns(classification).add(new Biome.SpawnListEntry(entity, weight, minGroupCount, maxGroupCount));
+                b.getMobSpawnInfo().getSpawners(classification).add(new MobSpawnInfo.Spawners(entity, weight, minGroupCount, maxGroupCount));
     }
 }

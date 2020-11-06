@@ -6,6 +6,7 @@ import de.noisruker.dfs.network.PacketPower;
 import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.objects.entities.IEntityMagic;
 import de.noisruker.dfs.registries.ModSpecies;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.network.datasync.DataParameter;
@@ -94,7 +95,6 @@ public class PlayerSpecies implements IEntityMagic {
             DfSMod.LOGGER.debug("Can't load species to players data manager!");
         }
         species.applyBaseValues(player);
-        this.onResize();
 
         //this.registerDataParameters();
     }
@@ -102,7 +102,6 @@ public class PlayerSpecies implements IEntityMagic {
     public PlayerSpecies updatePlayer(PlayerEntity player) {
         this.player = player;
         species.applyBaseValues(player);
-        this.onResize();
 
         //this.registerDataParameters();
 
@@ -117,7 +116,6 @@ public class PlayerSpecies implements IEntityMagic {
         this.species = species;
         this.setSpecies(species);
         species.applyBaseValues(player);
-        this.onResize();
 
         this.setPowerRegenerationAmount(species.getPowerRegeneration());
         this.setMaxPower(species.getInitMaxPower());
@@ -127,7 +125,7 @@ public class PlayerSpecies implements IEntityMagic {
 
         this.player.setSneaking(false);
 
-        if(!this.player.world.isRemote) {
+        if(!this.player.world.isRemote && this.player instanceof ServerPlayerEntity) {
             ServerWorld world = (ServerWorld) this.player.world;
 
             world.spawnParticle((ServerPlayerEntity) player, ParticleTypes.LARGE_SMOKE, true, player.getPosX() - 0.5, player.getPosY(), player.getPosZ() - 0.5, 50, 1, 2, 1, 0.1);
@@ -143,7 +141,6 @@ public class PlayerSpecies implements IEntityMagic {
         this.species = species;
         this.setSpecies(species);
         species.applyBaseValues(player);
-        this.onResize();
 
         this.setPowerRegenerationAmount(species.getPowerRegeneration());
         this.setMaxPower(species.getInitMaxPower());
@@ -159,7 +156,6 @@ public class PlayerSpecies implements IEntityMagic {
     public void update() {
         this.setSpecies(species);
         species.applyBaseValues(player);
-        this.onResize();
 
         this.player.setHealth(this.player.getMaxHealth());
     }
@@ -196,10 +192,6 @@ public class PlayerSpecies implements IEntityMagic {
             SpeciesMessages.INSTANCE.sendTo(new PacketAcceptSpecies(Species.getKeyForSpecies(this.getSpecies())), ((ServerPlayerEntity)player).connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    private void onResize() {
-        this.species.applyBoundings(this.player);
-    }
-
     void onSave() {
         DfSMod.LOGGER.debug("Save Species Playerdata: " + Species.getKeyForSpecies(this.getSpecies()));
 
@@ -226,7 +218,6 @@ public class PlayerSpecies implements IEntityMagic {
         this.setPower(this.player.getPersistentData().getFloat(PlayerSpecies.POWER));
         this.setPowerRegenerationAmount(this.player.getPersistentData().getFloat(PlayerSpecies.REGENERATION));
         this.species.applyBaseValues(this.player);
-        this.onResize();
     }
 
     @Override
@@ -349,5 +340,9 @@ public class PlayerSpecies implements IEntityMagic {
     public IEntityMagic addPower(float power) {
         this.setPower(this.getPower() + power);
         return this;
+    }
+
+    public EntitySize getSize() {
+        return species.getSize(this);
     }
 }

@@ -1,17 +1,7 @@
 package de.noisruker.dfs.world.gen.structures.giant_tree;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.datafixers.util.Pair;
-import de.noisruker.dfs.DfSMod;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.feature.jigsaw.JigsawManager;
-import net.minecraft.world.gen.feature.jigsaw.JigsawPattern;
-import net.minecraft.world.gen.feature.jigsaw.SingleJigsawPiece;
-import net.minecraft.world.gen.feature.template.*;
-
 public class GiantTreePools {
-
+/*
     public static void init() {
     }
 
@@ -40,5 +30,5 @@ public class GiantTreePools {
     }
 
     //ImmutableList.of(new RuleStructureProcessor(ImmutableList.of(new RuleEntry(new RandomBlockMatchRuleTest(Blocks.COBBLESTONE, 1F),AlwaysTrueRuleTest.INSTANCE,Blocks.MOSSY_COBBLESTONE.getDefaultState())))),JigsawPattern.PlacementBehaviour.RIGID
-
+*/
 }

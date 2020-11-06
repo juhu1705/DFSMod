@@ -6,6 +6,7 @@ import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.registries.ModKeyBindings;
 import de.noisruker.dfs.registries.ModSpecies;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +32,7 @@ public class PlayerSpeciesEvents {
     public static Species species = ModSpecies.HUMAN;
 
     @SubscribeEvent
-    public static void onPlayerEyeHeightEvent(EntityEvent.EyeHeight event) {
+    public static void onPlayerEyeHeightEvent(EntityEvent.Size event) {
         if(event.getEntity() instanceof PlayerEntity) {
 
             PlayerSpecies player = PlayerSpecies.getOrCreatePlayer((PlayerEntity) event.getEntity());
@@ -45,13 +46,15 @@ public class PlayerSpeciesEvents {
                     case FALL_FLYING:
                     case SWIMMING:
                         //event.setNewHeight(player.species.getEyeHeight() - 1.22f);
-                        event.setNewHeight(0.4f);
+                        event.setNewEyeHeight(0.4f);
                         break;
                     case CROUCHING:
-                        event.setNewHeight(player.species.getEyeHeight() - 0.35f);
+                        event.setNewEyeHeight(player.species.getEyeHeight() - 0.35f);
+                        event.setNewSize(EntitySize.flexible(player.species.getWidth(), player.species.getHeight() - 0.3f));
                         break;
                     default:
-                        event.setNewHeight(player.species.getEyeHeight());
+                        event.setNewEyeHeight(player.species.getEyeHeight());
+                        event.setNewSize(player.getSize());
                 }
             } catch (NullPointerException exception) {
                 DfSMod.LOGGER.debug("Can't load eye height!");
@@ -129,7 +132,6 @@ public class PlayerSpeciesEvents {
         }
     }
 
-    @SubscribeEvent
     public static void onPlayerTickLast(TickEvent.PlayerTickEvent playerTickEvent) {
         PlayerEntity player = playerTickEvent.player;
         if(playerTickEvent.phase == TickEvent.Phase.START /*&& player.getPose().equals(Pose.STANDING) || player.getPose().equals(Pose.CROUCHING)*/) {
@@ -144,18 +146,6 @@ public class PlayerSpeciesEvents {
             } else
                 species = PlayerSpeciesEvents.species;
 
-            // Edit bounding box
-            try {
-                species.loadSizeForPlayer();
-                /*player.boundingBox = new AxisAlignedBB(player.boundingBox.minX,
-                        player.boundingBox.minY,
-                        player.boundingBox.minZ,
-                        player.boundingBox.minX + species.getWidth(),
-                        player.boundingBox.minY + species.getHeight() - (player.getPose().equals(Pose.STANDING) ? 0f : 0.3f),
-                        player.boundingBox.minZ + species.getWidth());*/
-            } catch (NullPointerException ignored) {
-
-            }
         }
     }
 
@@ -185,7 +175,7 @@ public class PlayerSpeciesEvents {
                     int k = (int)(((PlayerSpeciesEvents.shownPower * 10f) / i) * 183f);
                     int l = event.getWindow().getScaledHeight() - 32 + 3;
                     if (k > 0) {
-                        minecraft.ingameGUI.blit(x, l, 0, 0, k, 5);
+                        minecraft.ingameGUI.blit(event.getMatrixStack(), x, l, 0, 0, k, 5);
                     }
                 }
             }

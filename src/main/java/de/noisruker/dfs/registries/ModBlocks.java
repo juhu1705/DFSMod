@@ -35,5 +35,11 @@ public class ModBlocks {
                     .harvestLevel(1)
                     .harvestTool(ToolType.PICKAXE)));
     public static final RegistryObject<Block> LEVITATOR = BLOCKS.register("levitator_block", LevitatorBlock::new);
+    public static final RegistryObject<Block> MAGIC_ITEM_HOLDER_BASIC = BLOCKS.register("magic_item_holder_basic",
+            () -> new MagicItemHolderBlock(Block.Properties.create(Material.ROCK)
+                    .hardnessAndResistance(3.0f, 5.0f)
+                    .sound(SoundType.STONE)
+                    .harvestLevel(1)
+                    .harvestTool(ToolType.PICKAXE), 0));
 
 }

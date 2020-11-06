@@ -31,10 +31,14 @@ public class RegistryHandler {
 
         DfSMod.LOGGER.debug("DfS Entities are registered");
 
-        ModDimensions.MOD_DIMENSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());
+        /*ModDimensions.MOD_DIMENSIONS.register(FMLJavaModLoadingContext.get().getModEventBus());*/
         ModRecipeTypes.RECIPE_SERIALIZER_TYPES.register(FMLJavaModLoadingContext.get().getModEventBus());
 
-        DfSMod.LOGGER.debug("Dfs Dimensions are registered");
+        DfSMod.LOGGER.debug("DfS Dimensions are registered");
+
+        ModStructures.FEATURES.register(FMLJavaModLoadingContext.get().getModEventBus());
+
+        DfSMod.LOGGER.debug("DfS Structures are registered");
     }
 
 

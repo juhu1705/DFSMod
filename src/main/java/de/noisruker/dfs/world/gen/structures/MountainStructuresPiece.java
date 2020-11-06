@@ -13,10 +13,12 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
 import net.minecraft.world.gen.feature.template.*;
 
@@ -66,7 +68,7 @@ public class MountainStructuresPiece {
 
                         @Nullable
                         @Override
-                        public Template.BlockInfo process(IWorldReader worldReaderIn, BlockPos pos, Template.BlockInfo p_215194_3_, Template.BlockInfo blockInfo, PlacementSettings placementSettingsIn) {
+                        public Template.BlockInfo process(IWorldReader p_230386_1_, BlockPos p_230386_2_, BlockPos p_230386_3_, Template.BlockInfo p_230386_4_, Template.BlockInfo blockInfo, PlacementSettings p_230386_6_, @Nullable Template template) {
                             if(ImmutableList.of(Blocks.STRUCTURE_BLOCK).contains(blockInfo.state.getBlock()))
                                 blockInfo = new Template.BlockInfo(blockInfo.pos, Blocks.AIR.getDefaultState(), null);
                             return blockInfo;
@@ -76,7 +78,7 @@ public class MountainStructuresPiece {
         }
 
         @Override
-        public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenIn, Random rand, MutableBoundingBox mutableBB, ChunkPos chunkPos) {
+        public boolean func_230383_a_(ISeedReader seedReader, StructureManager manager, ChunkGenerator generator, Random rand, MutableBoundingBox mutableBB, ChunkPos chunkPos, BlockPos blockPos) {
             PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.randomRotation(rand)).setMirror(Mirror.NONE).setCenterOffset(BlockPos.ZERO).addProcessor(new BlockIgnoreStructureProcessor(ImmutableList.of(Blocks.STRUCTURE_BLOCK)) {
                 @Override
                 protected IStructureProcessorType getType() {
@@ -85,7 +87,7 @@ public class MountainStructuresPiece {
 
                 @Nullable
                 @Override
-                public Template.BlockInfo process(IWorldReader worldReaderIn, BlockPos pos, Template.BlockInfo p_215194_3_, Template.BlockInfo blockInfo, PlacementSettings placementSettingsIn) {
+                public Template.BlockInfo process(IWorldReader p_230386_1_, BlockPos p_230386_2_, BlockPos p_230386_3_, Template.BlockInfo p_230386_4_, Template.BlockInfo blockInfo, PlacementSettings p_230386_6_, @Nullable Template template) {
                     if(ImmutableList.of(Blocks.STRUCTURE_BLOCK).contains(blockInfo.state.getBlock()))
                         blockInfo = new Template.BlockInfo(blockInfo.pos, Blocks.AIR.getDefaultState(), null);
                     return blockInfo;
@@ -99,12 +101,12 @@ public class MountainStructuresPiece {
             int k = blockpos.getX() * blockpos.getZ();
 
             if(k == 0)
-                j = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.templatePosition.getX(), this.templatePosition.getZ());
+                j = seedReader.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.templatePosition.getX(), this.templatePosition.getZ());
             else {
                 BlockPos blockpos1 = this.templatePosition.add(blockpos.getX() - 1, 0, blockpos.getZ() - 1);
 
                 for(BlockPos blockpos2 : BlockPos.getAllInBoxMutable(this.templatePosition, blockpos1)) {
-                    int l = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos2.getX(), blockpos2.getZ());
+                    int l = seedReader.getHeight(Heightmap.Type.WORLD_SURFACE_WG, blockpos2.getX(), blockpos2.getZ());
                     j += l;
                     i = Math.min(i, l);
                 }
@@ -115,11 +117,11 @@ public class MountainStructuresPiece {
             j -= y_offset;
 
             this.templatePosition = new BlockPos(this.templatePosition.getX(), j, this.templatePosition.getZ());
-            return super.create(worldIn, chunkGenIn, rand, mutableBB, chunkPos);
+            return super.func_230383_a_(seedReader, manager, generator, rand, mutableBB, chunkPos, blockPos);
         }
 
         @Override
-        protected void handleDataMarker(String function, @Nonnull BlockPos pos, @Nonnull IWorld worldIn, @Nonnull Random rand, @Nonnull MutableBoundingBox sbb) {
+        protected void handleDataMarker(String function, @Nonnull BlockPos pos, @Nonnull IServerWorld worldIn, @Nonnull Random rand, @Nonnull MutableBoundingBox sbb) {
             DfSMod.LOGGER.debug("Hallo ich heiße " + function);
             switch (function) {
                 case "chest_treasure":

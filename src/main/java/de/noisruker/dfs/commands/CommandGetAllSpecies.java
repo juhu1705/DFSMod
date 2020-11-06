@@ -31,7 +31,7 @@ public class CommandGetAllSpecies implements Command<CommandSource> {
             context.getSource().sendFeedback(new StringTextComponent("Your Species: " + species.getSpecies().toString()), false);
 
         for(Map.Entry<UUID, PlayerSpecies> entry: PlayerSpecies.getMap().entrySet()) {
-            context.getSource().sendFeedback(new StringTextComponent(entry.getValue().getPlayer().getName().getFormattedText() + ": " + entry.getValue().getSpecies().toString()), false);
+            context.getSource().sendFeedback(new StringTextComponent(entry.getValue().getPlayer().getName().getString() + ": " + entry.getValue().getSpecies().toString()), false);
             //context.getSource().sendFeedback(entry.getValue().getPlayer().getDisplayNameAndUUID(), false);
         }
 

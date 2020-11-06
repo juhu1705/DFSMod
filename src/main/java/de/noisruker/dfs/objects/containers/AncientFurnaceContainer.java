@@ -224,4 +224,9 @@ public class AncientFurnaceContainer extends RecipeBookContainer<IInventory> {
     public List<RecipeBookCategories> getRecipeBookCategories() {
         return Lists.newArrayList(RecipeBookCategories.FURNACE_SEARCH, RecipeBookCategories.FURNACE_FOOD, RecipeBookCategories.FURNACE_BLOCKS, RecipeBookCategories.FURNACE_MISC);
     }
+
+    @Override
+    public RecipeBookCategory func_241850_m() {
+        return RecipeBookCategory.FURNACE;
+    }
 }

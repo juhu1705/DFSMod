@@ -35,7 +35,6 @@ public class CrystalBlock extends Block {
                 .sound(SoundType.GLASS)
                 .harvestLevel(2)
                 .harvestTool(ToolType.PICKAXE));
-
     }
 
     @Override

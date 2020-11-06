@@ -145,7 +145,7 @@ public class SpeciesPassiveAbilities {
                     if(event.getPlayer().areEyesInFluid(FluidTags.WATER))
                         event.setNewSpeed(event.getNewSpeed() * 6f);
 
-                    if(!event.getPlayer().onGround) {
+                    if(!event.getPlayer().isOnGround()) {
                         event.setNewSpeed(event.getNewSpeed() * 6f);
                     }
                     event.setCanceled(false);

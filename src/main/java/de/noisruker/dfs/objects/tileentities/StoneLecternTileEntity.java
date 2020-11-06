@@ -2,6 +2,7 @@ package de.noisruker.dfs.objects.tileentities;
 
 import de.noisruker.dfs.registries.ModItems;
 import de.noisruker.dfs.registries.ModTileEntityTypes;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
@@ -85,11 +86,11 @@ public class StoneLecternTileEntity extends TileEntity{
     }
 
     @Override
-    public void read(CompoundNBT compound) {
+    public void read(BlockState state, CompoundNBT compound) {
         if(compound == null)
             return;
 
-        super.read(compound);
+        super.read(state, compound);
 
         NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
 
@@ -135,8 +136,8 @@ public class StoneLecternTileEntity extends TileEntity{
     }
 
     @Override
-    public void handleUpdateTag(CompoundNBT tag) {
-        this.read(tag);
-        super.handleUpdateTag(tag);
+    public void handleUpdateTag(BlockState state, CompoundNBT tag) {
+        this.read(state, tag);
+        super.handleUpdateTag(state, tag);
     }
 }

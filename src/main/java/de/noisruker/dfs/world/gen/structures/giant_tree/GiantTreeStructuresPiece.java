@@ -2,6 +2,7 @@ package de.noisruker.dfs.world.gen.structures.giant_tree;
 
 import de.noisruker.dfs.registries.RegistryHandler;
 import de.noisruker.dfs.world.gen.DfSGenerator;
+import net.minecraft.loot.LootTables;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.LockableLootTileEntity;
 import net.minecraft.util.Mirror;
@@ -10,15 +11,17 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
+import net.minecraft.world.gen.feature.structure.StructureManager;
 import net.minecraft.world.gen.feature.structure.TemplateStructurePiece;
 import net.minecraft.world.gen.feature.template.BlockIgnoreStructureProcessor;
 import net.minecraft.world.gen.feature.template.PlacementSettings;
 import net.minecraft.world.gen.feature.template.Template;
 import net.minecraft.world.gen.feature.template.TemplateManager;
-import net.minecraft.world.storage.loot.LootTables;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
@@ -35,7 +38,7 @@ public class GiantTreeStructuresPiece {
             this.resourceLocation = new ResourceLocation(nbt.getString("Template"));
             this.y_offset = nbt.getInt("yOffset");
             this.checkingArea = new BlockPos(nbt.getInt("checking_area_x"), nbt.getInt("checking_area_y"), nbt.getInt("checking_area_z"));
-            this.setupTemplate(templateMgr);
+            this.setup(templateMgr.getTemplateDefaulted(resourceLocation), templatePosition, placeSettings);
         }
 
         public GiantTree(TemplateManager templateMgr, BlockPos blockPos, BlockPos checkingArea, ResourceLocation resourceLocation, int y_offset) {
@@ -44,7 +47,7 @@ public class GiantTreeStructuresPiece {
             this.checkingArea = new BlockPos(checkingArea.getX(), checkingArea.getY(), checkingArea.getZ());
             this.resourceLocation = resourceLocation;
             this.y_offset = y_offset;
-            this.setupTemplate(templateMgr);
+            this.setup(templateMgr.getTemplateDefaulted(resourceLocation), templatePosition, placeSettings);
         }
 
         @Override
@@ -57,18 +60,17 @@ public class GiantTreeStructuresPiece {
             tagCompound.putInt("checking_area_z", this.checkingArea.getZ());
         }
 
-        private void setupTemplate(TemplateManager templateMgr) {
-            Template template = templateMgr.getTemplateDefaulted(this.resourceLocation);
+        protected void setup(@NotNull Template template, @NotNull BlockPos pos, @NotNull PlacementSettings settings) {
             PlacementSettings placementsettings = (new PlacementSettings())
                     .setRotation(Rotation.NONE)
                     .setMirror(Mirror.NONE)
                     .setCenterOffset(BlockPos.ZERO)
                     .addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
-            this.setup(template, this.templatePosition, placementsettings);
+            super.setup(template, pos, placementsettings);
         }
 
         @Override
-        public boolean create(IWorld worldIn, ChunkGenerator<?> chunkGenIn, Random rand, MutableBoundingBox mutableBB, ChunkPos chunkPos) {
+        public boolean func_230383_a_(ISeedReader seedReader, StructureManager manager, ChunkGenerator generator, Random rand, MutableBoundingBox mutableBB, ChunkPos chunkPos, BlockPos blockPos) {
             PlacementSettings placementsettings = (new PlacementSettings()).setRotation(Rotation.randomRotation(rand)).setMirror(Mirror.NONE).setCenterOffset(BlockPos.ZERO).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_BLOCK);
             BlockPos blockpos = this.template.getSize();
 
@@ -78,7 +80,7 @@ public class GiantTreeStructuresPiece {
             //int k = blockpos.getX() * blockpos.getZ();
 
             //if(k == 0)
-            j = worldIn.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.checkingArea.getX(), this.checkingArea.getZ());
+            j = seedReader.getHeight(Heightmap.Type.WORLD_SURFACE_WG, this.checkingArea.getX(), this.checkingArea.getZ());
             //else {
                 //BlockPos blockpos1 = this.checkingArea.add(19, 0, 19);
 
@@ -98,11 +100,11 @@ public class GiantTreeStructuresPiece {
             j += y_offset;
 
             this.templatePosition = new BlockPos(this.templatePosition.getX(), j, this.templatePosition.getZ());
-            return super.create(worldIn, chunkGenIn, rand, mutableBB, chunkPos);
+            return super.func_230383_a_(seedReader, manager, generator, rand, mutableBB, chunkPos, blockPos);
         }
 
         @Override
-        protected void handleDataMarker(String function, BlockPos pos, IWorld worldIn, Random rand, MutableBoundingBox sbb) {
+        protected void handleDataMarker(String function, BlockPos pos, IServerWorld worldIn, Random rand, MutableBoundingBox sbb) {
             if ("chest".equals(function)) {
                 LockableLootTileEntity.setLootTable(worldIn, rand, pos.down(), LootTables.CHESTS_VILLAGE_VILLAGE_TAIGA_HOUSE);
             } else if ("chest_armor".equals(function)) {

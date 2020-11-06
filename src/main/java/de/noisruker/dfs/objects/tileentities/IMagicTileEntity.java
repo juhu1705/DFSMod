@@ -1,12 +1,10 @@
 package de.noisruker.dfs.objects.tileentities;
 
-import de.noisruker.dfs.objects.blocks.IMagicBlock;
-
 public interface IMagicTileEntity {
 
     /**
      * Sets this blocks power to the given power.
-     * If the given power is larger then this blocks {@link IMagicBlock :getMaxPower() max power} the
+     * If the given power is larger then this blocks maxPower the
      * power is set to this blocks max power.
      * @param power The given power
      */

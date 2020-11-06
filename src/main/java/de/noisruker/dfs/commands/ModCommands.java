@@ -14,7 +14,7 @@ public class ModCommands {
 
     @SubscribeEvent
     public static void onLoad(FMLServerStartingEvent event) {
-        ModCommands.register(event.getCommandDispatcher());
+        ModCommands.register(event.getServer().getFunctionManager().getCommandDispatcher());
     }
 
     public static void register(CommandDispatcher<CommandSource> dispatcher) {

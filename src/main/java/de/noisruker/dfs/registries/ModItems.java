@@ -35,7 +35,7 @@ public class ModItems {
             if (!worldIn.isRemote) {
                 MagicProjectileEntity magicProjectileEntity = new MagicProjectileEntity(worldIn, playerIn);
                 magicProjectileEntity.setItem(itemstack);
-                magicProjectileEntity.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 0);
+                magicProjectileEntity.func_234612_a_(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 0);
 
                 magicProjectileEntity.setPower(10f);
 
@@ -69,6 +69,7 @@ public class ModItems {
     public static final RegistryObject<Item> MAGIC_BLOCK_ITEM = ITEMS.register("magic_block", () -> new BlocksItemBase(ModBlocks.MAGIC_BLOCK.get()));
     public static final RegistryObject<Item> ANCIENT_FURNACE_ITEM = ITEMS.register("ancient_furnace", () -> new BlocksItemBase(ModBlocks.ANCIENT_FURNACE.get()));
     public static final RegistryObject<Item> LEVITATOR_ITEM = ITEMS.register("levitator_block", () -> new BlocksItemBase(ModBlocks.LEVITATOR.get()));
+    public static final RegistryObject<Item> MAGIC_ITEM_HOLDER_BASIC = ITEMS.register("magic_item_holder_basic", () -> new BlocksItemBase(ModBlocks.MAGIC_ITEM_HOLDER_BASIC.get()));
 
     //Spawn Eggs
     public static final RegistryObject<Item> SPAWN_SOUL = ITEMS.register("soul_spawn_egg", ItemSpawnEggSoul::new);

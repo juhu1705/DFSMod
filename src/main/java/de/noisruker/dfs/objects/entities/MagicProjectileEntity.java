@@ -70,11 +70,11 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
 
                         species.addPower(this.getPower());
 
-                        entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), powerLeft / 10f);
+                        entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), powerLeft / 10f);
                     } else
-                        entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
+                        entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), this.getPower() / 10f);
                 } else
-                    entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
+                    entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), this.getPower() / 10f);
             } else if(entity instanceof IEntityMagic) {
                 IEntityMagic entityMagic = (IEntityMagic) entity;
 
@@ -82,9 +82,9 @@ public class MagicProjectileEntity extends ProjectileItemEntity implements IEnti
 
                 entityMagic.addPower(this.getPower());
 
-                entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), powerLeft / 10f);
+                entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), powerLeft / 10f);
             } else
-                entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.getPower() / 10f);
+                entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.func_234616_v_()), this.getPower() / 10f);
         } else if(result.getType() == RayTraceResult.Type.BLOCK) {
             BlockPos block = ((BlockRayTraceResult)result).getPos();
             if(world.getTileEntity(block) instanceof IMagicTileEntity && world.getBlockState(block).hasTileEntity()) {

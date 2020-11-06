@@ -34,9 +34,7 @@ public class AncientFurnaceRecipeSerializer<T extends AncientFurnaceRecipe> exte
         else {
             String s1 = JSONUtils.getString(json, "result");
             ResourceLocation resourcelocation = new ResourceLocation(s1);
-            itemstack = new ItemStack(Registry.ITEM.getValue(resourcelocation).orElseThrow(() -> {
-                return new IllegalStateException("Item: " + s1 + " does not exist");
-            }));
+            itemstack = new ItemStack(Registry.ITEM.getOrDefault(resourcelocation));
         }
         float f = JSONUtils.getFloat(json, "experience", 0.0F);
         int i = JSONUtils.getInt(json, "cookingtime", this.cookingTime);

@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import de.noisruker.dfs.registries.ModSpecies;
 import net.minecraft.entity.EntitySize;
 import net.minecraft.entity.Pose;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.Attributes;
 import net.minecraft.entity.player.PlayerEntity;
 
 import java.util.HashMap;
@@ -48,18 +48,18 @@ public class Species {
     }
 
     public void setStrength(PlayerEntity playerEntity) {
-        if(playerEntity.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null)
-            playerEntity.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(this.attackDamage);
+        if(playerEntity.getAttribute(Attributes.ATTACK_DAMAGE) != null)
+            playerEntity.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(this.attackDamage);
     }
 
     public void setAttackSpeed(PlayerEntity playerEntity) {
-        if(playerEntity.getAttribute(SharedMonsterAttributes.ATTACK_SPEED) != null)
-            playerEntity.getAttribute(SharedMonsterAttributes.ATTACK_SPEED).setBaseValue(this.attackSpeed);
+        if(playerEntity.getAttribute(Attributes.ATTACK_SPEED) != null)
+            playerEntity.getAttribute(Attributes.ATTACK_SPEED).setBaseValue(this.attackSpeed);
     }
 
     public void setHearts(PlayerEntity playerEntity) {
-        if(playerEntity.getAttribute(SharedMonsterAttributes.MAX_HEALTH) != null)
-            playerEntity.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.hearts);
+        if(playerEntity.getAttribute(Attributes.MAX_HEALTH) != null)
+            playerEntity.getAttribute(Attributes.MAX_HEALTH).setBaseValue(this.hearts);
     }
 
     public void applyBoundings(PlayerEntity playerEntity) {
@@ -69,6 +69,10 @@ public class Species {
 
             //PlayerEntity.SIZE_BY_POSE = ImmutableMap.<Pose, EntitySize>builder().put(Pose.STANDING, PlayerEntity.STANDING_SIZE).put(Pose.SLEEPING, EntitySize.fixed(0.2F, 0.2F)).put(Pose.FALL_FLYING, EntitySize.flexible(0.6F, 0.6F)).put(Pose.SWIMMING, EntitySize.flexible(0.6F, 0.6F)).put(Pose.SPIN_ATTACK, EntitySize.flexible(0.6F, 0.6F)).put(Pose.CROUCHING, EntitySize.flexible(width, height - 0.3f)).put(Pose.DYING, EntitySize.fixed(0.2F, 0.2F)).build();
 
+    }
+
+    public EntitySize getSize(PlayerSpecies s) {
+        return new EntitySize(width, height, s.getPlayer().size.fixed);
     }
 
 

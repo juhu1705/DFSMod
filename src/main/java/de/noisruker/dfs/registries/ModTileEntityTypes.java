@@ -3,7 +3,9 @@ package de.noisruker.dfs.registries;
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.objects.tileentities.BlockAncientFurnaceTileEntity;
 import de.noisruker.dfs.objects.tileentities.LevitatorTileEntity;
+import de.noisruker.dfs.objects.tileentities.MagicItemHolderTileEntity;
 import de.noisruker.dfs.objects.tileentities.StoneLecternTileEntity;
+import de.noisruker.dfs.objects.tileentities.renderer.MagicItemHolderRenderer;
 import de.noisruker.dfs.objects.tileentities.renderer.StoneLecternRenderer;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
@@ -21,9 +23,11 @@ public class ModTileEntityTypes {
             .register("ancient_furnace", () -> TileEntityType.Builder.create(BlockAncientFurnaceTileEntity::new, ModBlocks.ANCIENT_FURNACE.get()).build(null));
     public static final RegistryObject<TileEntityType<LevitatorTileEntity>> LEVITATOR = TILE_ENTITY_TYPES
             .register("levitator", () -> TileEntityType.Builder.create(LevitatorTileEntity::new, ModBlocks.LEVITATOR.get()).build(null));
+    public static final RegistryObject<TileEntityType<MagicItemHolderTileEntity>> MAGIC_ITEM_HOLDER = TILE_ENTITY_TYPES.register("magic_item_holder", () -> TileEntityType.Builder.create(MagicItemHolderTileEntity::new, ModBlocks.MAGIC_ITEM_HOLDER_BASIC.get()).build(null));
 
     public static void bindSpecialRenderers() {
         ClientRegistry.bindTileEntityRenderer(STONE_LECTERN.get(), StoneLecternRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(MAGIC_ITEM_HOLDER.get(), MagicItemHolderRenderer::new);
     }
 
 }

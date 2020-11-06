@@ -1,5 +1,6 @@
 package de.noisruker.dfs.objects.screens;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.objects.containers.AncientFurnaceContainer;
@@ -25,12 +26,12 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
     private boolean widthTooNarrowIn;
     private final ResourceLocation guiTexture;
 
-    public AncientFurnaceScreen(AncientFurnaceContainer screenContainer, PlayerInventory inv, ITextComponent titleIn) {
-        this(screenContainer, new FurnaceRecipeGui(), inv, titleIn, GUI_TEXTURE);
+    public AncientFurnaceScreen(AncientFurnaceContainer screenContainer, PlayerInventory inv, ITextComponent field_230704_d_In) {
+        this(screenContainer, new FurnaceRecipeGui(), inv, field_230704_d_In, GUI_TEXTURE);
     }
 
-    public AncientFurnaceScreen(AncientFurnaceContainer screenContainer, AbstractRecipeBookGui recipeGuiIn, PlayerInventory inv, ITextComponent titleIn, ResourceLocation guiTextureIn) {
-        super(screenContainer, inv, titleIn);
+    public AncientFurnaceScreen(AncientFurnaceContainer screenContainer, AbstractRecipeBookGui recipeGuiIn, PlayerInventory inv, ITextComponent field_230704_d_In, ResourceLocation guiTextureIn) {
+        super(screenContainer, inv, field_230704_d_In);
         this.recipeGui = recipeGuiIn;
         this.guiTexture = guiTextureIn;
     }
@@ -38,7 +39,7 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
     public void init() {
         super.init();
         this.widthTooNarrowIn = this.width < 379;
-        this.recipeGui.init(this.width, this.height, this.minecraft, this.widthTooNarrowIn, this.container);
+        this.recipeGui.init(this.width, this.height, this.getMinecraft(), this.widthTooNarrowIn, this.container);
         this.guiLeft = this.recipeGui.updateScreenPosition(this.widthTooNarrowIn, this.width, this.xSize);
         this.addButton((new ImageButton(this.guiLeft + 20, this.height / 2 - 49, 20, 18, 0, 0, 19, field_214089_l, (p_214087_1_) -> {
             this.recipeGui.initSearchBar(this.widthTooNarrowIn);
@@ -53,50 +54,50 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
         this.recipeGui.tick();
     }
 
-    public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-        this.renderBackground();
+    public void render(MatrixStack stack, int p_render_1_, int p_render_2_, float p_render_3_) {
+        this.renderBackground(stack);
         if (this.recipeGui.isVisible() && this.widthTooNarrowIn) {
-            this.drawGuiContainerBackgroundLayer(p_render_3_, p_render_1_, p_render_2_);
-            this.recipeGui.render(p_render_1_, p_render_2_, p_render_3_);
+            this.drawGuiContainerBackgroundLayer(stack, p_render_3_, p_render_1_, p_render_2_);
+            this.recipeGui.render(stack, p_render_1_, p_render_2_, p_render_3_);
         } else {
-            this.recipeGui.render(p_render_1_, p_render_2_, p_render_3_);
-            super.render(p_render_1_, p_render_2_, p_render_3_);
-            this.recipeGui.renderGhostRecipe(this.guiLeft, this.guiTop, true, p_render_3_);
+            this.recipeGui.render(stack, p_render_1_, p_render_2_, p_render_3_);
+            super.render(stack, p_render_1_, p_render_2_, p_render_3_);
+            this.recipeGui.func_230477_a_(stack, this.guiLeft, this.guiTop, true, p_render_3_);
         }
 
-        this.renderHoveredToolTip(p_render_1_, p_render_2_);
-        this.recipeGui.renderTooltip(this.guiLeft, this.guiTop, p_render_1_, p_render_2_);
+        super.renderHoveredTooltip(stack, p_render_1_, p_render_2_);
+        this.recipeGui.func_238924_c_(stack, this.guiLeft, this.guiTop, p_render_1_, p_render_2_);
     }
 
     /**
      * Draw the foreground layer for the GuiContainer (everything in front of the items)
      */
-    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-        String s = this.title.getFormattedText();
-        this.font.drawString(s, (float)(this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
-        this.font.drawString(this.playerInventory.getDisplayName().getFormattedText(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
+    protected void drawGuiContainerForegroundLayer(MatrixStack stack, int mouseX, int mouseY) {
+        String s = getTitle().getString();
+        this.font.drawString(stack, s, (float)(this.xSize / 2 - this.font.getStringWidth(s) / 2), 6.0F, 4210752);
+        this.font.drawString(stack, this.playerInventory.getDisplayName().getString(), 8.0F, (float)(this.ySize - 96 + 2), 4210752);
     }
 
     /**
      * Draws the background layer of this container (behind the items).
      */
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.minecraft.getTextureManager().bindTexture(this.guiTexture);
+        super.getMinecraft().getTextureManager().bindTexture(this.guiTexture);
         int i = this.guiLeft;
         int j = this.guiTop;
-        this.blit(i, j, 0, 0, this.xSize, this.ySize);
+        this.blit(stack, i, j, 0, 0, this.xSize, this.ySize);
         if (((AncientFurnaceContainer)this.container).isBurning()) {
             int k = ((AncientFurnaceContainer)this.container).getBurnLeftScaled();
-            this.blit(i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
+            this.blit(stack, i + 56, j + 36 + 12 - k, 176, 12 - k, 14, k + 1);
         }
 
         int l = ((AncientFurnaceContainer)this.container).getCookProgressionScaled();
-        this.blit(i + 79, j + 34, 176, 14, l + 1, 16);
+        this.blit(stack, i + 79, j + 34, 176, 14, l + 1, 16);
 
         if(((AncientFurnaceContainer)this.container).hasPower()) {
             int k = ((AncientFurnaceContainer) this.container).getPowerLeftScaled();
-            this.blit(i + 55, j + 52 + 18 - k, 176, 18 + 31 - k, 18, k + 1);
+            this.blit(stack, i + 55, j + 52 + 18 - k, 176, 18 + 31 - k, 18, k + 1);
         }
     }
 
@@ -104,7 +105,7 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
         if (this.recipeGui.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_)) {
             return true;
         } else {
-            return this.widthTooNarrowIn && this.recipeGui.isVisible() ? true : super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
+            return this.widthTooNarrowIn && this.recipeGui.isVisible() || super.mouseClicked(p_mouseClicked_1_, p_mouseClicked_3_, p_mouseClicked_5_);
         }
     }
 
@@ -117,7 +118,7 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
     }
 
     public boolean keyPressed(int p_keyPressed_1_, int p_keyPressed_2_, int p_keyPressed_3_) {
-        return this.recipeGui.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_) ? false : super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
+        return !this.recipeGui.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_) && super.keyPressed(p_keyPressed_1_, p_keyPressed_2_, p_keyPressed_3_);
     }
 
     protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeftIn, int guiTopIn, int mouseButton) {
@@ -126,7 +127,7 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
     }
 
     public boolean charTyped(char p_charTyped_1_, int p_charTyped_2_) {
-        return this.recipeGui.charTyped(p_charTyped_1_, p_charTyped_2_) ? true : super.charTyped(p_charTyped_1_, p_charTyped_2_);
+        return this.recipeGui.charTyped(p_charTyped_1_, p_charTyped_2_) || super.charTyped(p_charTyped_1_, p_charTyped_2_);
     }
 
     public void recipesUpdated() {
@@ -137,8 +138,9 @@ public class AncientFurnaceScreen extends ContainerScreen<AncientFurnaceContaine
         return this.recipeGui;
     }
 
-    public void removed() {
+    @Override
+    public void closeScreen() {
         this.recipeGui.removed();
-        super.removed();
+        super.closeScreen();
     }
 }

@@ -1,16 +1,19 @@
 package de.noisruker.dfs.objects.screens;
 
+import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import de.noisruker.dfs.DfSMod;
 import de.noisruker.dfs.network.PacketSetSpecies;
 import de.noisruker.dfs.network.SpeciesMessages;
 import de.noisruker.dfs.species.Species;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.IteratableOption;
 import net.minecraft.client.settings.ParticleStatus;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -37,7 +40,7 @@ public class SpeciesScreen extends Screen {
         species_optioned = new IteratableOption("options.particles", (p_216622_0_, p_216622_1_) -> {
             p_216622_0_.particles = ParticleStatus.byId(p_216622_0_.particles.getId() + p_216622_1_);
         }, (p_216616_0_, p_216616_1_) -> {
-            return p_216616_1_.getDisplayString() + I18n.format(p_216616_0_.particles.getResourceKey());
+            return ITextComponent.getTextComponentOrEmpty(p_216616_1_.getName(Minecraft.getInstance().gameSettings).getString() + I18n.format(p_216616_0_.particles.getResourceKey()));
         });
     }
 
@@ -48,17 +51,17 @@ public class SpeciesScreen extends Screen {
 
     @Override
     protected void init() {
-        super.addButton(new Button(this.width / 2 + 80, this.height / 6 + 70, 20, 20, I18n.format(">"), (event) -> {
+        super.addButton(new Button(this.width / 2 + 80, this.height / 6 + 70, 20, 20, ITextComponent.getTextComponentOrEmpty(">"), (event) -> {
             speciesPosition++;
             if(speciesPosition >= species.length)
                 speciesPosition = 0;
         }));
-        super.addButton(new Button(this.width / 2 - 50, this.height / 6 + 150, 100, 20, I18n.format("screen.dfssul.species.finish"), (event) -> {
+        super.addButton(new Button(this.width / 2 - 50, this.height / 6 + 150, 100, 20, ITextComponent.getTextComponentOrEmpty(I18n.format("screen.dfssul.species.finish")), (event) -> {
             SpeciesMessages.INSTANCE.sendToServer(new PacketSetSpecies(species[speciesPosition].getKey()));
 
-            this.onClose();
+            this.closeScreen();
         }));
-        super.addButton(new Button(this.width / 2 - 100, this.height / 6 + 70, 20, 20, I18n.format("<"), (event) -> {
+        super.addButton(new Button(this.width / 2 - 100, this.height / 6 + 70, 20, 20, ITextComponent.getTextComponentOrEmpty("<"), (event) -> {
             speciesPosition--;
             if(speciesPosition < 0)
                 speciesPosition = species.length - 1;
@@ -66,20 +69,20 @@ public class SpeciesScreen extends Screen {
     }
 
     @Override
-    public void render(int p_render_1_, int p_render_2_, float p_render_3_) {
-        this.renderBackground();
-        super.render(p_render_1_, p_render_2_, p_render_3_);
+    public void render(MatrixStack stack, int p_render_1_, int p_render_2_, float p_render_3_) {
+        this.renderBackground(stack);
+        super.render(stack, p_render_1_, p_render_2_, p_render_3_);
 
         String name = I18n.format("screen.dfssul.species." + species[speciesPosition].getKey());
         String description = I18n.format("screen.dfssul.species." + species[speciesPosition].getKey() + ".description");
 
-        this.font.drawString(name, (float)(super.width / 2 - this.font.getStringWidth(name) / 2), (float)super.height / 2 - 75, 0);
-        this.font.drawSplitString(description, super.width / 2 - 60, super.height / 2 - 60, 120, 0);
+        this.font.drawString(stack, name, (float)(super.width / 2 - this.font.getStringWidth(name) / 2), (float)super.height / 2 - 75, 0);
+        this.font.func_238418_a_(ITextComponent.getTextComponentOrEmpty(description), super.width / 2 - 60, super.height / 2 - 60, 120, 0);
     }
 
     @Override
-    public void renderBackground() {
-        super.renderBackground();
+    public void renderBackground(MatrixStack stack) {
+        super.renderBackground(stack);
 
 
 
@@ -89,7 +92,7 @@ public class SpeciesScreen extends Screen {
 
         this.minecraft.getTextureManager().bindTexture(SCREEN_TEXTURE);
 
-        this.blit((super.width - 256) / 2, (super.height - 258) / 2, 0, 0, 256, 256);
+        this.blit(stack, (super.width - 256) / 2, (super.height - 258) / 2, 0, 0, 256, 256);
 
         RenderSystem.clearCurrentColor();
 

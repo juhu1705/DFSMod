@@ -1,6 +1,6 @@
 package de.noisruker.dfs.world.gen.biomes;
 
-import net.minecraft.world.IWorld;
+/*import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.NoiseChunkGenerator;
 
@@ -29,4 +29,4 @@ public class DungeonChunkGenerator extends NoiseChunkGenerator<DungeonGeneration
     public int getGroundHeight() {
         return 0;
     }
-}
+}*/

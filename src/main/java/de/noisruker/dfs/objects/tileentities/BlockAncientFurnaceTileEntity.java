@@ -9,6 +9,7 @@ import de.noisruker.dfs.registries.ModTileEntityTypes;
 import de.noisruker.dfs.species.PlayerSpecies;
 import de.noisruker.dfs.species.PlayerSpeciesEvents;
 import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -118,8 +119,8 @@ public class BlockAncientFurnaceTileEntity extends LockableTileEntity implements
         return this.burnTime > 0;
     }
 
-    public void read(CompoundNBT compound) {
-        super.read(compound);
+    public void read(BlockState state, CompoundNBT compound) {
+        super.read(state, compound);
         this.items = NonNullList.withSize(this.getSizeInventory(), ItemStack.EMPTY);
         ItemStackHelper.loadAllItems(compound, this.items);
         this.burnTime = compound.getInt("BurnTime");
